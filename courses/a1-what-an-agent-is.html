@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 1 · What an agent actually is - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Leader track · Session 1 of 6</div>
+    <h1>What an <span class="accent">agent</span> actually is</h1>
+    <p class="sub">Every vendor deck this year says "agent". Most of them mean something far more ordinary. Tonight you get the one-sentence definition both Anthropic and OpenAI actually use, a filter that separates agents from rebadged chatbots in under a minute, and - most usefully - the cases where you should NOT want an agent at all. You will also watch a real one run in your browser, then watch it lie confidently when a single capability is switched off. No code anywhere in this track: just the judgment.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Leader track</span>
+      <span class="chip audience">C-level · managers · curious minds</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">Start here</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The loop behind the hype</span>
+      <span class="a3" style="flex:5">18-42 · Watch one run + when not to</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>How this track works</h2>
+    </div>
+    <p class="lede">Six 45-minute sessions that build one leadership skill: judging agent proposals without needing to read code. Tonight you learn to <strong>judge</strong> what is and is not an agent. a2 gives you the <strong>anatomy</strong> in plain English. a3 puts your hand on the <strong>autonomy dial</strong> between workflows and agents. a4 covers <strong>risk and governance</strong>. a5 scans <strong>your org</strong> for the right first use cases. a6 is the <strong>roadmap</strong>: what is coming next and what to ignore. Every session ends with questions you can walk into Monday's meeting and ask.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live agent run - step through + toggle levers</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A definition of "agent" you can defend in a board meeting (with the official Anthropic and OpenAI wording), a one-question hype filter for any vendor pitch, and a short, honest list of situations where the right answer is "no agent - normal software wins."
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE LOOP BEHIND THE HYPE ============ -->
+  <section class="section" id="the-loop">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic "Building Effective Agents" definitions, OpenAI guide pp.4-7</span>
+      <h2>The loop behind the hype <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Strip the pitch language away and an agent is a simple, checkable thing: <strong>an AI model running in a loop with tools, choosing its own next step until the task is done</strong>. The model looks at the goal, decides whether to answer or to use a tool, reads what came back, and repeats - then stops when it hits an exit condition. That is the whole machine. Everything a vendor adds on top is either one of four capabilities you will meet in a2, or decoration.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hype versus reality: three pitch claims about agents on the left, what each actually means on the right.">
+        <style>
+          .hyT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .hyS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .hyI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .hyM { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .hyN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .hyWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#hyHd); }
+        </style>
+        <defs>
+          <marker id="hyHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="60" y="40" width="330" height="42" rx="8" fill="#FDBA74"/>
+        <text class="hyI" x="76" y="66">WHAT THE PITCH SAYS</text>
+        <rect x="490" y="40" width="330" height="42" rx="8" fill="#9A3412"/>
+        <text class="hyT" x="506" y="66">WHAT IT ACTUALLY IS</text>
+        <rect x="60" y="110" width="330" height="52" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="2"/>
+        <text class="hyI" x="76" y="132">"An autonomous digital employee"</text>
+        <text class="hyM" x="76" y="150">hire it and forget it</text>
+        <rect x="490" y="110" width="330" height="52" rx="8" fill="#EA580C"/>
+        <text class="hyT" x="506" y="132">An LLM + tools in a loop</text>
+        <text class="hyS" x="506" y="150">software you commission, not staff</text>
+        <rect x="60" y="180" width="330" height="52" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="2"/>
+        <text class="hyI" x="76" y="202">"It thinks and decides"</text>
+        <text class="hyM" x="76" y="220">like a person would</text>
+        <rect x="490" y="180" width="330" height="52" rx="8" fill="#F97316"/>
+        <text class="hyT" x="506" y="202">It chooses the next step</text>
+        <text class="hyS" x="506" y="220">answer now, or call a tool first</text>
+        <rect x="60" y="250" width="330" height="52" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="2"/>
+        <text class="hyI" x="76" y="272">"Fully autonomous"</text>
+        <text class="hyM" x="76" y="290">no supervision needed</text>
+        <rect x="490" y="250" width="330" height="52" rx="8" fill="#9A3412"/>
+        <text class="hyT" x="506" y="272">It loops until an exit</text>
+        <text class="hyS" x="506" y="290">done, error, or max turns - then stops</text>
+        <path class="hyWire" d="M395,136 L482,136"/>
+        <path class="hyWire" d="M395,206 L482,206"/>
+        <path class="hyWire" d="M395,276 L482,276"/>
+        <rect x="60" y="322" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="hyN" x="84" y="334">Not agents (OpenAI's own exclusion): chatbots and classifiers - the model never controls what happens next.</text>
+        <rect x="60" y="350" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="hyN" x="84" y="362">The hype filter: ask what chooses the next step. If your code does, it is a workflow - useful, not an agent.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three pitch claims, and what each one really means</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The two definitions that matter<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You only need two sentences, and they come from the two vendors who defined the field:</p>
+        <ul>
+          <li><strong>OpenAI:</strong> agents are <em>"systems that independently accomplish tasks on your behalf."</em> The guide is equally clear about what does not count: chatbots and classifiers that do not control workflow execution <em>"are not agents."</em></li>
+          <li><strong>Anthropic:</strong> agents are systems where <em>"LLMs dynamically direct their own processes and tool usage."</em> When your code fixes every step in advance, that is a <strong>workflow</strong> - a perfectly good thing, just a different thing.</li>
+        </ul>
+        <p>The shared keyword is <strong>direct</strong>. In an agent, the model chooses the next step. In a workflow, your engineers chose it months ago. Both belong in your portfolio; only one deserves the word "agent" - and the budget, latency, and oversight that word implies.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>A 60-second history: chatbot → copilot → agent<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three generations, one direction of travel: how much of the process the model controls.</p>
+        <ul>
+          <li><strong>Chatbot</strong> - one question in, one answer out. The model controls nothing beyond its reply. Excluded from "agent" by OpenAI's definition.</li>
+          <li><strong>Copilot</strong> - the model suggests, a human executes every step. Control still sits entirely with the person.</li>
+          <li><strong>Agent</strong> - the model chooses steps and uses tools itself, inside limits you set. Control is delegated, which is exactly why a4 spends a whole session on guardrails.</li>
+        </ul>
+        <p>Most products sold as "agents" today sit in the first two generations. That is not a scandal - it is often the right engineering choice - but you should know which one you are buying.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: WATCH ONE RUN ============ -->
+  <section class="section" id="watch-one-run">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · live demo · Daybreak Ops Agent</span>
+      <h2>Watch one actually run <span class="tag demo">★ 14 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">This is the Daybreak Ops Agent - the running example for the whole course, built on a small coffee brand's real operations data. The founder asks: <em>"What was March 2026 revenue?"</em> Step through the run below and watch the loop from Part 1 happen in front of you. Then break it, on purpose, with one click.</p>
+
+    <div class="steps">
+      <div class="step"><p>Press <strong>Next</strong> and step through with <strong>Tools on</strong>. Find the moment the model chooses to look the number up instead of answering from memory - that choice is what makes it an agent.</p></div>
+      <div class="step"><p>Note the tool result: <strong>$150.00, 1 refund excluded</strong>. That figure is computed live from Daybreak's embedded data, in your browser, right now.</p></div>
+      <div class="step"><p>Now toggle <strong>Tools off</strong> and step through again. Read the new "answer" carefully: fluent, specific, confidently formatted - and invented end to end.</p></div>
+      <div class="step"><p>Say the lesson out loud: the model did not get worse between runs. A capability was missing, and nothing in the polished answer told you.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="lookup" data-levers="tools"></div>
+
+    <div class="callout tip">
+      <strong>How to read every agent demo in this course</strong>
+      👤 user · 🧠 model reasoning · 🔧 tool call · 📦 tool result · 🛡 guardrail · 💬 final answer. The model's words are a scripted teaching simulation replaying the characteristic behaviors; every number in a 📦 step is genuinely computed from the embedded Daybreak data.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The demo-that-lied test<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>What you just reproduced is the single most common way executives get burned by agents: a demo that looks flawless because nobody asked what the system could actually reach.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The demo that lied.</strong> A team demoed an "analytics agent" to their exec - it answered every revenue question instantly, and got a budget. In production someone checked a number against the warehouse: the agent had no database tool wired in and had been improvising figures the whole time. Nobody had asked which capabilities were switched on. From today, you always ask.</p>
+        </div>
+        <p>The leader's version of the test is one sentence in any demo: <strong>"Show me the tool call that produced that number."</strong> If there is no tool call to show, you are watching a very confident guess.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: WHEN NOT TO ============ -->
+  <section class="section" id="when-not-to">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers OpenAI guide when-to-build criteria, inverted</span>
+      <h2>When you should NOT want one <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">OpenAI's own guide is refreshingly blunt: agents cost latency, money, and predictability. It names exactly three situations that justify that price - <strong>complex decision-making</strong> (judgment calls a rulebook cannot capture), <strong>difficult-to-maintain rules</strong> (the if/else forest nobody dares touch), and <strong>heavy unstructured data</strong> (tasks swimming in documents and conversations). Turn that into a leader's checklist: if a proposal cannot claim at least one of the three, the answer is normal software - and saying so is not being behind, it is being right.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decision flow: a task arrives, three questions are asked, yes to any leads to consider an agent, no to all leads to normal software.">
+        <style>
+          .dfT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .dfS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .dfI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .dfM { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .dfN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .dfWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#dfHd); }
+        </style>
+        <defs>
+          <marker id="dfHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="50" y="130" width="165" height="56" rx="8" fill="#1E293B"/>
+        <text class="dfT" x="66" y="154">A TASK ARRIVES</text>
+        <text class="dfS" x="66" y="172">"let's agent this"</text>
+        <rect x="285" y="90" width="300" height="140" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="dfI" x="305" y="116">ASK THE THREE QUESTIONS</text>
+        <text class="dfM" x="305" y="144">1 · Judgment no rulebook captures?</text>
+        <text class="dfM" x="305" y="170">2 · An if/else forest nobody touches?</text>
+        <text class="dfM" x="305" y="196">3 · Swimming in unstructured docs?</text>
+        <rect x="655" y="60" width="185" height="56" rx="8" fill="#EA580C"/>
+        <text class="dfT" x="671" y="84">YES TO ANY</text>
+        <text class="dfS" x="671" y="102">consider an agent</text>
+        <rect x="655" y="210" width="185" height="56" rx="8" fill="#1E293B"/>
+        <text class="dfT" x="671" y="234">NO TO ALL</text>
+        <text class="dfS" x="671" y="252">normal software wins</text>
+        <path class="dfWire" d="M215,158 L280,158"/>
+        <path class="dfWire" d="M585,125 C615,115 625,100 650,92"/>
+        <path class="dfWire" d="M585,195 C615,205 625,222 650,232"/>
+        <text class="dfM" x="600" y="88">yes</text>
+        <text class="dfM" x="600" y="248">no</text>
+        <rect x="50" y="292" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="dfN" x="74" y="304">Agents cost latency, money and predictability (OpenAI). Pay that price only when at least one answer is yes.</text>
+        <rect x="50" y="320" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="dfN" x="74" y="332">Deterministic code first: if rules capture the task, normal software is cheaper, testable and boring.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the three-question filter before any agent gets funded</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The trade you are making<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When you approve an agent instead of a workflow, you are trading three things away. Name the trade explicitly in the approval conversation:</p>
+        <ul>
+          <li><strong>Cost</strong> - the loop calls the model many times per task, not once. Budget per task, not per month.</li>
+          <li><strong>Latency</strong> - choosing steps takes turns. Fine for a report, wrong for a checkout page.</li>
+          <li><strong>Predictability</strong> - the path is chosen at run time, so two runs can differ. That is the feature and the risk at once.</li>
+        </ul>
+        <p>Anthropic's essay opens with the matching advice: the most successful teams build with simple, composable patterns and add autonomy only when it demonstrably wins. "We could use an agent" is not a reason to.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Three proposals, three verdicts<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Run the filter on three typical pitches and notice how fast it decides:</p>
+        <ul>
+          <li><strong>"Agent to send the weekly sales report"</strong> - fixed steps, structured data, no judgment. Verdict: workflow or plain automation. Cheaper, testable, done.</li>
+          <li><strong>"Agent to triage inbound support tickets"</strong> - unstructured text, judgment about urgency and routing. Verdict: a real agent candidate, with guardrails from day one.</li>
+          <li><strong>"Agent to approve refunds"</strong> - judgment, yes, but also money leaving the building. Verdict: maybe - and only with a human approval gate, which is a4's whole topic.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 20-30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run the demo above in both states - Tools on, Tools off - until you can explain to a colleague why the second answer looked so trustworthy.</li>
+      <li>Write the one-line definition of an agent in your own words. If it does not mention who chooses the next step, it is not done yet.</li>
+      <li><strong>Ask your teams:</strong> "Of the things we currently call AI agents, which ones actually choose their own steps - and which are workflows with a fixed path?" Workflows are fine; mislabeled workflows distort budgets and risk reviews.</li>
+      <li><strong>Ask your teams:</strong> "For our flashiest AI demo, show me the tool call behind the headline number." One honest answer to that question is worth a quarter of vendor meetings.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This track teaches the leadership core of the canonical agent-building sources - Anthropic's and OpenAI's official guidance plus the major vendor courses - in business language, with a live agent to poke on every page. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - definitions</span><span class="note">Workflows vs agents wording · the patterns get their own session in a3</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI "A Practical Guide to Building Agents" - pp. 4-7</span><span class="note">Agent definition + exclusions · when-to-build criteria, inverted here into the when-NOT-to list</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DeepLearning.AI "Agentic AI" (Ng) - Module 1</span><span class="note">Degrees of autonomy · the full autonomy dial is a3's topic</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · A vendor shows you an "AI agent". What single fact makes it an agent rather than a workflow?</p>
+      <button class="qopt" type="button">A · It runs on the newest, largest model</button>
+      <button class="qopt" type="button">B · It is connected to many tools and systems</button>
+      <button class="qopt" type="button">C · The model chooses its own next step - the vendor's code does not fix the path</button>
+      <p class="qwhy">Anthropic's line: workflows run "predefined code paths"; agents "dynamically direct their own processes." Model size and tool count are irrelevant - who chooses the next step is everything.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · In the demo, the agent quoted a confident March revenue figure that no system ever produced. What was missing?</p>
+      <button class="qopt" type="button">A · Tools - with no data source wired in, the model improvised a fluent, wrong answer</button>
+      <button class="qopt" type="button">B · A bigger model - more parameters would have known the number</button>
+      <button class="qopt" type="button">C · Better prompting - the question was too vague</button>
+      <p class="qwhy">Invented numbers are the signature of a missing data tool. No amount of model size or prompt polish gives a model access to figures it cannot reach - only a wired tool does.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · A team proposes an agent for a task with stable rules and fully structured data. Best call?</p>
+      <button class="qopt" type="button">A · Fund the agent - autonomy is where the industry is going</button>
+      <button class="qopt" type="button">B · Normal software - none of OpenAI's three criteria hold, so deterministic code is cheaper and more predictable</button>
+      <button class="qopt" type="button">C · Fund it, but ask for a bigger model to be safe</button>
+      <p class="qwhy">OpenAI's three criteria: complex judgment, unmaintainable rules, heavy unstructured data. None present means you would pay agent costs (latency, money, unpredictability) for no benefit.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Agent in one line</b><span>An LLM in a loop with tools, choosing its own next step until the task is done, then stopping at an exit condition.</span></div>
+      <div class="cheat-item"><b>The two definitions</b><span>OpenAI: "systems that independently accomplish tasks on your behalf." Anthropic: "LLMs dynamically direct their own processes and tool usage."</span></div>
+      <div class="cheat-item"><b>Not an agent</b><span>Chatbots and classifiers - OpenAI's own exclusion. The model never controls what happens next.</span></div>
+      <div class="cheat-item"><b>The hype filter</b><span>One question: "What chooses the next step?" If the answer is their code, it is a workflow - useful, but not an agent.</span></div>
+      <div class="cheat-item"><b>The demo test</b><span>"Show me the tool call that produced that number." No tool call = a very confident guess.</span></div>
+      <div class="cheat-item"><b>When to agent</b><span>OpenAI's three: complex judgment, difficult-to-maintain rules, heavy unstructured data. At least one, or no deal.</span></div>
+      <div class="cheat-item"><b>When NOT to</b><span>Stable rules + structured data = normal software. Cheaper, testable, boring - and boring is a feature in production.</span></div>
+      <div class="cheat-item"><b>The trade</b><span>Approving an agent trades away cost, latency and predictability. Name the trade out loud before you sign.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 1 of 6 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="a2-anatomy-plain.html">Next: The anatomy in plain English →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 2 · Tools + your first agent - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 2 of 10</div>
+    <h1>Tools + your <span class="accent">first agent</span></h1>
+    <p class="sub">Last session you learned the loop; tonight you build it. First the quiet craft that decides whether an agent works at all: the tool schema - because the description, not your prompt, is the interface the model actually reads. Then you wire in Daybreak's toolbox (the very MCP server from the MCP course) and hand-roll the agent loop in about thirty lines of raw Python - Claude API first, Ollama as the local path. By the end, the scorecard climbs its first rung: 1/12 becomes 5/12. And one task gets more dangerous, on purpose.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Builder track</span>
+      <span class="chip audience">Practitioners: DE · DS · AI engineers · builders</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Tool schemas + ACI</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: the minimal loop</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we are</h2>
+    </div>
+    <p class="lede">b1 gave you the loop and the four levers. Tonight turns on the first lever: <strong>tools</strong>. You will read one tool definition the way the model reads it, meet the Daybreak toolbox you may have built in the MCP course, then write the loop yourself - no framework, no SDK magic - so that every framework you touch afterwards is just this loop wearing a coat.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live agent run - step through + toggle levers</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The anatomy of a tool schema and the ACI habit (prompt-engineer your tools, not just your prompt), two legitimate ways to wire the Daybreak toolbox in (MCP-native or plain function-calling), a ~30-line agent loop you wrote and understand line by line, and rung 1 of the scorecard: 5/12 with tools on.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: TOOL SCHEMAS + ACI ============ -->
+  <section class="section" id="tool-anatomy">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic tool-use docs + essay appendix 2 (ACI), HF Unit 1</span>
+      <h2>A tool is an interface for a model <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">A tool definition has three parts: a <strong>name</strong>, a <strong>description</strong>, and a <strong>JSON Schema</strong> for its input. Here is the part almost everyone gets backwards: the model never sees your Python. It sees the description. Anthropic's essay closes on exactly this point - appendix 2 is about crafting the <strong>agent-computer interface (ACI)</strong>: prompt-engineer your tool docs and test them, the same way you would craft a prompt. A vague description gives you a confused agent no system prompt can rescue.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anatomy of one tool definition, query_sales: name routes the call, description is the model's manual, schema is the argument contract.">
+        <style>
+          .tdT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .tdS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .tdI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .tdX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .tdN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .tdWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#tdHd); }
+        </style>
+        <defs>
+          <marker id="tdHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="50" y="42" width="380" height="258" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="tdI" x="70" y="70">ONE TOOL DEFINITION - query_sales</text>
+        <rect x="75" y="88" width="330" height="50" rx="8" fill="#9A3412"/>
+        <text class="tdT" x="91" y="109">name</text>
+        <text class="tdS" x="91" y="127">"query_sales"</text>
+        <rect x="75" y="152" width="330" height="64" rx="8" fill="#EA580C"/>
+        <text class="tdT" x="91" y="173">description</text>
+        <text class="tdS" x="91" y="191">"Order count, refunds, and completed</text>
+        <text class="tdS" x="91" y="206">revenue for one month (YYYY-MM)."</text>
+        <rect x="75" y="230" width="330" height="50" rx="8" fill="#F97316"/>
+        <text class="tdT" x="91" y="251">input_schema</text>
+        <text class="tdS" x="91" y="269">{ month: string (YYYY-MM), required }</text>
+        <text class="tdI" x="560" y="96">ROUTING</text>
+        <text class="tdX" x="560" y="113">the handle the model emits when it</text>
+        <text class="tdX" x="560" y="129">chooses this tool over the others</text>
+        <text class="tdI" x="560" y="171">THE MODEL'S MANUAL</text>
+        <text class="tdX" x="560" y="188">the ONLY thing the model reads to decide</text>
+        <text class="tdX" x="560" y="204">when to call it - prompt-engineer this (ACI)</text>
+        <text class="tdI" x="560" y="249">ARGUMENT CONTRACT</text>
+        <text class="tdX" x="560" y="266">JSON Schema validates the arguments;</text>
+        <text class="tdX" x="560" y="282">strict: true enforces the exact shape</text>
+        <path class="tdWire" d="M405,113 C470,108 500,98 552,92"/>
+        <path class="tdWire" d="M405,184 C470,180 500,172 552,167"/>
+        <path class="tdWire" d="M405,255 C470,250 500,248 552,245"/>
+        <rect x="50" y="332" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="tdN" x="74" y="344">ACI (essay appendix 2): prompt-engineer your tools - descriptions are docs the model actually reads.</text>
+        <rect x="50" y="364" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="tdN" x="74" y="376">Anthropic tool use supports strict: true - the API then guarantees arguments match the schema exactly.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - anatomy of one tool definition: name routes, description teaches, schema enforces</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Writing descriptions the ACI way<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Anthropic's ACI guidance boils down to three habits, all visible in the Daybreak toolbox:</p>
+        <ul>
+          <li><strong>Say what comes back, not just what goes in.</strong> "Order count, refunds, and completed revenue for one month" tells the model exactly when this tool answers its question - and when it does not.</li>
+          <li><strong>Put the format in the description.</strong> "(YYYY-MM)" saves the model from guessing "March", "03/2026", or "2026-3" - malformed arguments are the most common tool failure.</li>
+          <li><strong>Test tools like prompts.</strong> Run the agent on questions near the tool's edges and watch which tool it picks. If it picks wrong, fix the description before touching the system prompt.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The one-word fix.</strong> An agent kept calling a revenue tool to answer refund-policy questions. The team rewrote the system prompt three times with no luck. The actual fix: the tool's description said "sales data" and nothing else - adding "does NOT cover policies or subscriptions" routed every question correctly from then on. Interface bug, not model bug.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Schemas can be strict - and vendors type their tools<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two refinements worth knowing before b7 makes them matter:</p>
+        <ul>
+          <li><strong>strict: true (Anthropic tool use).</strong> With strict mode on, the API guarantees the tool-call arguments conform to your JSON Schema exactly - no missing required fields, no surprise extras. Cheap insurance; turn it on for tools whose arguments feed SQL or APIs.</li>
+          <li><strong>OpenAI's tool taxonomy.</strong> The OpenAI guide sorts tools into <strong>data</strong> tools (read: query_sales), <strong>action</strong> tools (write: send_email, refund_order - arriving later in this track), and <strong>orchestration</strong> tools (agents used as tools - b6). The taxonomy matters because risk scales with the category: data tools can mislead you; action tools can hurt you. b7 risk-rates every tool on exactly this axis.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE DAYBREAK TOOLBOX ============ -->
+  <section class="section" id="toolbox">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the running project + Academy tool-use lessons</span>
+      <h2>The Daybreak toolbox <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">This course does not invent a toolbox - it inherits one. The MCP course's Daybreak server (server.py in this repo's project folder) ships <strong>three tools, two resources, and one prompt</strong> over the same SQLite database the SQL course used. That server is this agent's hands for the rest of the track.</p>
+
+    <table class="clean">
+      <thead><tr><th>Asset</th><th>Signature / URI</th><th>What it returns</th></tr></thead>
+      <tbody>
+        <tr><td>Tool</td><td><code>query_sales(month: str)</code></td><td>Order count, refunds, and completed revenue for one month (YYYY-MM)</td></tr>
+        <tr><td>Tool</td><td><code>top_products(from_date, to_date)</code></td><td>Best-selling products by quantity for a date range (YYYY-MM-DD)</td></tr>
+        <tr><td>Tool</td><td><code>subscription_status()</code></td><td>Active vs cancelled subscription counts, with monthly quantities</td></tr>
+        <tr><td>Resource</td><td><code>daybreak://catalog</code></td><td>Product catalog with prices</td></tr>
+        <tr><td>Resource</td><td><code>daybreak://policy/refunds</code></td><td>Refund and cancellation policy</td></tr>
+        <tr><td>Prompt</td><td><code>monthly_report(month)</code></td><td>Standard monthly ops report template for the founder</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Wire it two ways - both are legitimate<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>(a) MCP-native.</strong> If you built the server in the MCP course, your agent's client session lists its tools and calls them over the protocol - the toolbox stays one process, every host can share it:</p>
+<pre><code>from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+params = StdioServerParameters(command="uv", args=["run", "server.py"])
+async with stdio_client(params) as (read, write):
+    async with ClientSession(read, write) as session:
+        await session.initialize()
+        tools = await session.list_tools()   # query_sales, top_products, subscription_status
+        result = await session.call_tool("query_sales", {"month": "2026-03"})</code></pre>
+        <p><strong>(b) Plain function-calling.</strong> No server? Wrap the same SQLite queries as local Python functions and pass their schemas straight to the API:</p>
+<pre><code>import sqlite3
+
+def query_sales(month: str) -> str:
+    """Order count, refunds, and completed revenue for one month (YYYY-MM)."""
+    con = sqlite3.connect("daybreak.db")
+    try:
+        rows = con.execute(
+            "SELECT status, COUNT(DISTINCT o.order_id),"
+            "       COALESCE(SUM(oi.quantity * oi.unit_price), 0)"
+            "  FROM orders o JOIN order_items oi ON oi.order_id = o.order_id"
+            " WHERE substr(o.order_date, 1, 7) = ? GROUP BY status",
+            (month,),
+        ).fetchall()
+    finally:
+        con.close()
+    ...  # format exactly like the MCP server does
+
+TOOL_FUNCTIONS = {"query_sales": query_sales,
+                  "top_products": top_products,
+                  "subscription_status": subscription_status}</code></pre>
+        <p>Same tools, same answers, same agent. The course uses whichever you have - MCP buys you reuse across hosts; plain functions buy you zero setup. The loop in Part 3 cannot tell the difference.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: BUILD-ALONG ============ -->
+  <section class="section" id="build-along">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Anthropic tool-use docs (loop + Tool Runner), HF Unit 1</span>
+      <h2>Build-along: the minimal loop in raw Python <span class="tag demo">★ 15 min · type along</span></h2>
+    </div>
+    <p class="lede">Here is the entire agent, no framework. One while-style loop: call the model with tools attached; if it stops because it wants a tool (<code>stop_reason == "tool_use"</code>), run the tool, append the result, go around again; otherwise it answered - break. The b1 exit conditions are all here: a final answer, no more tool calls, an error, or the <code>max_turns</code> guard.</p>
+
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+
+TOOLS = [{
+    "name": "query_sales",
+    "description": ("Order count, refunds, and completed revenue "
+                    "for one month (YYYY-MM)."),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "month": {"type": "string",
+                      "description": "Month as YYYY-MM, e.g. 2026-03"},
+        },
+        "required": ["month"],
+    },
+}]
+
+def run_agent(goal: str, max_turns: int = 10) -> str:
+    messages = [{"role": "user", "content": goal}]
+    for _ in range(max_turns):                      # exit 4: max turns
+        response = client.messages.create(
+            model="claude-opus-5",
+            max_tokens=1024,
+            tools=TOOLS,
+            messages=messages,
+        )
+        if response.stop_reason == "tool_use":      # model wants a tool run
+            messages.append({"role": "assistant", "content": response.content})
+            results = []
+            for block in response.content:
+                if block.type == "tool_use":
+                    output = TOOL_FUNCTIONS[block.name](**block.input)
+                    results.append({"type": "tool_result",
+                                    "tool_use_id": block.id,
+                                    "content": output})
+            messages.append({"role": "user", "content": results})
+            continue                                # observe, then loop
+        return response.content[0].text             # exits 1-2: done
+    return "Stopped: max_turns reached."
+
+print(run_agent("What was March 2026 revenue?"))
+# -> calls query_sales("2026-03") -> "$150.00 completed, 1 refunded"</code></pre>
+
+    <div class="callout tip">
+      <strong>You just hand-rolled what SDKs automate</strong>
+      Anthropic's SDK ships a <strong>Tool Runner</strong> that runs this exact loop for you - hand it functions, it handles tool_use, execution, and tool_result plumbing. Use it in real projects. We hand-rolled once so that when a framework loop misbehaves, you can see through the coat to the loop underneath.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The Ollama variant - same loop, local model<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The loop is vendor-neutral. With Ollama, a tool-capable local model plays the same game - it even accepts plain Python functions as tools and reads their docstrings as descriptions (ACI again):</p>
+<pre><code>import ollama
+
+messages = [{"role": "user", "content": "What was March 2026 revenue?"}]
+for _ in range(10):
+    response = ollama.chat(model="qwen3", messages=messages,
+                           tools=[query_sales])   # functions as tools
+    messages.append(response.message)
+    if not response.message.tool_calls:
+        print(response.message.content)           # final answer
+        break
+    for call in response.message.tool_calls:
+        output = TOOL_FUNCTIONS[call.function.name](**call.function.arguments)
+        messages.append({"role": "tool", "tool_name": call.function.name,
+                         "content": str(output)})</code></pre>
+        <p>Differences from the Claude path: the done-signal is "no tool_calls" instead of <code>stop_reason</code>, and tool results go back as <code>role: "tool"</code> messages. The shape - decide, act, observe, repeat, exit - is identical. Small local models call tools less reliably; that is a model gap, not a loop gap.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Demo 1 of 2</span>
+      <h2>Your loop, running - predict every step <span class="tag demo">★ 8 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">This is the loop you just wrote, running the b1 question over Daybreak's real data. This time you know the machinery - so <strong>predict each step before you click Next</strong>: what will the model do, which tool, which argument, what comes back?</p>
+
+    <div class="steps">
+      <div class="step"><p>Before each Next, say the step out loud: reason → <code>query_sales("2026-03")</code> → 📦 result → answer. Score your predictions.</p></div>
+      <div class="step"><p>At the 📦 step, check the number: <strong>$150.00, 1 refund excluded</strong> - computed live from the embedded Daybreak data, exactly what your Python returns.</p></div>
+      <div class="step"><p>Toggle <strong>Tools off</strong> and step through again. Name the failure precisely: no tool_use stop, so the loop never runs a tool - the model improvises from memory.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="lookup" data-levers="tools"></div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Demo 2 of 2</span>
+      <h2>Rung 1 unlocked - and a new danger <span class="tag demo">★ 7 min · explore</span></h2>
+    </div>
+    <p class="lede">The scorecard from b1, with the lever you built tonight switched on. <strong>You just unlocked rung 1: 5/12</strong> - up from 1/12 with everything off. Lookups live. But do not skip the fine print on task 12.</p>
+
+    <div class="steps">
+      <div class="step"><p>Confirm the climb: <strong>1/12 → 5/12</strong> with tools on. Every task that flipped to ✓ is a lookup your three tools can now answer.</p></div>
+      <div class="step"><p>Read WHY task 12 got <strong>MORE dangerous</strong> with tools on: an agent that can act will act on whatever its context says - including instructions hiding inside untrusted data it reads. That is prompt injection, and it is now a live wire. b7 builds the guardrail that catches it.</p></div>
+      <div class="step"><p>Note what stays red: multi-step comparisons (memory, b4) and decomposition tasks (planning, b5). Tools alone are hands without a notebook or a plan.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="score" data-levers="tools"></div>
+
+    <div class="callout tip">
+      <strong>How to read every agent demo in this course</strong>
+      👤 user · 🧠 model reasoning · 🔧 tool call · 📦 tool result · 🛡 guardrail · 💬 final answer. The model's words are a scripted teaching simulation replaying the characteristic behaviors; every number in a 📦 step is genuinely computed from the embedded Daybreak data.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run your loop against three questions: "What was March 2026 revenue?", "What are our top products?", and "How many active subscriptions do we have?" - one tool each. Watch the stop_reason on every turn.</li>
+      <li>Write one NEW tool schema for Daybreak, description-first: draft the description and schema before any Python, then check it against the three ACI habits from Part 1. (Candidates: order lookup by customer, revenue by product.)</li>
+      <li>Break the loop on purpose: remove the max_turns guard, then ask an impossible task ("find the order from 2019" - the data starts in 2026) and watch it never exit. Put the guard back. You now believe in exit conditions.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - appendix 2 (ACI)</span><span class="note">Prompt-engineer your tools: descriptions as the agent-computer interface</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic tool-use docs</span><span class="note">Tool schemas, the tool_use / tool_result loop, Tool Runner, strict: true</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hugging Face Agents course - Unit 1</span><span class="note">Functions as tools; docstrings become descriptions on the Ollama path</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">OpenAI "A Practical Guide to Building Agents"</span><span class="note">Data / action / orchestration tool types - risk-rated fully in b7</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic Academy "Building with the Claude API" - tool-use lessons</span><span class="note">The same loop, taught with the Academy's exercises; do them for practice</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · When the model picks which tool to call, what does it actually read?</p>
+      <button class="qopt" type="button">A · The tool's Python source code</button>
+      <button class="qopt" type="button">B · The tool's description and schema in the request - never your implementation</button>
+      <button class="qopt" type="button">C · The system prompt only - tool definitions are for the runtime</button>
+      <p class="qwhy">The model sees name + description + JSON Schema, nothing else. That is why ACI (essay appendix 2) says to prompt-engineer descriptions: they ARE the interface. Wrong tool picked? Fix the description first.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · The response comes back with stop_reason "tool_use". What does that mean?</p>
+      <button class="qopt" type="button">A · The model errored while running your tool</button>
+      <button class="qopt" type="button">B · The model finished - "tool_use" confirms tools were used along the way</button>
+      <button class="qopt" type="button">C · The model paused and is asking YOU to run a tool - execute it, append a tool_result, and call the API again</button>
+      <p class="qwhy">The model never runs anything - it emits a request and stops. Your loop runs the function, appends the tool_result, and continues. Any other stop_reason means the loop can exit with an answer.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Turning tools ON made task 12 MORE dangerous on the scorecard. Why?</p>
+      <button class="qopt" type="button">A · Tools let the agent act - so instructions hidden in untrusted data it reads can now trigger real actions</button>
+      <button class="qopt" type="button">B · Tools slow the loop down, so the task times out more often</button>
+      <button class="qopt" type="button">C · The extra tool definitions overflow the context window</button>
+      <p class="qwhy">An LLM with no tools can only say bad things; an agent with tools can do them. Task 12 reads untrusted tickets - a planted instruction becomes a live action. That is prompt injection; b7 builds the guardrail.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Tool anatomy</b><span>name (routing) + description (the model's manual) + JSON Schema (argument contract). The model never sees your code.</span></div>
+      <div class="cheat-item"><b>ACI rule</b><span>Prompt-engineer your tools (essay appendix 2): say what comes back, put formats in the description, test tools like prompts.</span></div>
+      <div class="cheat-item"><b>Daybreak toolbox</b><span>query_sales(month) · top_products(from, to) · subscription_status() + catalog + refund-policy resources + monthly_report prompt.</span></div>
+      <div class="cheat-item"><b>Two wirings</b><span>MCP-native (session lists + calls server tools) or plain function-calling (wrap the same SQLite queries). The loop cannot tell.</span></div>
+      <div class="cheat-item"><b>The loop</b><span>messages.create with tools → stop_reason "tool_use"? run tool, append tool_result, continue → else break with the answer.</span></div>
+      <div class="cheat-item"><b>Exit conditions</b><span>Final answer · no more tool calls · error · max_turns guard. Remove the guard and an impossible task loops forever.</span></div>
+      <div class="cheat-item"><b>Tool Runner</b><span>SDKs auto-run this loop (Anthropic Tool Runner). Use it in production - hand-roll once so you can debug through it.</span></div>
+      <div class="cheat-item"><b>Rung 1</b><span>Tools on: 1/12 → 5/12. And task 12 got MORE dangerous - acting agents obey planted instructions. Guardrails land in b7.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 2 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b1-agent-loop.html">← Prev: The agent loop</a> &nbsp;·&nbsp; <a href="b3-workflow-patterns.html">Next: The five workflow patterns →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

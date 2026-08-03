@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 8 · Agent evals - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 8 of 10</div>
+    <h1>Agent <span class="accent">evals</span></h1>
+    <p class="sub">Your agent nails the demo - but would it nail the same task five times in a row? Tonight the b1 scorecard grows up into a real eval harness. You learn the vocabulary that unlocks the whole evals literature (task, trial, grader, transcript, outcome), the three grader types and their trade-offs, and the metric split that separates a demo from a product: pass@k versus pass^k. Then you build a ~30-line harness that runs the Daybreak golden set for real - the same harness the b10 capstone must pass at 12/12 before you ship.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Builder track</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Vocabulary + graders</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: the harness</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Why evals, why now</h2>
+    </div>
+    <p class="lede">You have spent b1-b7 making the Daybreak Ops Agent capable: tools, memory, planning, guardrails. Tonight you make it <strong>measurable</strong>. An agent without an eval harness is a demo; an agent with one is a system you can improve on purpose. Everything here comes from the newest layer of the official canon - Anthropic's agent-evals essay, LangSmith's trajectory evals and the agentevals package, and Arize's evaluation course - taught on the golden set you have been climbing since b1.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live scorecard - the golden set as your spec</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The five words that let you read any evals paper (task, trial, grader, transcript, outcome), the three grader types and when each one lies, the pass@k vs pass^k distinction drawn from memory, and a working Python harness that runs your golden set N trials at a time and prints both numbers per task.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: VOCABULARY ============ -->
+  <section class="section" id="vocabulary">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic "Demystifying evals for AI agents"</span>
+      <h2>The vocabulary that unlocks the literature <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Anthropic's agent-evals essay gives the field its shared words. A <strong>task</strong> is one unit of work with a defined success condition ("what was March 2026 revenue?"). A <strong>trial</strong> is one attempt at that task - agents are non-deterministic, so one trial proves nothing. A <strong>grader</strong> decides whether a trial passed. The <strong>transcript</strong> (or trace) is the full record of the trial - every thought, tool call, and result. The <strong>outcome</strong> is the final state of the environment after the agent is done - not what it said, but what is now true. Learn these five and every evals doc, paper, and product suddenly reads clearly.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same agent runs the same task five times. Trials 1, 3 and 5 pass; trials 2 and 4 fail. pass at 5 is yes because it succeeded at least once; pass to the power 5 is no because it did not succeed every time.">
+        <style>
+          .pkT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .pkS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .pkI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .pkF { font: 400 11.5px Inter, sans-serif; fill: #64748B; }
+          .pkX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .pkN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .pkWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#pkHd); }
+        </style>
+        <defs>
+          <marker id="pkHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <text class="pkI" x="60" y="40">Same agent · same task · 5 trials: "what was March 2026 revenue?"</text>
+        <rect x="60" y="58" width="330" height="38" rx="8" fill="#EA580C"/>
+        <text class="pkT" x="76" y="82">Trial 1 · ✓ answered $150</text>
+        <rect x="60" y="106" width="330" height="38" rx="8" fill="#FFF7ED" stroke="#CBD5E1" stroke-width="1.5"/>
+        <text class="pkI" x="76" y="126">Trial 2 · ✗ answered from memory</text>
+        <text class="pkF" x="76" y="139">wrong number, no tool call in the transcript</text>
+        <rect x="60" y="154" width="330" height="38" rx="8" fill="#F97316"/>
+        <text class="pkT" x="76" y="178">Trial 3 · ✓ answered $150</text>
+        <rect x="60" y="202" width="330" height="38" rx="8" fill="#FFF7ED" stroke="#CBD5E1" stroke-width="1.5"/>
+        <text class="pkI" x="76" y="222">Trial 4 · ✗ queried the wrong month</text>
+        <text class="pkF" x="76" y="235">right tool, wrong argument - outcome grader catches it</text>
+        <rect x="60" y="250" width="330" height="38" rx="8" fill="#EA580C"/>
+        <text class="pkT" x="76" y="274">Trial 5 · ✓ answered $150</text>
+        <path class="pkWire" d="M390,115 C450,110 470,105 515,105"/>
+        <path class="pkWire" d="M390,235 C450,240 470,245 515,245"/>
+        <rect x="520" y="80" width="300" height="56" rx="8" fill="#9A3412"/>
+        <text class="pkT" x="536" y="103">pass@5 = YES</text>
+        <text class="pkS" x="536" y="121">succeeded at least once in 5 trials (3 of 5)</text>
+        <rect x="520" y="220" width="300" height="56" rx="8" fill="#1E293B"/>
+        <text class="pkT" x="536" y="243">pass^5 = NO</text>
+        <text class="pkS" x="536" y="261">needed all 5 - trials 2 and 4 failed</text>
+        <rect x="60" y="330" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="pkN" x="84" y="342">pass@k answers "can it ever do this?" - the capability number that flatters demos.</text>
+        <rect x="60" y="362" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="pkN" x="84" y="374">pass^k answers "can users trust it every time?" - the reliability number you ship on.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - pass@5 vs pass^5 on the same five trials: capability is not reliability</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three grader types - and what each one costs<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every grader in existence is one of three kinds. The essay's advice is not to pick one - it is to combine them and know each one's failure mode:</p>
+        <ul>
+          <li><strong>Code-based graders</strong> - assert the answer contains "150", check a row landed in the database. Fast, objective, cheap to run thousands of times - and brittle: a correct answer phrased as "$150.00" can fail a naive string check, and a lucky wrong answer can pass one.</li>
+          <li><strong>LLM-judge graders</strong> - a model grades the transcript against a written rubric. Handles open-ended answers code cannot - but judges need <em>calibration</em> against human labels before you trust them, and every rubric needs an <strong>"Unknown" escape clause</strong> so the judge can abstain instead of guessing when the transcript is ambiguous.</li>
+          <li><strong>Human graders</strong> - the gold standard. Too slow and expensive to run on every trial, so their real job is to <em>calibrate the other two</em>: label a sample by hand, then check your code graders and LLM-judges agree with the humans.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The judge that always said yes.</strong> A team wired an LLM-judge with the rubric "is this answer helpful?" and watched their eval pass rate hit 98% while users kept complaining. The judge had never been calibrated - it graded fluency, not correctness, and it had no way to say "I cannot tell." A rubric with concrete pass criteria plus an Unknown clause dropped the score to 61% - the honest number they could finally improve.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why one trial proves nothing<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Agents are non-deterministic twice over: the model samples its tokens, and the environment (tool latency, data state, ordering) shifts under it. That is why the unit of evidence is the <strong>trial</strong>, and why every score in this course is reported over N trials, never one. The gap between pass@k and pass^k on the same task is a direct reading of that variance - in the homework you will measure it on your own agent and treat it as a debt to pay down, not a dice roll to accept.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: OUTCOME VS TRAJECTORY ============ -->
+  <section class="section" id="outcome-vs-trajectory">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers LangSmith trajectory evals + agentevals, Arize "Evaluating AI Agents"</span>
+      <h2>Outcome vs trajectory <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Anthropic's essay is firm: <strong>grade outcomes over process</strong>. The pitfall it names is over-specifying tool sequences - if your grader demands query_sales then top_products in that order, you will fail perfectly good agents that found another valid route to the right final state. But outcome-only grading has a blind spot too: an agent that gets the right answer while silently calling send_email twice looks identical to a clean run. That is what <strong>trajectory checks</strong> are for - and it is exactly the split LangSmith's agentevals package implements.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th></th><th>Outcome eval</th><th>Trajectory eval</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>What it grades</strong></td>
+          <td>The final environment state - did the right answer land, did the right row change</td>
+          <td>The path taken - which tools were called, with what arguments, in what shape</td>
+        </tr>
+        <tr>
+          <td><strong>What it catches</strong></td>
+          <td>Wrong answers, hallucinated numbers, tasks silently left half-done</td>
+          <td>Silent weirdness on the way: redundant calls, skipped guardrails, tool loops, side effects the answer hides</td>
+        </tr>
+        <tr>
+          <td><strong>When it lies</strong></td>
+          <td>Right answer by luck or by a dangerous route still passes - the path is invisible</td>
+          <td>Over-specified sequences fail good agents that found a different valid route - the Anthropic pitfall</td>
+        </tr>
+        <tr>
+          <td><strong>Use it for</strong></td>
+          <td>Your primary pass/fail signal on every task</td>
+          <td>A second lens on action tasks and regressions - loose modes first, strict only when order truly matters</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The agentevals trajectory modes<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The agentevals package (LangSmith's trajectory-evals toolkit) ships four match modes plus an LLM judge, each a different strictness dial against a reference trajectory:</p>
+        <ul>
+          <li><strong>strict</strong> - same tool calls, same order. The most brittle; reach for it only when order is the requirement (approve before send).</li>
+          <li><strong>unordered</strong> - same tool calls, any order. Right for "it must have checked both months" tasks.</li>
+          <li><strong>subset</strong> - the agent called no tools outside the reference set. Catches rogue extra calls.</li>
+          <li><strong>superset</strong> - the agent called at least the reference tools. Catches skipped required steps.</li>
+          <li><strong>create_trajectory_llm_as_judge</strong> - a rubric-driven judge over the whole trajectory, for the qualities no matcher can express ("did it re-check before acting?").</li>
+        </ul>
+        <p>Arize's course teaches the same idea as decomposition: evaluate the <strong>router</strong> (did it pick the right tool?), each <strong>skill</strong> (did the tool step succeed?), and the <strong>trajectory</strong> separately - then improve the LLM-judge itself against human labels.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The five pitfalls that quietly ruin eval suites<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>From the Anthropic essay's field notes - check your harness against all five before trusting any number it prints:</p>
+        <ul>
+          <li><strong>Eval saturation</strong> - your suite hits 100% and stops teaching you anything. Add harder tasks from fresh failures; a saturated eval is a retired eval.</li>
+          <li><strong>Brittle grading</strong> - the string check that fails "$150.00", the judge that punishes formatting. Calibrate graders against transcripts you have read yourself.</li>
+          <li><strong>Shared state between trials</strong> - trial 3 passes because trial 2 already wrote the row. Reset the environment between trials or your pass^k is fiction.</li>
+          <li><strong>Ambiguous task specs</strong> - if two reasonable humans disagree on what "done" means, your grader is guessing. Tighten the success condition, not the agent.</li>
+          <li><strong>Positive-only test sets</strong> - every task has a happy path. Add tasks the agent SHOULD refuse (b7's injection trap belongs in the golden set too).</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: BUILD-ALONG ============ -->
+  <section class="section" id="build-along">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Formalize the golden set <span class="tag demo">★ 24 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">Since b1 you have been clicking through the 12-task scorecard - 1 → 5 → 7 → 10 → 12 as the levers came on. Tonight that scorecard stops being a widget and becomes your <strong>spec</strong>. The box below is the reference: 12 tasks, all four levers on, 12/12. Your job is to rebuild it as a Python harness around your own b2 loop - tasks, trials, graders, and both pass numbers per task.</p>
+
+    <div class="steps">
+      <div class="step"><p>Open the scorecard below with all levers on and read all 12 task descriptions - each one is a task spec: a prompt plus a success condition your grader must encode.</p></div>
+      <div class="step"><p>Write the harness from the code card: a tasks list, N trials per task through your b2 loop, one grader per task.</p></div>
+      <div class="step"><p>Start with code-based graders (assert the number is in the answer), then add ONE LLM-judge for the open-ended dip-diagnosis task - rubric plus Unknown clause.</p></div>
+      <div class="step"><p>Run K=5 and read the two columns. Any task where pass@5 is true but pass^5 is false is a flaky task - that gap is what b9's staged rollout will gate on.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="score" data-levers="tools,memory,planning,guardrails"></div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The ~30-line harness<span class="mini">10 min · type along</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Everything from Parts 1-2 in one file. <code>run_agent</code> is your b2 loop unchanged - the harness wraps it, never reaches inside it (grade outcomes, remember):</p>
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+K = 5  # trials per task - one trial proves nothing
+
+def run_agent(prompt: str) -&gt; str:
+    """Your b2 loop: model + Daybreak tools, returns the final answer."""
+    ...  # unchanged from b2 - the harness only sees what comes out
+
+# --- graders ------------------------------------------------------
+def grade_march(answer: str) -&gt; bool:      # code-based: fast, brittle
+    return "150" in answer                 # March 2026 revenue is $150
+
+RUBRIC = (
+    "PASS if the answer names BOTH the March refund and the cancelled "
+    "subscription as causes of the March dip. FAIL if it invents causes. "
+    "UNKNOWN if the answer is too ambiguous to grade - never guess."
+)
+
+def grade_dip(answer: str) -&gt; bool:        # LLM-judge: rubric + escape
+    verdict = client.messages.create(
+        model="claude-opus-5", max_tokens=5,
+        messages=[{"role": "user",
+                   "content": RUBRIC + "\n\nAnswer to grade:\n" + answer}],
+    ).content[0].text.strip()
+    return verdict == "PASS"   # UNKNOWNs get queued for human review
+
+# --- golden set ---------------------------------------------------
+TASKS = [
+    {"prompt": "What was March 2026 revenue?",  "grader": grade_march},
+    {"prompt": "Why did revenue dip in March?", "grader": grade_dip},
+    # ... grow toward the full 12, then past it with real failures
+]
+
+for task in TASKS:
+    wins = [task["grader"](run_agent(task["prompt"])) for _ in range(K)]
+    print(task["prompt"], "| pass@5:", any(wins), "| pass^5:", all(wins))</code></pre>
+        <p><code>any(wins)</code> is pass@k, <code>all(wins)</code> is pass^k - the whole metric split is two builtins. The work is in the graders, which is exactly where the essay says the work should be.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>The Anthropic recipe for a golden set that stays honest</strong>
+      Start with 20-50 tasks drawn from real user failures, not imagined ones. Read transcripts regularly - graders catch what you taught them to catch, your eyes catch the rest. Combine grader types instead of betting on one. And tie the suite to production monitoring, so the failures users hit tomorrow become the tasks you eval next week.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Add 3 tasks to your golden set drawn from your agent's own real failures - moments in b2-b7 where it got something wrong. Real failures make better evals than invented ones.</li>
+      <li>Write one LLM-judge rubric with concrete pass criteria and an Unknown escape clause. Grade five transcripts by hand first, then check the judge agrees with you.</li>
+      <li>Run every task at K=5 and compare pass@5 vs pass^5 per task. The gap between the two columns is your reliability debt - write down which lever you suspect for each flaky task.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session teaches the working core of the agent-evals canon. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Demystifying evals for AI agents"</span><span class="note">Vocabulary, grader types, pass@k vs pass^k, outcomes over process, the 20-50-task recipe</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">LangSmith trajectory evals + the agentevals package</span><span class="note">strict / unordered / subset / superset modes + create_trajectory_llm_as_judge</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">DeepLearning.AI "Evaluating AI Agents" (Arize)</span><span class="note">Router / skill / trajectory decomposition; improving the LLM-judge against human labels</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Hugging Face Agents course - bonus unit 2</span><span class="note">Observability + evaluation; the tracing half lands in b9</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Your agent scores pass@5 = yes but pass^5 = no on a task. What does that tell you?</p>
+      <button class="qopt" type="button">A · The task is impossible for this agent - remove it from the set</button>
+      <button class="qopt" type="button">B · It succeeded at least once in 5 trials but not all 5 - capable, not yet reliable</button>
+      <button class="qopt" type="button">C · The two metrics disagree, so the grader is broken and must be rewritten</button>
+      <p class="qwhy">pass@k asks "did it succeed at least once in k trials?"; pass^k asks "did it succeed in all k?". A yes/no split is the signature of a flaky task - the capability exists, the reliability does not. That gap is what you pay down before shipping.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Why does Anthropic say to grade outcomes rather than the agent's process?</p>
+      <button class="qopt" type="button">A · Many valid paths reach the same correct final state - over-specifying tool sequences fails good agents</button>
+      <button class="qopt" type="button">B · Transcripts are too long to store, so only the final answer survives</button>
+      <button class="qopt" type="button">C · Process cannot be observed from outside the model</button>
+      <p class="qwhy">The named pitfall is over-specifying tool sequences: demand one exact route and you punish agents that found another valid one. Outcome is the primary signal; trajectory checks (in their looser modes) are the second lens for silent weirdness, not the gate.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · Which grader type needs calibration against human labels AND an "Unknown" escape clause?</p>
+      <button class="qopt" type="button">A · Code-based graders - assertions can be miscalibrated too</button>
+      <button class="qopt" type="button">B · Human graders - people disagree with each other</button>
+      <button class="qopt" type="button">C · LLM-judge graders - uncalibrated judges grade fluency, and without an escape they guess</button>
+      <p class="qwhy">LLM-judges handle open-ended answers but must be checked against human labels before you trust them, and every rubric needs an Unknown clause so the judge can abstain instead of guessing. Humans ARE the calibration standard; code graders are objective but brittle in a different way.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 8 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The vocabulary</b><span>Task (unit of work) · trial (one attempt) · grader (pass/fail judge) · transcript/trace (full record) · outcome (final environment state).</span></div>
+      <div class="cheat-item"><b>Three graders</b><span>Code-based: fast, objective, brittle. LLM-judge: rubrics, needs calibration + an Unknown escape. Human: gold standard - calibrates the other two.</span></div>
+      <div class="cheat-item"><b>pass@k vs pass^k</b><span>At least once in k = capability. All k = reliability. The gap between them is your reliability debt.</span></div>
+      <div class="cheat-item"><b>Outcome over process</b><span>Grade the final state. The pitfall: over-specifying tool sequences fails good agents on valid alternate routes.</span></div>
+      <div class="cheat-item"><b>Trajectory modes</b><span>agentevals: strict · unordered · subset · superset + create_trajectory_llm_as_judge. Loose modes first; strict only when order IS the requirement.</span></div>
+      <div class="cheat-item"><b>Five pitfalls</b><span>Eval saturation · brittle grading · shared state between trials · ambiguous specs · positive-only test sets.</span></div>
+      <div class="cheat-item"><b>The recipe</b><span>20-50 tasks from real user failures · read transcripts regularly · combine grader types · tie evals to production monitoring.</span></div>
+      <div class="cheat-item"><b>Running project</b><span>The b1 scorecard is now a Python harness: 12 tasks, K trials, both pass numbers. b10 must hit 12/12 before shipping - b9 shows how to ship it.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 8 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b7-guardrails.html">← b7 · Guardrails</a> &nbsp;·&nbsp; <a href="b9-ship-observe.html">Next: Ship and observe →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

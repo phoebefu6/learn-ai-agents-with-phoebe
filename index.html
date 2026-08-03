@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>learn ai agents with phoebe - a two-track course on building AI agents</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(234,88,12,.12); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,#FBF6EF); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe</div>
+    <h1>Two tracks into the loop behind every AI agent</h1>
+    <p class="sub">An agent is an LLM in a loop with tools, directing its own next step - and everything that makes one reliable comes down to four levers: tools, memory, planning, guardrails. A leader track teaches you to judge, scope, and govern agents without touching code. A builder track takes you from reading a live agent trace to assembling the Daybreak Ops Agent - tools, workflow patterns, memory, planning, multi-agent, guardrails, evals - on the same coffee-brand MCP server built in the MCP course. Every builder page has a live agent to run, break, and fix in your browser.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="2">2</b><span>tracks</span></div>
+      <div class="stat"><b data-count="16">16</b><span>sessions</span></div>
+      <div class="stat"><b data-count="12">12</b><span>golden-set tasks</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>The leader track 🤝 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· for C-level, managers &amp; curious minds · 6 x 45 min · no code to write</span></h2>
+      <p class="plede">Thinking mode: what agents actually are behind the hype, where they pay off, the risks that reach customers, and the questions that separate a real agent vendor from a demo - each session ends with questions to ask your teams.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-what-an-agent-is.html" style="--diff:#34D399">
+        <span class="cicon">🔄</span>
+        <span class="cnum">Leader 1 · easy</span>
+        <h3>What an agent actually is</h3>
+        <p>The loop behind the hype, the official Anthropic and OpenAI definitions, what does not count - and when NOT to want one.</p>
+        <span class="meta"><span class="pill amber">▶ Leaders start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-anatomy-plain.html" style="--diff:#34D399">
+        <span class="cicon">🧩</span>
+        <span class="cnum">Leader 2 · easy</span>
+        <h3>The anatomy in plain English</h3>
+        <p>Tools, memory, planning, guardrails as business capabilities you can commission - and the failure each one prevents.</p>
+        <span class="meta"><span class="pill light">No-code session</span></span>
+      </a>
+      <a class="course-card" href="courses/a3-workflows-vs-agents.html" style="--diff:#FBBF24">
+        <span class="cicon">🎚️</span>
+        <span class="cnum">Leader 3 · medium</span>
+        <h3>Workflows vs agents</h3>
+        <p>The autonomy dial: five workflow patterns as cost-reliability decisions, and why both vendors say start at the boring end.</p>
+        <span class="meta"><span class="pill light">Autonomy-dial exercise</span></span>
+      </a>
+      <a class="course-card" href="courses/a4-risk-governance.html" style="--diff:#FBBF24">
+        <span class="cicon">🛡️</span>
+        <span class="cnum">Leader 4 · medium</span>
+        <h3>Risk and governance</h3>
+        <p>Prompt injection, the seven guardrail types, tool risk-rating, human-in-the-loop triggers - the risk register that actually matters.</p>
+        <span class="meta"><span class="pill light">Vendor-grilling checklist</span></span>
+      </a>
+      <a class="course-card" href="courses/a5-agents-in-your-org.html" style="--diff:#FB923C">
+        <span class="cicon">🏢</span>
+        <span class="cnum">Leader 5 · deciding</span>
+        <h3>Agents in your organization</h3>
+        <p>The three when-to-build criteria, scanning your org for agent-shaped wins, build vs buy, team readiness, and ROI framing.</p>
+        <span class="meta"><span class="pill light">Use-case scan exercise</span></span>
+      </a>
+      <a class="course-card" href="courses/a6-roadmap.html" style="--diff:#FB923C">
+        <span class="cicon">🔭</span>
+        <span class="cnum">Leader 6 · deciding</span>
+        <h3>The roadmap and your strategy</h3>
+        <p>Multi-agent systems, MCP vs A2A, computer use, managed agents - what changes in the next 12 months, what to fund, what to wait on.</p>
+        <span class="meta"><span class="pill light">Strategy session</span></span>
+      </a>
+    </div>
+
+    <div class="paths">
+      <h2>The builder track 🛠️ <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· for practitioners · 10 x 45 min · Python · live agent on every page</span></h2>
+      <p class="plede">One running project, built harder every session: the Daybreak Ops Agent - a coffee brand's real operations agent on its MCP-server toolbox. The 12-task scorecard climbs 1 → 5 → 7 → 10 → 12 as the levers come on; b10 must hit 12/12 to ship. Claude API or local Ollama, your choice, throughout.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/b1-agent-loop.html" style="--diff:#34D399">
+        <span class="cicon">🔄</span>
+        <span class="cnum">Builder 1 · easy</span>
+        <h3>The agent loop</h3>
+        <p>What qualifies as an agent, Thought-Action-Observation, the four levers, and the 12-task scorecard you will spend ten sessions climbing.</p>
+        <span class="meta"><span class="pill amber">▶ Builders start here</span></span>
+      </a>
+      <a class="course-card" href="courses/b2-tools-first-agent.html" style="--diff:#34D399">
+        <span class="cicon">🔧</span>
+        <span class="cnum">Builder 2 · easy</span>
+        <h3>Tools + your first agent</h3>
+        <p>Tool schemas, the agent-computer interface, Daybreak's MCP server as toolbox - and a working single-loop agent in raw Python.</p>
+        <span class="meta"><span class="pill light">Rung 1: 5/12</span></span>
+      </a>
+      <a class="course-card" href="courses/b3-workflow-patterns.html" style="--diff:#FBBF24">
+        <span class="cicon">🧱</span>
+        <span class="cnum">Builder 3 · medium</span>
+        <h3>The five workflow patterns</h3>
+        <p>Prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer - Anthropic's full pattern catalog, built on Daybreak.</p>
+        <span class="meta"><span class="pill light">The pattern catalog</span></span>
+      </a>
+      <a class="course-card" href="courses/b4-memory-context.html" style="--diff:#FBBF24">
+        <span class="cicon">🧠</span>
+        <span class="cnum">Builder 4 · medium</span>
+        <h3>Memory and context</h3>
+        <p>Context management, compaction, scratchpads, sessions, long-term stores - keeping findings and instructions from falling out mid-task.</p>
+        <span class="meta"><span class="pill light">Rung 2: 7/12</span></span>
+      </a>
+      <a class="course-card" href="courses/b5-planning-reasoning.html" style="--diff:#FBBF24">
+        <span class="cicon">🗺️</span>
+        <span class="cnum">Builder 5 · medium</span>
+        <h3>Planning and reasoning</h3>
+        <p>ReAct, plan-then-execute, reflection, task decomposition - turning one-shot half-answers into real diagnoses and reports.</p>
+        <span class="meta"><span class="pill light">Rung 3: 10/12</span></span>
+      </a>
+      <a class="course-card" href="courses/b6-multi-agent.html" style="--diff:#FB923C">
+        <span class="cicon">🤝</span>
+        <span class="cnum">Builder 6 · hands-on</span>
+        <h3>Multi-agent systems</h3>
+        <p>Manager vs handoffs, subagents, orchestrator-workers at agent scale - and the single-agent-first rule that saves most teams.</p>
+        <span class="meta"><span class="pill light">When multi beats one</span></span>
+      </a>
+      <a class="course-card" href="courses/b7-guardrails.html" style="--diff:#FB923C">
+        <span class="cicon">🛡️</span>
+        <span class="cnum">Builder 7 · hands-on</span>
+        <h3>Guardrails</h3>
+        <p>The seven guardrail types hands-on: injection defense, approval gates, budgets and stop conditions - the two dangerous tasks finally pass safely.</p>
+        <span class="meta"><span class="pill light">Rung 4: 12/12</span></span>
+      </a>
+      <a class="course-card" href="courses/b8-agent-evals.html" style="--diff:#FB923C">
+        <span class="cicon">🎯</span>
+        <span class="cnum">Builder 8 · hands-on</span>
+        <h3>Agent evals</h3>
+        <p>Tasks, trials, graders, pass@k vs pass^k, trajectory checks, LLM-judges - the golden set formalized into a real eval harness.</p>
+        <span class="meta"><span class="pill light">The open lane</span></span>
+      </a>
+      <a class="course-card" href="courses/b9-ship-observe.html" style="--diff:#F87171">
+        <span class="cicon">🚢</span>
+        <span class="cnum">Builder 9 · hardest</span>
+        <h3>Ship and observe</h3>
+        <p>Claude Agent SDK vs LangGraph vs crewAI/AutoGen, tracing, deployment, cost control - and where A2A fits the protocol map.</p>
+        <span class="meta"><span class="pill light">Framework landscape</span></span>
+      </a>
+      <a class="course-card" href="courses/b10-capstone.html" style="--diff:#F87171">
+        <span class="cicon">🏆</span>
+        <span class="cnum">Builder 10 · hardest</span>
+        <h3>Capstone: the full ops agent</h3>
+        <p>Assemble everything - toolbox, memory, planning, guardrails - run the eval harness, and do not ship until the scorecard reads 12/12.</p>
+        <span class="meta"><span class="pill light">Ship it at 12/12</span></span>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#34D399"></i>easy - everyone</span>
+      <span><i style="background:#FBBF24"></i>medium</span>
+      <span><i style="background:#FB923C"></i>hands-on / deciding</span>
+      <span><i style="background:#F87171"></i>hardest</span>
+    </div>
+
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Two doors, one loop. Leaders never touch code; builders never sit through strategy they have not just wired themselves.</p>
+      <div class="path"><b>🤝 Leader (judge &amp; govern)</b>
+        <a class="pstep" href="courses/a1-what-an-agent-is.html">a1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-anatomy-plain.html">a2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a3-workflows-vs-agents.html">a3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-risk-governance.html">a4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a5-agents-in-your-org.html">a5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-roadmap.html">a6</a>
+      </div>
+      <div class="path"><b>🛠️ Builder (ship the Ops Agent)</b>
+        <a class="pstep" href="courses/b1-agent-loop.html">b1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b2-tools-first-agent.html">b2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b3-workflow-patterns.html">b3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b4-memory-context.html">b4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b5-planning-reasoning.html">b5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b6-multi-agent.html">b6</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b7-guardrails.html">b7</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b8-agent-evals.html">b8</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b9-ship-observe.html">b9</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b10-capstone.html">b10</a>
+      </div>
+      <div class="path"><b>🌱 Curious follower (a taste)</b>
+        <a class="pstep" href="courses/a1-what-an-agent-is.html">a1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-anatomy-plain.html">a2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b1-agent-loop.html">b1</a>
+      </div>
+      <div class="path"><b>🚀 Full journey (lead AND build)</b>
+        <a class="pstep" href="courses/a1-what-an-agent-is.html">a1-a6</a><span class="parr">→</span>
+        <a class="pstep" href="courses/b1-agent-loop.html">b1-b10</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">Both tracks at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a> · taught from Anthropic's "Building Effective Agents" + Agent SDK docs &amp; Academy, OpenAI's agents guide + SDK, DeepLearning.AI (Ng, Arize, crewAI, AutoGen, A2A), Hugging Face Agents course, LangGraph</span>
+  </footer>
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  title: "Learn\nAI Agents",
+  centerColor: "#9A3412",
+  sessions: [
+    { label: "What an\nagent is", href: "courses/a1-what-an-agent-is.html", color: "#34D399",
+      concepts: [
+        { label: "The loop", href: "courses/a1-what-an-agent-is.html" },
+        { label: "Official definitions", href: "courses/a1-what-an-agent-is.html" },
+        { label: "When not to", href: "courses/a1-what-an-agent-is.html" } ] },
+    { label: "Anatomy,\nplain English", href: "courses/a2-anatomy-plain.html", color: "#34D399",
+      concepts: [
+        { label: "Four levers", href: "courses/a2-anatomy-plain.html" },
+        { label: "Failure signatures", href: "courses/a2-anatomy-plain.html" } ] },
+    { label: "Workflows\nvs agents", href: "courses/a3-workflows-vs-agents.html", color: "#FBBF24",
+      concepts: [
+        { label: "Autonomy dial", href: "courses/a3-workflows-vs-agents.html" },
+        { label: "5 patterns as choices", href: "courses/a3-workflows-vs-agents.html" } ] },
+    { label: "Risk &\ngovernance", href: "courses/a4-risk-governance.html", color: "#FBBF24",
+      concepts: [
+        { label: "Prompt injection", href: "courses/a4-risk-governance.html" },
+        { label: "7 guardrail types", href: "courses/a4-risk-governance.html" } ] },
+    { label: "Agents in\nyour org", href: "courses/a5-agents-in-your-org.html", color: "#FB923C",
+      concepts: [
+        { label: "When-to-build", href: "courses/a5-agents-in-your-org.html" },
+        { label: "ROI framing", href: "courses/a5-agents-in-your-org.html" } ] },
+    { label: "Roadmap &\nstrategy", href: "courses/a6-roadmap.html", color: "#FB923C",
+      concepts: [
+        { label: "MCP vs A2A", href: "courses/a6-roadmap.html" },
+        { label: "Computer use", href: "courses/a6-roadmap.html" } ] },
+    { label: "The agent\nloop", href: "courses/b1-agent-loop.html", color: "#34D399",
+      concepts: [
+        { label: "T-A-O cycle", href: "courses/b1-agent-loop.html" },
+        { label: "Four levers", href: "courses/b1-agent-loop.html" },
+        { label: "The scorecard", href: "courses/b1-agent-loop.html" } ] },
+    { label: "Tools +\nfirst agent", href: "courses/b2-tools-first-agent.html", color: "#34D399",
+      concepts: [
+        { label: "Tool schemas + ACI", href: "courses/b2-tools-first-agent.html" },
+        { label: "MCP toolbox", href: "courses/b2-tools-first-agent.html" } ] },
+    { label: "Workflow\npatterns", href: "courses/b3-workflow-patterns.html", color: "#FBBF24",
+      concepts: [
+        { label: "Chaining · routing", href: "courses/b3-workflow-patterns.html" },
+        { label: "Orchestrator-workers", href: "courses/b3-workflow-patterns.html" } ] },
+    { label: "Memory &\ncontext", href: "courses/b4-memory-context.html", color: "#FBBF24",
+      concepts: [
+        { label: "Compaction", href: "courses/b4-memory-context.html" },
+        { label: "Long-term store", href: "courses/b4-memory-context.html" } ] },
+    { label: "Planning &\nreasoning", href: "courses/b5-planning-reasoning.html", color: "#FBBF24",
+      concepts: [
+        { label: "ReAct", href: "courses/b5-planning-reasoning.html" },
+        { label: "Reflection", href: "courses/b5-planning-reasoning.html" } ] },
+    { label: "Multi-\nagent", href: "courses/b6-multi-agent.html", color: "#FB923C",
+      concepts: [
+        { label: "Manager vs handoffs", href: "courses/b6-multi-agent.html" },
+        { label: "Single-agent-first", href: "courses/b6-multi-agent.html" } ] },
+    { label: "Guard-\nrails", href: "courses/b7-guardrails.html", color: "#FB923C",
+      concepts: [
+        { label: "Injection defense", href: "courses/b7-guardrails.html" },
+        { label: "Approval gates", href: "courses/b7-guardrails.html" } ] },
+    { label: "Agent\nevals", href: "courses/b8-agent-evals.html", color: "#FB923C",
+      concepts: [
+        { label: "pass@k vs pass^k", href: "courses/b8-agent-evals.html" },
+        { label: "Trajectory checks", href: "courses/b8-agent-evals.html" } ] },
+    { label: "Ship &\nobserve", href: "courses/b9-ship-observe.html", color: "#F87171",
+      concepts: [
+        { label: "Framework landscape", href: "courses/b9-ship-observe.html" },
+        { label: "Tracing + cost", href: "courses/b9-ship-observe.html" } ] },
+    { label: "Capstone\n12/12", href: "courses/b10-capstone.html", color: "#F87171",
+      concepts: [
+        { label: "Full assembly", href: "courses/b10-capstone.html" },
+        { label: "Eval harness gate", href: "courses/b10-capstone.html" } ] }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

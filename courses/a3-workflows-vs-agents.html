@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 3 · Workflows vs agents - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Leader track · Session 3 of 6</div>
+    <h1>Workflows <span class="accent">vs agents</span></h1>
+    <p class="sub">The most expensive word in AI right now is "agent" - because teams reach for full autonomy when a simpler, cheaper, testable design would do the job. Tonight you get the tool both Anthropic and OpenAI hand their own customers: a dial, not a binary. On the left, code that picks every step. On the right, a model that picks its own. In between, five named patterns - each one a business decision about how much cost and unpredictability you are willing to buy. By the end you can look at any AI proposal and ask the question that saves budgets: "where on the dial does this really need to sit?"</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Medium</span>
+      <span class="chip audience">Leader track: execs · managers · sponsors</span>
+      <span class="chip time">No code</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The autonomy dial</span>
+      <span class="a3" style="flex:5">18-42 · Five patterns as decisions</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">Six leader sessions, no code. a1 defined what an agent actually is, a2 opened the anatomy in plain English. Tonight (a3) is the buying guide: workflows vs agents as a spectrum of deliberate purchases. a4 covers risk and governance, a5 brings it into your organization, a6 looks at the road ahead. Bring one AI initiative from your own org in mind - you will place it on the dial before you leave.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The official Anthropic definitions of workflow and agent, an autonomy dial you can draw on a whiteboard, the five workflow patterns translated into five business decisions (assembly line, triage desk, second opinions, a lead with specialists, writer plus editor), and the single-agent-first rule that tells you when multi-agent complexity is actually justified.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE AUTONOMY DIAL ============ -->
+  <section class="section" id="autonomy-dial">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic "Building Effective Agents" definitions, Ng M1</span>
+      <h2>The autonomy dial <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Anthropic's essay draws the line precisely. <strong>Workflows</strong> are "LLMs and tools orchestrated through predefined code paths" - your team decides the steps in advance. <strong>Agents</strong> are systems where "LLMs dynamically direct their own processes and tool usage" - the model decides the steps as it goes. Neither is better. Autonomy is a thing you buy: it handles messier work, and the price is cost and unpredictability. The leadership skill is buying exactly as much as the task needs, and no more.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The autonomy dial: deterministic code on the left, five workflow patterns in the middle, full agent on the right. Autonomy and cost rise to the right; reliability and testability rise to the left.">
+        <style>
+          .adT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .adS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .adI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .adX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .adN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .adWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#adHd); }
+          .adAx { stroke: #CBD5E1; stroke-width: 2; fill: none; marker-end: url(#adGy); }
+        </style>
+        <defs>
+          <marker id="adHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+          <marker id="adGy" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#CBD5E1"/>
+          </marker>
+        </defs>
+        <path class="adAx" d="M60,52 L810,52"/>
+        <text class="adX" x="290" y="40">autonomy rises → cost and unpredictability rise with it</text>
+        <rect x="40" y="105" width="170" height="56" rx="8" fill="#1E293B"/>
+        <text class="adT" x="56" y="128">DETERMINISTIC</text>
+        <text class="adS" x="56" y="147">code picks every step</text>
+        <rect x="250" y="90" width="400" height="86" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="adI" x="270" y="114">FIVE WORKFLOW PATTERNS - autonomy in doses</text>
+        <text class="adX" x="270" y="136">prompt chaining · routing · parallelization</text>
+        <text class="adX" x="270" y="156">orchestrator-workers · evaluator-optimizer</text>
+        <rect x="690" y="105" width="160" height="56" rx="8" fill="#9A3412"/>
+        <text class="adT" x="706" y="128">FULL AGENT</text>
+        <text class="adS" x="706" y="147">model picks the steps</text>
+        <path class="adWire" d="M210,133 L245,133"/>
+        <path class="adWire" d="M650,133 L685,133"/>
+        <path class="adAx" d="M810,225 L70,225"/>
+        <text class="adX" x="300" y="248">← reliability, testability and predictability rise</text>
+        <rect x="40" y="272" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="adN" x="64" y="284">Anthropic's line: workflows run on predefined code paths; agents dynamically direct their own process.</text>
+        <rect x="40" y="304" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="adN" x="64" y="316">Every step rightward buys capability with cost and unpredictability - spend that budget deliberately.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the autonomy dial from deterministic code to full agent</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Autonomy is a purchase, not an upgrade<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When a team slides right on the dial, three things happen at once - and only one of them is on the pitch slide:</p>
+        <ul>
+          <li><strong>Capability goes up.</strong> The system handles requests too varied for a fixed script - this is the part everyone sells.</li>
+          <li><strong>Cost goes up.</strong> More model calls per task, more latency, a bigger bill for the same outcome.</li>
+          <li><strong>Predictability goes down.</strong> Fixed paths can be tested like normal software; a model choosing its own steps cannot be certified the same way, only evaluated and monitored.</li>
+        </ul>
+        <p>So the leader's question is never "should we use agents?" It is "how far right does THIS task force us?" Most tasks in most organizations sit comfortably in the middle band - the five patterns - or all the way left, in plain code.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Questions to ask when someone says "agent"<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Four questions that place any proposal on the dial in one meeting:</p>
+        <ul>
+          <li><strong>"Who chooses the next step - our code or the model?"</strong> If the answer is "our code", it is a workflow, whatever the deck calls it.</li>
+          <li><strong>"Could we write the steps down in advance?"</strong> If yes, a pattern in the middle band will be cheaper and testable.</li>
+          <li><strong>"What does one task cost at the far right vs the middle?"</strong> Ask for both numbers before approving either.</li>
+          <li><strong>"How will we test it?"</strong> A team that cannot answer this has bought unpredictability without noticing.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: FIVE PATTERNS ============ -->
+  <section class="section" id="five-patterns">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Anthropic "Building Effective Agents" - the 5 workflow patterns</span>
+      <h2>Five patterns, five business decisions <span class="tag concept">24 min live</span></h2>
+    </div>
+    <p class="lede">Anthropic names five workflow patterns: <strong>prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer</strong>. Your builders will know them as architectures. You should know them as purchasing decisions - each one is a familiar org design, and each is the right buy for a different shape of work. Learn the five shapes and you can read any AI architecture diagram like an org chart.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five workflow patterns drawn as mini shapes, one row each: prompt chaining as a series, routing as a fork, parallelization as a fan-out and merge, orchestrator-workers as a lead delegating, evaluator-optimizer as a writer and editor loop.">
+        <style>
+          .fpT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .fpB { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+          .fpX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .fpN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .fpWire { stroke: #EA580C; stroke-width: 2; fill: none; marker-end: url(#fpHd); }
+        </style>
+        <defs>
+          <marker id="fpHd" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <text class="fpT" x="40" y="52">Prompt chaining</text>
+        <text class="fpX" x="40" y="70">the assembly line</text>
+        <rect x="300" y="40" width="100" height="32" rx="6" fill="#EA580C"/><text class="fpB" x="322" y="60">step 1</text>
+        <rect x="440" y="40" width="100" height="32" rx="6" fill="#F97316"/><text class="fpB" x="462" y="60">step 2</text>
+        <rect x="580" y="40" width="100" height="32" rx="6" fill="#9A3412"/><text class="fpB" x="602" y="60">step 3</text>
+        <path class="fpWire" d="M400,56 L435,56"/>
+        <path class="fpWire" d="M540,56 L575,56"/>
+        <text class="fpT" x="40" y="132">Routing</text>
+        <text class="fpX" x="40" y="150">the triage desk</text>
+        <rect x="300" y="119" width="100" height="32" rx="6" fill="#1E293B"/><text class="fpB" x="318" y="139">request</text>
+        <rect x="560" y="99" width="120" height="20" rx="5" fill="#EA580C"/><text class="fpB" x="574" y="113">billing lane</text>
+        <rect x="560" y="127" width="120" height="20" rx="5" fill="#F97316"/><text class="fpB" x="574" y="141">tech lane</text>
+        <rect x="560" y="155" width="120" height="20" rx="5" fill="#FDBA74"/><text class="fpB" x="574" y="169">sales lane</text>
+        <path class="fpWire" d="M400,130 C470,120 500,112 555,109"/>
+        <path class="fpWire" d="M400,136 L555,137"/>
+        <path class="fpWire" d="M400,142 C470,152 500,160 555,165"/>
+        <text class="fpT" x="40" y="212">Parallelization</text>
+        <text class="fpX" x="40" y="230">second opinions at once</text>
+        <rect x="300" y="199" width="100" height="32" rx="6" fill="#1E293B"/><text class="fpB" x="316" y="219">one task</text>
+        <rect x="470" y="179" width="110" height="20" rx="5" fill="#EA580C"/><text class="fpB" x="484" y="193">reviewer A</text>
+        <rect x="470" y="207" width="110" height="20" rx="5" fill="#F97316"/><text class="fpB" x="484" y="221">reviewer B</text>
+        <rect x="470" y="235" width="110" height="20" rx="5" fill="#FDBA74"/><text class="fpB" x="484" y="249">reviewer C</text>
+        <rect x="650" y="199" width="110" height="32" rx="6" fill="#9A3412"/><text class="fpB" x="668" y="219">combine</text>
+        <path class="fpWire" d="M400,210 C430,202 440,194 465,190"/>
+        <path class="fpWire" d="M400,216 L465,217"/>
+        <path class="fpWire" d="M400,222 C430,230 440,238 465,244"/>
+        <path class="fpWire" d="M580,190 C610,194 620,202 645,210"/>
+        <path class="fpWire" d="M580,217 L645,216"/>
+        <path class="fpWire" d="M580,244 C610,238 620,230 645,222"/>
+        <text class="fpT" x="40" y="292">Orchestrator-workers</text>
+        <text class="fpX" x="40" y="310">a lead with specialists</text>
+        <rect x="300" y="279" width="130" height="32" rx="6" fill="#9A3412"/><text class="fpB" x="320" y="299">orchestrator</text>
+        <rect x="540" y="259" width="110" height="20" rx="5" fill="#EA580C"/><text class="fpB" x="558" y="273">worker 1</text>
+        <rect x="540" y="287" width="110" height="20" rx="5" fill="#F97316"/><text class="fpB" x="558" y="301">worker 2</text>
+        <rect x="540" y="315" width="110" height="20" rx="5" fill="#FDBA74"/><text class="fpB" x="558" y="329">worker 3</text>
+        <path class="fpWire" d="M430,290 C480,282 500,274 535,269"/>
+        <path class="fpWire" d="M430,296 L535,297"/>
+        <path class="fpWire" d="M430,302 C480,310 500,318 535,325"/>
+        <text class="fpX" x="690" y="299">delegates, then merges</text>
+        <text class="fpT" x="40" y="372">Evaluator-optimizer</text>
+        <text class="fpX" x="40" y="390">writer + editor</text>
+        <rect x="300" y="359" width="100" height="32" rx="6" fill="#EA580C"/><text class="fpB" x="326" y="379">writer</text>
+        <rect x="540" y="359" width="100" height="32" rx="6" fill="#9A3412"/><text class="fpB" x="566" y="379">editor</text>
+        <path class="fpWire" d="M400,367 C450,350 490,350 535,367"/>
+        <path class="fpWire" d="M540,383 C490,400 450,400 405,383"/>
+        <text class="fpX" x="452" y="344">draft</text>
+        <text class="fpX" x="432" y="412">feedback, until good</text>
+        <rect x="40" y="424" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="fpN" x="64" y="436">Same five shapes the builder track constructs in code (b3) - leaders read them as org charts.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the five Anthropic workflow patterns as five familiar org designs</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Prompt chaining - the assembly line<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> the task runs as a fixed sequence of steps, each model call feeding the next - outline, then draft, then translate, with checks between stations.</p>
+        <p><strong>The right buy when:</strong> the work naturally decomposes into stages that always run in the same order, and you want quality control between them. You trade a little latency for a lot of accuracy per step - exactly the deal an assembly line makes. Ask your team: "could we name the stations?" If yes, chain it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Routing - the triage desk<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> a first model call classifies the incoming request, then hands it to the specialist path built for that category - billing questions here, technical issues there.</p>
+        <p><strong>The right buy when:</strong> your inputs fall into distinct categories that deserve different handling - different prompts, different tools, even different models by cost. It is a hospital triage desk: one cheap decision up front so every case gets the right specialist, and no single prompt has to be good at everything.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Parallelization - second opinions at once<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> several model calls run at the same time - either splitting the work into independent pieces, or asking for multiple independent takes on the same question - then the results are combined.</p>
+        <p><strong>The right buy when:</strong> speed matters and the pieces are independent, or confidence matters and you want several opinions before acting - screening content, double-checking a judgment call. You pay for extra calls; you get speed or confidence. Like asking three doctors at once instead of one after another.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Orchestrator-workers - a lead with specialists<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> a central model looks at the task, decides how to break it up on the fly, delegates the pieces to worker calls, then merges what comes back.</p>
+        <p><strong>The right buy when:</strong> you cannot predict the subtasks in advance - each case needs a different breakdown. This is the first pattern where the model, not your code, decides the decomposition, so it sits furthest right in the middle band. It is a team lead with specialists: more capable than a fixed pipeline, more expensive, and the step to watch on cost.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Evaluator-optimizer - writer plus editor<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> one model call produces, a second evaluates against clear criteria and sends it back with feedback, looping until the output passes.</p>
+        <p><strong>The right buy when:</strong> quality is measurable and iteration visibly improves it - translations, reports, anything a human editor would redline. You pay for the loop; you get output that clears a defined bar instead of a first draft. Ask your team: "what does the editor check against?" If they cannot name the criteria, this pattern is not ready.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: SINGLE-AGENT-FIRST ============ -->
+  <section class="section" id="single-agent-first">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers OpenAI guide - single-agent-first + split triggers</span>
+      <h2>Single-agent-first, workflow-before-agent <span class="tag concept">self-study + recap</span></h2>
+    </div>
+    <p class="lede">Both vendors give the same standing order, from opposite ends. Anthropic: start with simple, composable patterns and add autonomy only when it demonstrably wins. OpenAI: <strong>"maximize a single agent's capabilities first"</strong> - do not split into multiple agents until one agent genuinely cannot cope. Simplicity is not the beginner option; it is the recommendation both market leaders give their largest customers.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The two legitimate split triggers<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>OpenAI names exactly two conditions that justify going multi-agent - and neither is "it sounds more advanced":</p>
+        <ul>
+          <li><strong>Complex conditional logic</strong> - the instructions have grown so many branching rules that prompts become unmaintainable, the same way an if/else forest becomes unmaintainable code.</li>
+          <li><strong>Tool overload</strong> - and here is the nuance leaders miss: it is not about the NUMBER of tools. It is about <strong>overlap</strong>. An agent with many clearly distinct tools can be fine; an agent with a few similar, overlapping tools gets confused about which to use. Ask "are the tools distinct?" before "how many are there?"</li>
+        </ul>
+        <p>If neither trigger is present and someone proposes a multi-agent system, the burden of proof is on them - with numbers.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "boring" wins in production<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The middle band of the dial has a property the far right never will: <strong>you can test it like software</strong>. A routed workflow has fixed lanes - you can check each lane, measure each lane, and sign off each lane. A full agent's path changes per request, so assurance becomes evaluation and monitoring rather than certification. For anything customer-facing or regulated, that difference is the whole governance story (a4 picks this up). Less autonomy means cheaper, testable, boring - and boring is a feature in production.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The agent that became a triage desk.</strong> One team we discuss in this course had signed off an "autonomous support agent" - a full agent deciding its own steps on every ticket. Costs were high and answers wandered. When they mapped their actual tickets, the requests fell into a handful of clean categories. They replaced the agent with a routed workflow - one classifier, a few specialist lanes - and got something they could test lane by lane, at a fraction of the per-ticket cost. Nobody downgraded; they moved the dial to where the task actually lived. That is the move this session exists to teach.</p>
+    </div>
+
+    <div class="callout tip">
+      <strong>The one-line policy to take home</strong>
+      Every AI proposal states where it sits on the dial, and every step to the right of "routing" arrives with a written reason why the cheaper pattern to its left will not do.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 20-30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Pick three AI initiatives in your own organization - live, proposed, or rumored - and place each one on the autonomy dial. Be honest: "who chooses the next step?" is the only test.</li>
+      <li>For one of the three, name the CHEAPEST of the five patterns that would still do the job, and write one sentence on what you would gain (testability, cost) and lose by moving there.</li>
+      <li>Bring your three-initiative classification to a5 - it becomes the raw material for the build-vs-buy and readiness discussion.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">The leader track teaches the decision-making core of the canonical agent sources in business language. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - definitions + the 5 workflow patterns</span><span class="note">Parts 1-2 · workflows vs agents, simplicity principle, all five pattern names</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI "A Practical Guide to Building Agents" - single-agent-first + split triggers</span><span class="note">Part 3 · maximize one agent first; conditional logic + tool overload (overlap over count)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DeepLearning.AI "Agentic AI" (Ng) - Modules 1 and 5</span><span class="note">Degrees of autonomy + multi-agent overview, at leader altitude</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic Academy "Building with the Claude API" - Agents and Workflows lessons</span><span class="note">The same spectrum and patterns, taught there with code - builders go deep in b3</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Requests arrive in clearly different categories and each deserves a different specialist path. Which pattern is that?</p>
+      <button class="qopt" type="button">A · Prompt chaining - run the categories one after another</button>
+      <button class="qopt" type="button">B · Routing - one cheap classification up front, then the right lane, like a triage desk</button>
+      <button class="qopt" type="button">C · Evaluator-optimizer - let an editor model sort them out</button>
+      <p class="qwhy">Routing is the triage desk: classify once, send each request down its specialist lane. Chaining is for fixed stages of one job; evaluator-optimizer is for iterating one output toward a quality bar.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · What actually justifies splitting one agent into a multi-agent system?</p>
+      <button class="qopt" type="button">A · The vendor's reference architecture shows multiple agents</button>
+      <button class="qopt" type="button">B · The agent has more than a handful of tools</button>
+      <button class="qopt" type="button">C · Complex conditional logic in the instructions, or tool overload - where overlapping tools matter more than the count</button>
+      <p class="qwhy">OpenAI's rule: maximize a single agent first, and split only on complex conditional logic or tool overload - and overload is about overlapping, confusable tools, not the raw number.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why do both Anthropic and OpenAI tell their own customers to start at the workflow end of the dial?</p>
+      <button class="qopt" type="button">A · Workflows are cheaper, testable and predictable - buy autonomy only when the task demonstrably demands it</button>
+      <button class="qopt" type="button">B · Agents are still a research technology that cannot run in production</button>
+      <button class="qopt" type="button">C · Workflows always produce higher-quality answers than agents</button>
+      <p class="qwhy">Predefined paths can be tested like normal software and cost less per task. Autonomy earns its price only on work too varied for fixed paths - so start simple and slide right deliberately.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The definitions</b><span>Workflows: LLMs orchestrated "through predefined code paths." Agents: LLMs "dynamically direct their own processes." Who picks the next step is everything.</span></div>
+      <div class="cheat-item"><b>The dial</b><span>Deterministic code → five workflow patterns → full agent. Rightward buys capability; the price is cost and unpredictability.</span></div>
+      <div class="cheat-item"><b>Prompt chaining</b><span>The assembly line - fixed stages, checks between stations. Buy when the work always decomposes the same way.</span></div>
+      <div class="cheat-item"><b>Routing</b><span>The triage desk - classify once, send to the specialist lane. Buy when inputs fall into distinct categories.</span></div>
+      <div class="cheat-item"><b>Parallelization</b><span>Second opinions at once - independent calls in parallel, then combine. Buy for speed or confidence.</span></div>
+      <div class="cheat-item"><b>Orchestrator-workers</b><span>A lead with specialists - the model decides the breakdown per case. The costliest pattern; watch it.</span></div>
+      <div class="cheat-item"><b>Evaluator-optimizer</b><span>Writer + editor looping until the output clears a named bar. Buy when quality is measurable and iteration helps.</span></div>
+      <div class="cheat-item"><b>Single-agent-first</b><span>Maximize one agent before splitting; the only split triggers are complex conditional logic and tool overload - overlap matters more than count.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 3 of 6 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="a2-anatomy-plain.html">← Prev: Anatomy in plain English</a> &nbsp;·&nbsp; <a href="a4-risk-governance.html">Next: Risk and governance →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

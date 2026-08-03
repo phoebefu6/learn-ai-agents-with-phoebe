@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 5 · Agents in your organization - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Leader track · Session 5 of 6</div>
+    <h1>Agents in <span class="accent">your organization</span></h1>
+    <p class="sub">Four sessions in, you can define an agent, name its parts, place it on the autonomy dial, and interrogate its guardrails. Tonight we point all of that at your own org chart. You will learn to scan any department with the official when-to-build criteria, make the build-buy-wait call with a straight face, and leave with a workshop recipe that ends in ONE pilot recommendation - gated by an eval set, not a demo. No code tonight; just decisions.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Deciding track</span>
+      <span class="chip audience">Leaders: execs · managers · sponsors</span>
+      <span class="chip audience">No code - business language only</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Where agents pay off</span>
+      <span class="a3" style="flex:5">18-42 · Build vs buy + the scan</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Tonight is where it gets personal</h2>
+    </div>
+    <p class="lede">Everything so far was about agents in general. This session is about <strong>your</strong> processes, <strong>your</strong> vendors, <strong>your</strong> team. We apply three tools in order: the when-to-build criteria as an org-scanning lens, a build-buy-wait decision table, and a use-case scan workshop you can run with your leadership team next week. Session 6 closes the track with the roadmap.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A repeatable scan that turns "we should do something with agents" into a shortlist of agent-shaped processes, a defensible build-buy-wait call for each, and a one-pilot recommendation format - four-lever spec plus a golden-set gate - that survives board scrutiny.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE THREE CRITERIA ============ -->
+  <section class="section" id="three-criteria">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers OpenAI guide when-to-build criteria</span>
+      <h2>The three criteria, applied <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">OpenAI's guide gives three signals that a process is worth an agent: <strong>complex decision-making</strong>, <strong>difficult-to-maintain rules</strong>, and <strong>heavy unstructured data</strong>. In session 1 those were a warning about when not to build. Tonight they become a lens: walk your org chart, hold each process up to the three filters, and see what survives. Most processes will not - and that is the point.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnel: all org processes pass through three filters - complex decisions, unmaintainable rules, unstructured data - leaving an agent-shaped shortlist.">
+        <style>
+          .fnT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .fnS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .fnI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .fnX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .fnN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .fnWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#fnHd); }
+        </style>
+        <defs>
+          <marker id="fnHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="40" y="110" width="180" height="90" rx="8" fill="#1E293B"/>
+        <text class="fnT" x="56" y="138">ALL PROCESSES</text>
+        <text class="fnS" x="56" y="158">support · finance · ops</text>
+        <text class="fnS" x="56" y="176">hundreds of tasks</text>
+        <rect x="300" y="40" width="300" height="52" rx="8" fill="#9A3412"/>
+        <text class="fnT" x="316" y="62">FILTER 1 · Complex decisions</text>
+        <text class="fnS" x="316" y="80">judgment a rulebook cannot capture</text>
+        <rect x="300" y="124" width="300" height="52" rx="8" fill="#EA580C"/>
+        <text class="fnT" x="316" y="146">FILTER 2 · Unmaintainable rules</text>
+        <text class="fnS" x="316" y="164">the if/else forest nobody dares touch</text>
+        <rect x="300" y="208" width="300" height="52" rx="8" fill="#F97316"/>
+        <text class="fnT" x="316" y="230">FILTER 3 · Unstructured data</text>
+        <text class="fnS" x="316" y="248">documents, emails, conversations</text>
+        <path class="fnWire" d="M220,140 C255,130 265,80 295,68"/>
+        <path class="fnWire" d="M450,92 L450,119"/>
+        <path class="fnWire" d="M450,176 L450,203"/>
+        <path class="fnWire" d="M600,232 C640,225 650,180 675,166"/>
+        <text class="fnX" x="620" y="60">any filter hit keeps a task in;</text>
+        <text class="fnX" x="620" y="77">zero hits = deterministic code</text>
+        <rect x="680" y="110" width="170" height="90" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="fnI" x="696" y="138">AGENT-SHAPED</text>
+        <text class="fnI" x="696" y="156">SHORTLIST</text>
+        <text class="fnX" x="696" y="176">refunds · vendor</text>
+        <text class="fnX" x="696" y="192">reviews · claims</text>
+        <rect x="40" y="282" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="fnN" x="64" y="294">OpenAI's rule: no criterion hit? Write deterministic code - agents cost latency, money, predictability.</text>
+        <rect x="40" y="312" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="fnN" x="64" y="324">Typical survivors: refund approvals in support, vendor security reviews, claims processing.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the org scan: hundreds of processes in, an agent-shaped shortlist out</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The criteria on real departments<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The three criteria stop being abstract the moment you attach a department to each. These are the guide's own flavor of examples, translated to a walk down your hallway:</p>
+        <ul>
+          <li><strong>Complex decision-making → support refunds.</strong> "Approve this refund?" depends on customer history, tone, order context, goodwill. A rulebook that captures all of it does not exist; a person with judgment does - and so can an agent with the right tools and guardrails.</li>
+          <li><strong>Difficult-to-maintain rules → vendor security reviews.</strong> The checklist grew for years; every exception spawned three more rules. Each policy change is now a risky edit to a forest nobody fully understands. Agents shine exactly where rulebooks rot.</li>
+          <li><strong>Heavy unstructured data → claims processing.</strong> The task swims in PDFs, photos, emails, and phone notes. Structured systems only see the 20% that fits their fields; an agent can actually read the rest.</li>
+        </ul>
+        <p>Run the lens honestly and most of your org falls out of the funnel. That is a success, not a failure - it protects your one pilot from competing with forty half-ideas.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Three scan anti-patterns to avoid<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The scan fails in predictable ways when it runs backwards. Watch for these in your own workshop:</p>
+        <ul>
+          <li><strong>Solution-first scanning.</strong> "We have budget for an agent - find it a job." The criteria exist to disqualify, not to justify. If every task somehow passes, the room is scoring the budget, not the work.</li>
+          <li><strong>Scanning for headcount instead of judgment.</strong> The criteria point at judgment-heavy, rule-rotted, document-soaked work - not at whoever's team looks most expensive. Tasks picked by cost alone tend to fail the filters quietly later, in production.</li>
+          <li><strong>Treating the shortlist as a commitment.</strong> Surviving the funnel earns a task a four-lever spec, nothing more. The build-buy-wait call and the failure-cost weighing still stand between shortlist and pilot.</li>
+        </ul>
+        <p>Anthropic's guidance is the antidote to all three: start simple, and add autonomy only where it demonstrably wins. "We could use an agent" is not a reason to.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>The scan is a filter, not a ranking</strong>
+      A process that hits all three filters is not automatically "first". It is merely eligible. Cost of failure and value of autonomy (Part 3) decide the order - a triple-hit process that moves money with no reversal path may still lose to a single-hit process that only drafts documents.
+    </div>
+  </section>
+
+  <!-- ============ PART 2: BUILD VS BUY VS WAIT ============ -->
+  <section class="section" id="build-buy-wait">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers build-buy-wait + the framework landscape in one breath</span>
+      <h2>Build vs buy vs wait <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Every survivor of the scan faces the same three-way call. The good news: after session 4 you already own the hardest question in the room - <em>"show me your guardrails"</em> - and it works on your own builders and on vendors alike.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Path</th><th>When it is the right call</th><th>What to demand before committing</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Build</strong></td>
+          <td>The workflow differentiates you - it IS your edge - and you have engineering capacity to hold it: builders, an eval habit, tracing.</td>
+          <td>A four-lever spec and a golden set of real tasks written down before any code. No spec, no build.</td>
+        </tr>
+        <tr>
+          <td><strong>Buy</strong></td>
+          <td>The domain is commodity - generic support triage, meeting notes, standard document handling. Someone else's agent, your data.</td>
+          <td>Guardrail evidence: which of the seven guardrail types run, how tools are risk-rated, what triggers a human, and eval results on tasks like yours - not a demo.</td>
+        </tr>
+        <tr>
+          <td><strong>Wait</strong></td>
+          <td>Rules capture the task today. Deterministic code is cheaper, testable, and boring - and boring is a feature.</td>
+          <td>A revisit trigger: the day the rulebook becomes hard to maintain, the task re-enters the scan.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The framework landscape in one breath<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>If your team builds, they will pick from a small set of serious options. You do not need depth here - builder session 9 has the depth - you need the names and one honest line each, so vendor and team conversations do not fly over your head:</p>
+        <ul>
+          <li><strong>Claude Agent SDK</strong> (Anthropic) - Python and TypeScript; ships with built-in tools, subagents, permission modes, and sessions, so guardrails are a setting, not an afterthought.</li>
+          <li><strong>OpenAI Agents SDK</strong> - five primitives: agents, handoffs, guardrails, sessions, tracing. The guide you have been reading all track is its design manual.</li>
+          <li><strong>LangGraph</strong> (LangChain) - agents as explicit graphs with checkpointing and human-in-the-loop interrupts; favored where teams want every step visible and resumable.</li>
+          <li><strong>crewAI / AutoGen</strong> - multi-agent team frameworks, each with its own DeepLearning.AI short course; strongest when the design is several cooperating agents.</li>
+        </ul>
+        <p>The strategic point, ahead of session 6: teams that anchor on their own eval set can move between these; teams that anchor on a framework cannot.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Team readiness: what your builders need<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"Build" is only real if the capacity behind it is real. Three honest checks before you fund a build:</p>
+        <ul>
+          <li><strong>Python fluency.</strong> Every serious agent stack - Claude Agent SDK, OpenAI Agents SDK, LangGraph - meets your team in Python. If the team lives elsewhere, budget the ramp.</li>
+          <li><strong>An eval habit.</strong> Does the team already test with golden sets and track pass rates, or do they ship on vibes? An agent build without an eval habit produces demos, not systems.</li>
+          <li><strong>Tracing.</strong> When the agent misbehaves, can the team replay every step it took - each tool call, each result? If "we would check the logs" is the answer, the answer is no, not yet.</li>
+        </ul>
+        <p>Missing one? That is a fundable gap, not a disqualifier. Missing all three? Buy or wait, and grow the muscle on the vendor's agent first.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE SCAN WORKSHOP ============ -->
+  <section class="section" id="use-case-scan">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the use-case scan workshop + ROI framing</span>
+      <h2>The use-case scan + ROI framing <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Here is the whole session compressed into one workshop you can run next week with your leadership team. Ninety minutes, five steps, one output: a single pilot recommendation with its gate attached.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>List candidate tasks.</strong> Thirty minutes, every department lead in the room, no filtering yet. "What eats your team's judgment time?" beats "where could we use AI?" - it surfaces real work instead of wishes.</p></div>
+      <div class="step"><p><strong>Score against the three criteria.</strong> Each task gets a 0-3: one point per filter it genuinely hits. Zero-score tasks leave the room with a compliment and a recommendation for deterministic automation.</p></div>
+      <div class="step"><p><strong>Write a four-lever spec for each survivor.</strong> One page: which tools it needs, what it must remember, whether it needs a plan, and what it must never do without approval. If the room cannot fill in the levers, the task is not understood well enough to pilot.</p></div>
+      <div class="step"><p><strong>Weigh cost of failure against value of autonomy.</strong> A task that only drafts (low failure cost) can run more autonomously than one that moves money or emails customers. Plot the survivors; the honest picture usually surprises the room.</p></div>
+      <div class="step"><p><strong>Pick ONE pilot and define its eval gate.</strong> One task, one owner, and a golden set of real cases the agent must pass before anyone widens its permissions. On budget: pilot with the most capable model to set the quality bar first, then right-size for cost once the gate passes - that is OpenAI's own model-selection recipe.</p></div>
+    </div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The pilot that got funded.</strong> Two teams pitched agent pilots to the same board. One showed a slick demo answering cherry-picked questions. The other framed theirs as "a 12-task golden set drawn from real support cases must pass before rollout" - and showed the current score climbing as levers came on. The board funded the second one, precisely because it came with a built-in reason to say no. A gate is not bureaucracy; it is what makes "yes" safe to say.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 45-60 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run the scan on your own org - solo is fine for a first pass. List ten candidate tasks, score each against the three criteria, and keep the top two or three.</li>
+      <li>For each survivor, make the build-buy-wait call using Part 2's table - and write down what evidence you would demand on that path.</li>
+      <li>Produce a one-pilot recommendation: the task, its four-lever spec (tools, memory, plan, approvals), and a golden-set sketch - eight to twelve real cases the agent must pass before rollout.</li>
+      <li>Bring it to session 6: the roadmap will tell you what to fund around your pilot, and what to deliberately ignore.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This track teaches the decision-maker's core of the canonical agent-building sources in business language. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI "A Practical Guide to Building Agents" - when-to-build + model selection</span><span class="note">Three criteria as an org lens · start-capable-then-right-size model recipe · guardrail evidence to demand</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic "Building Effective Agents" - simplicity + frameworks caution</span><span class="note">Start simple, add autonomy only when it demonstrably wins; framework choice is secondary to the spec</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Framework landscape - Claude Agent SDK · OpenAI Agents SDK · LangGraph · crewAI/AutoGen</span><span class="note">Names + positioning one-liners only; builder session 9 carries the depth</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Which three signals say a process might be worth an agent?</p>
+      <button class="qopt" type="button">A · Executive sponsorship, budget approval, vendor availability</button>
+      <button class="qopt" type="button">B · High volume, low complexity, and rules that rarely change</button>
+      <button class="qopt" type="button">C · Complex decision-making, difficult-to-maintain rules, heavy unstructured data</button>
+      <p class="qwhy">OpenAI's when-to-build criteria. Option B is the exact opposite - high volume with stable simple rules is the textbook case for deterministic code, which is cheaper and fully testable.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · A vendor demos an impressive support agent. What evidence do you ask for?</p>
+      <button class="qopt" type="button">A · Guardrail specifics - which types run, how tools are risk-rated, what triggers a human - plus eval results on tasks like yours</button>
+      <button class="qopt" type="button">B · A longer demo on more of their own examples</button>
+      <button class="qopt" type="button">C · The model name and its parameter count</button>
+      <p class="qwhy">Demos show the happy path by design. Guardrail evidence and eval results on your kind of tasks show what happens off it - which is where every real incident lives.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · What makes a pilot gate a board can trust?</p>
+      <button class="qopt" type="button">A · A polished live demo in the boardroom</button>
+      <button class="qopt" type="button">B · A golden set of real tasks that must pass before rollout - with the score visible as capabilities come on</button>
+      <button class="qopt" type="button">C · The vendor's published benchmark numbers</button>
+      <p class="qwhy">An eval set drawn from your real cases is the only gate that comes with a built-in reason to say no. Demos and vendor benchmarks measure someone else's happy path.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>When to build</b><span>Complex decision-making · difficult-to-maintain rules · heavy unstructured data. Any hit keeps a task in the funnel.</span></div>
+      <div class="cheat-item"><b>When not to</b><span>Zero criteria hit? Deterministic code - cheaper, testable, boring. Boring is a feature.</span></div>
+      <div class="cheat-item"><b>Build</b><span>The workflow differentiates you AND capacity exists. Demand a four-lever spec + golden set before code.</span></div>
+      <div class="cheat-item"><b>Buy</b><span>Commodity domain. Demand guardrail evidence + eval results on your tasks - never accept a demo as proof.</span></div>
+      <div class="cheat-item"><b>Wait</b><span>Rules suffice today. Set a revisit trigger: when the rulebook rots, the task re-enters the scan.</span></div>
+      <div class="cheat-item"><b>Framework landscape</b><span>Claude Agent SDK · OpenAI Agents SDK · LangGraph · crewAI/AutoGen. Names + one line each; depth lives in b9.</span></div>
+      <div class="cheat-item"><b>Team readiness</b><span>Python fluency, an eval habit, tracing. Missing one = fundable gap; missing all three = buy or wait.</span></div>
+      <div class="cheat-item"><b>The pilot gate</b><span>ONE pilot, one owner, a golden set of real cases that must pass before rollout. Gates make "yes" safe to say.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 5 of 6 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a4-risk-governance.html">← Previous: Risk + governance</a> &nbsp;·&nbsp; <a href="a6-roadmap.html">Next: The roadmap and your strategy →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

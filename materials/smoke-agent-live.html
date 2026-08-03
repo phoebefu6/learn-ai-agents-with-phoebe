@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>agent-live smoke test</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main style="max-width:900px;margin:40px auto;padding:0 20px">
+<h1>agent-live smoke</h1>
+<h2>score - default all on</h2>
+<div class="agentbox" data-mode="score"></div>
+<h2>score - none</h2>
+<div class="agentbox" data-mode="score" data-levers=""></div>
+<h2>trace lookup (tools)</h2>
+<div class="agentbox" data-mode="trace" data-scenario="lookup" data-levers="tools"></div>
+<h2>trace dip (all)</h2>
+<div class="agentbox" data-mode="trace" data-scenario="dip"></div>
+<h2>trace winback (no guardrails)</h2>
+<div class="agentbox" data-mode="trace" data-scenario="winback" data-levers="tools,memory,planning"></div>
+<h2>trace tickets (all)</h2>
+<div class="agentbox" data-mode="trace" data-scenario="tickets"></div>
+</main>
+<script src="../assets/agent-live.js"></script>
+</body>
+</html>

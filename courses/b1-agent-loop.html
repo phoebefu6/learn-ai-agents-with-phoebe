@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 1 · The agent loop - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 1 of 10</div>
+    <h1>The <span class="accent">agent loop</span></h1>
+    <p class="sub">An agent is not a smarter chatbot - it is an LLM running in a loop with tools, deciding its own next step until the task is done. Tonight you learn the loop cold: what qualifies as an agent (and what does not), the four levers that make one reliable, and why most "agent failures" are really a missing lever. You will watch a real agent succeed and fail, step by step, in your browser - over Daybreak, the coffee brand whose MCP server you may have built in the MCP course. By b10 that server powers a full ops agent you assemble yourself.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Builder track</span>
+      <span class="chip audience">Practitioners: DE · DS · AI engineers · builders</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+      <span class="chip time">Start here</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · What an agent is + the loop</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: watch it run + fail</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>How this track works</h2>
+    </div>
+    <p class="lede">Ten sessions, one running project: the <strong>Daybreak Ops Agent</strong> - an agent that answers and acts on a coffee brand's real operations questions, using its MCP server as a toolbox. Tonight you learn the loop. b2 wires tools, b3 builds the five workflow patterns, b4 adds memory, b5 planning, b6 goes multi-agent, b7 guardrails, b8 evals, b9 ships it, b10 assembles everything into the full agent and scores it. Every session ships a working artifact.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Live agent run - step through + toggle levers</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A working definition of "agent" you can defend (with the official Anthropic and OpenAI wording), the loop drawn from memory, the four levers - tools, memory, planning, guardrails - and the habit this whole course is built on: when an agent fails, name the missing lever before touching the prompt.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: WHAT AN AGENT IS ============ -->
+  <section class="section" id="what-is-an-agent">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic "Building Effective Agents", OpenAI guide pp.4-7, Ng M1</span>
+      <h2>What an agent actually is <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Both vendors who defined the field agree. OpenAI: agents are <em>"systems that independently accomplish tasks on your behalf."</em> Anthropic: agents are systems where <em>"LLMs dynamically direct their own processes and tool usage."</em> The key word in both is <strong>direct</strong> - the model chooses the next step. An app where your code chooses every step is a workflow. Both are useful; only one is an agent.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The agent loop: user goal in, model plans, calls tools, observes results, repeats until done, answer out. Exit conditions listed.">
+        <style>
+          .alT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .alS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .alI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .alX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .alN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .alWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#alHd); }
+        </style>
+        <defs>
+          <marker id="alHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="40" y="120" width="130" height="46" rx="8" fill="#1E293B"/>
+        <text class="alT" x="56" y="140">USER GOAL</text>
+        <text class="alS" x="56" y="158">"why the March dip?"</text>
+        <rect x="250" y="60" width="180" height="52" rx="8" fill="#9A3412"/>
+        <text class="alT" x="266" y="82">MODEL decides</text>
+        <text class="alS" x="266" y="100">next step: answer or act?</text>
+        <rect x="530" y="60" width="180" height="52" rx="8" fill="#EA580C"/>
+        <text class="alT" x="546" y="82">TOOL runs</text>
+        <text class="alS" x="546" y="100">query_sales("2026-03")</text>
+        <rect x="530" y="180" width="180" height="52" rx="8" fill="#F97316"/>
+        <text class="alT" x="546" y="202">RESULT observed</text>
+        <text class="alS" x="546" y="220">"$150, 1 refund..."</text>
+        <rect x="740" y="120" width="110" height="46" rx="8" fill="#1E293B"/>
+        <text class="alT" x="756" y="140">ANSWER</text>
+        <text class="alS" x="756" y="158">when done</text>
+        <path class="alWire" d="M170,135 C200,135 210,92 245,88"/>
+        <path class="alWire" d="M430,86 L525,86"/>
+        <path class="alWire" d="M620,112 L620,175"/>
+        <path class="alWire" d="M525,206 C470,206 460,116 435,98"/>
+        <path class="alWire" d="M715,206 C740,200 750,175 775,170"/>
+        <text class="alX" x="452" y="150">the LOOP: model → tool → observe → model,</text>
+        <text class="alX" x="452" y="167">as many turns as the task needs</text>
+        <rect x="40" y="266" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="alN" x="64" y="278">Exit conditions (OpenAI guide): a final-output answer · no more tool calls · an error · or max turns hit. Loops need exits.</text>
+        <rect x="40" y="298" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="alN" x="64" y="310">Not agents (by OpenAI's own exclusion): single-turn chatbots, sentiment classifiers - LLMs that never control what happens next.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the loop that defines an agent, with its exit conditions</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three components, four levers<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>OpenAI's guide says every agent is three things: a <strong>model</strong> (the reasoning engine), <strong>tools</strong> (what it can touch), and <strong>instructions</strong> (the guidelines and guardrails it runs under). This course stretches that into the four levers you will toggle all night - because they are the four ways real agents fail:</p>
+        <ul>
+          <li><strong>Tools</strong> - without them the model answers from memory: fluent, confident, wrong.</li>
+          <li><strong>Memory</strong> - without it, findings and instructions fall out of context mid-task.</li>
+          <li><strong>Planning</strong> - without it, complex tasks get one-shot, half-done answers.</li>
+          <li><strong>Guardrails</strong> - without them, the agent acts on things no one approved - including instructions hiding inside the data it reads.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The demo that lied.</strong> A team demoed an "analytics agent" to their exec - it answered every revenue question instantly and got a budget. In production someone checked a number against the warehouse: the agent had no database tool wired in and had been improvising figures the whole time. Nobody had asked which lever was on. You will run exactly this failure, on purpose, in Demo 1.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When NOT to build an agent<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>OpenAI's guide is blunt: agents cost latency, money, and predictability - only reach for one when at least one of these holds:</p>
+        <ul>
+          <li><strong>Complex decision-making</strong> - judgment calls a rulebook cannot capture (refund approvals with context).</li>
+          <li><strong>Difficult-to-maintain rules</strong> - the if/else forest nobody dares touch (vendor security reviews).</li>
+          <li><strong>Heavy unstructured data</strong> - the task swims in documents and conversations (claim processing).</li>
+        </ul>
+        <p>None of the three? Write deterministic code. Anthropic's essay opens with the same warning: the most successful agent builders use "simple, composable patterns" and add autonomy only when it demonstrably wins. "We could use an agent" is not a reason to.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THOUGHT-ACTION-OBSERVATION ============ -->
+  <section class="section" id="the-cycle">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers HF Unit 1 (Thought-Action-Observation), Academy "Agents and workflows"</span>
+      <h2>Inside one turn of the loop <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">Hugging Face teaches the loop's inner beat as <strong>Thought → Action → Observation</strong>. The model reasons about where it is (thought), emits a structured tool call (action), and the runtime feeds the result back into context (observation). Then the cycle repeats - with one more observation in context each time. That growing context IS the agent's working state: protect it, and you have protected the agent.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One turn: thought, action, observation, each feeding a growing context window that carries the agent's state.">
+        <style>
+          .taT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .taS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .taI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .taX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .taN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .taWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#taHd); }
+        </style>
+        <defs>
+          <marker id="taHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="60" y="50" width="200" height="56" rx="8" fill="#9A3412"/>
+        <text class="taT" x="76" y="74">1 · THOUGHT</text>
+        <text class="taS" x="76" y="93">"I need February first"</text>
+        <rect x="340" y="50" width="200" height="56" rx="8" fill="#EA580C"/>
+        <text class="taT" x="356" y="74">2 · ACTION</text>
+        <text class="taS" x="356" y="93">query_sales("2026-02")</text>
+        <rect x="620" y="50" width="200" height="56" rx="8" fill="#F97316"/>
+        <text class="taT" x="636" y="74">3 · OBSERVATION</text>
+        <text class="taS" x="636" y="93">"$271, 7 orders"</text>
+        <path class="taWire" d="M260,78 L335,78"/>
+        <path class="taWire" d="M540,78 L615,78"/>
+        <rect x="180" y="180" width="520" height="56" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="taI" x="200" y="204">CONTEXT WINDOW - the agent's only working memory</text>
+        <text class="taX" x="200" y="224">goal + every thought, action and observation so far, in order</text>
+        <path class="taWire" d="M720,110 C720,150 640,165 600,178"/>
+        <path class="taWire" d="M250,178 C220,160 160,140 160,112"/>
+        <text class="taX" x="80" y="160">next thought reads</text>
+        <text class="taX" x="80" y="176">the whole history</text>
+        <rect x="60" y="266" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="taN" x="84" y="278">Every failure you will see tonight is a corruption of this picture: no actions (tools off), history lost (memory off),</text>
+        <text class="taN" x="84" y="298">one turn only (planning off), wrong master (guardrails off).</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - Thought, Action, Observation - and the context window that carries them</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where the four levers live in real stacks<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The levers are not this course's invention - they are what every serious framework ships, under different names. Learn the lever, and every framework becomes familiar:</p>
+        <ul>
+          <li><strong>Tools</strong> - Anthropic tool use / MCP servers · OpenAI function tools · HF "Tools". b2 wires Daybreak's MCP server in as the toolbox.</li>
+          <li><strong>Memory</strong> - OpenAI SDK "Sessions" · LangGraph checkpointing + Store · Anthropic context management. b4.</li>
+          <li><strong>Planning</strong> - Ng's Planning pattern · Anthropic's "transparency: show planning steps" principle. b5.</li>
+          <li><strong>Guardrails</strong> - OpenAI's 7 guardrail types + human-in-the-loop · Agent SDK permission modes · LangGraph interrupts. b7.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Workflows vs agents is a dial, not a war<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Anthropic's essay draws the line precisely: <strong>workflows</strong> orchestrate LLMs "through predefined code paths"; <strong>agents</strong> let the LLM direct its own process. Between the two extremes sit the five workflow patterns you build in b3 - prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer - each handing the model a little more of the steering wheel.</p>
+        <ul>
+          <li><strong>More autonomy</strong> = handles messier tasks, costs more, fails less predictably.</li>
+          <li><strong>Less autonomy</strong> = cheaper, testable, boring - and boring is a feature in production.</li>
+          <li><strong>The rule (both vendors):</strong> start at the workflow end; slide toward agent only when the task demonstrably demands it.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Demo 1 of 2</span>
+      <h2>Watch one lever change everything <span class="tag demo">★ 12 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">The founder asks: <em>"What was March 2026 revenue?"</em> Below is the Daybreak Ops Agent running that task. Step through with Next and read every step - then <strong>turn the Tools lever off and step through again</strong>. Same model, same question, opposite outcome. This is the failure from the "demo that lied" story, reproduced safely.</p>
+
+    <div class="steps">
+      <div class="step"><p>Step through with <strong>Tools on</strong>. Find the moment the model chooses to call <code>query_sales</code> instead of answering directly - that choice is what makes it an agent.</p></div>
+      <div class="step"><p>Note the tool result: <strong>$150.00, 1 refund excluded</strong>. That number is computed live from Daybreak's data, in your browser, right now.</p></div>
+      <div class="step"><p>Toggle <strong>Tools off</strong>. Read the new "answer". It is fluent, specific, confidently formatted - and invented end to end.</p></div>
+      <div class="step"><p>Say the lesson out loud: a wrong agent answer usually is not a "bad model" - it is a missing lever. Name the lever first.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="lookup" data-levers="tools"></div>
+
+    <div class="callout tip">
+      <strong>How to read every agent demo in this course</strong>
+      👤 user · 🧠 model reasoning · 🔧 tool call · 📦 tool result · 🛡 guardrail · 💬 final answer. The model's words are a scripted teaching simulation replaying the characteristic behaviors; every number in a 📦 step is genuinely computed from the embedded Daybreak data.
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Demo 2 of 2</span>
+      <h2>The 12-task scorecard - your course-long benchmark <span class="tag demo">★ 10 min · explore</span></h2>
+    </div>
+    <p class="lede">Twelve real Daybreak ops tasks, from "what's our refund policy" to "send win-back emails". Start with every lever off and climb: watch WHICH tasks flip to ✓ with each lever, and read the failure text on the ones still red. This exact ladder - <strong>1 → 5 → 7 → 10 → 12</strong> - is the spine of the whole track: each session turns on the lever that unlocks the next rung.</p>
+
+    <div class="steps">
+      <div class="step"><p>All levers off: <strong>1/12</strong>. Only pure arithmetic survives - an LLM alone is a reasoner, not an agent.</p></div>
+      <div class="step"><p>+ Tools: <strong>5/12</strong> (b2). Lookups work. But read task 12's failure - tools without guardrails introduced a brand-new danger.</p></div>
+      <div class="step"><p>+ Memory: <strong>7/12</strong> (b4). Multi-step comparisons stop losing their own findings.</p></div>
+      <div class="step"><p>+ Planning: <strong>10/12</strong> (b5). Diagnoses and reports - tasks that need decomposition - come alive.</p></div>
+      <div class="step"><p>+ Guardrails: <strong>12/12</strong> (b7). The two tasks that touch the outside world - sending email, reading untrusted tickets - finally pass <em>safely</em>.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="score" data-levers=""></div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>This scorecard is a real practice, not a toy.</strong> Anthropic's agent-evals guidance says to start with 20-50 tasks drawn from real failures and track them continuously; Arize teaches the same decomposition for production agents. In b8 you will formalize this exact golden set - pass@k, trajectory checks, LLM-judges - and in b10 the assembled agent must hit 12/12 before you ship it.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 20-30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run all four lever combinations on the Demo 1 trace and both extreme combinations on the scorecard, until you can predict every verdict before clicking.</li>
+      <li>Draw the agent loop from memory - user goal, model, tool, observation, exit conditions - then check it against Part 1's diagram.</li>
+      <li>Pick one task from YOUR work you wish an agent handled. Write down: which tools it would need, what it must remember, whether it needs a plan, and what it must never do without approval. That is a four-lever spec - bring it to b2.</li>
+      <li>Read Anthropic's "Building Effective Agents" essay end to end (20 min) - you now have the frame to get everything out of it.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This track teaches the working core of the canonical agent-building sources - Anthropic's and OpenAI's official guidance, the major vendor courses, and the eval literature - with a live agent to poke on every page. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - definitions + principles</span><span class="note">Parts 1-2 · workflows vs agents, simplicity, transparency; patterns land in b3</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI "A Practical Guide to Building Agents" - pp. 4-13</span><span class="note">Agent definition + exclusions, when-to-build, model/tools/instructions, exit conditions</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hugging Face Agents course - Unit 1 (Fundamentals)</span><span class="note">Thought-Action-Observation cycle · taught here on live traces</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DeepLearning.AI "Agentic AI" (Ng) - Module 1</span><span class="note">Degrees of autonomy + design-patterns overview; patterns built in b3/b5/b6</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic Academy "Building with the Claude API" - Agents and Workflows section</span><span class="note">Workflows-vs-agents lesson; the workflow lessons map to b3</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What makes a system an agent rather than a workflow?</p>
+      <button class="qopt" type="button">A · It uses a large enough model</button>
+      <button class="qopt" type="button">B · The LLM directs its own process and tool use - your code does not fix the path</button>
+      <button class="qopt" type="button">C · It is connected to more than one tool</button>
+      <p class="qwhy">Anthropic's line: workflows run "predefined code paths"; agents "dynamically direct their own processes." Model size and tool count are irrelevant - who chooses the next step is everything.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · The agent quotes revenue that was never in any tool result. Which lever was off?</p>
+      <button class="qopt" type="button">A · Planning - it should have decomposed the task</button>
+      <button class="qopt" type="button">B · Guardrails - nothing screened the output</button>
+      <button class="qopt" type="button">C · Tools - with no way to fetch data, the model improvised a fluent, wrong answer</button>
+      <p class="qwhy">Hallucinated numbers are the tools-off signature. Planning-off gives shallow half-answers; guardrails-off gives unauthorized actions. Diagnose by lever, then fix.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why do both Anthropic and OpenAI say to try a workflow BEFORE an agent?</p>
+      <button class="qopt" type="button">A · Autonomy costs latency, money and predictability - pay it only when the task demands it</button>
+      <button class="qopt" type="button">B · Agents are still a research technology that cannot run in production</button>
+      <button class="qopt" type="button">C · Workflows always produce higher-quality answers</button>
+      <p class="qwhy">Predefined paths are cheaper, testable, and debuggable. Agents win when tasks are too varied for fixed paths - OpenAI's three criteria. Start simple, escalate deliberately.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Agent in one line</b><span>An LLM in a loop with tools, directing its own next step until the task is done. (Anthropic: "dynamically direct their own processes.")</span></div>
+      <div class="cheat-item"><b>Not an agent</b><span>Single-turn chatbots, classifiers, LLM features on rails - the model never controls what happens next.</span></div>
+      <div class="cheat-item"><b>The loop</b><span>Goal → model decides → tool runs → result observed → repeat → answer. Exits: final answer, no tool call, error, max turns.</span></div>
+      <div class="cheat-item"><b>Inner beat</b><span>Thought → Action → Observation, accumulating in the context window - which IS the agent's working state.</span></div>
+      <div class="cheat-item"><b>The four levers</b><span>Tools (b2) · Memory (b4) · Planning (b5) · Guardrails (b7). Diagnose failures by lever, not vibes.</span></div>
+      <div class="cheat-item"><b>The ladder</b><span>12-task golden set: 1 → 5 → 7 → 10 → 12 as the levers come on. b8 formalizes it; b10 must hit 12/12.</span></div>
+      <div class="cheat-item"><b>When to agent</b><span>Complex judgment, unmaintainable rules, or heavy unstructured data - otherwise write deterministic code.</span></div>
+      <div class="cheat-item"><b>Running project</b><span>Daybreak Ops Agent on the MCP-course server: 3 data tools now, action tools + memory + guardrails as the track builds.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 1 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="b2-tools-first-agent.html">Next: Tools + your first agent →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

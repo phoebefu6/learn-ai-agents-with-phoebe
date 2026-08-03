@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 6 · Multi-agent systems - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 6 of 10</div>
+    <h1>Multi-agent <span class="accent">systems</span></h1>
+    <p class="sub">One agent that works beats five that impress. Tonight you learn the official split rule (it is stricter than you think), the only two multi-agent shapes the vendor guides actually name - manager and handoffs - and then you build a real manager crew over Daybreak: an analyst with query tools and a writer with none, exposed to a manager as two tools. About 30 lines of plain Python. You leave knowing exactly when many agents beat one, and how to say no when they do not.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on build-along</span>
+      <span class="chip audience">Builder track · practitioners</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Two shapes of many</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: a manager crew</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: SINGLE-AGENT-FIRST ============ -->
+  <section class="section" id="single-agent-first">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers OpenAI guide (when to split), Anthropic simplicity principle</span>
+      <h2>Single-agent-first (really) <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">OpenAI's guide is unambiguous: <strong>maximize a single agent's capabilities first</strong>. Multi-agent is not a maturity badge - it is a cost you pay only when one agent demonstrably cannot carry the task. Anthropic's essay says the same thing in one word: simplicity. Everything you built in b2-b5 was the "maximize" part; tonight you learn when it runs out.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The two split triggers<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Per the OpenAI guide, you split one agent into many when - and only when - one of these holds:</p>
+        <ul>
+          <li><strong>Complex conditional logic</strong> - the instructions have grown so many branching if-this-then-that paths that prompts become unmaintainable and the model starts missing branches.</li>
+          <li><strong>Tool overload</strong> - and here is the subtle part: <strong>overlap matters more than count</strong>. Some agents manage 15+ distinct, clearly separated tools without trouble; others struggle under 10 whose descriptions blur into each other. If the model keeps picking the wrong-but-similar tool, splitting by domain gives each agent a small, unambiguous toolbox.</li>
+        </ul>
+        <p>Neither trigger firing? Stay single. A bigger toolbox, better tool docs (b2's ACI craft), or a plan step (b5) is almost always the cheaper fix.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The org chart nobody can debug.</strong> Teams routinely jump to multi-agent for status - "we run a six-agent system" sounds better in a steering deck than "we run one good loop". What they inherit is N debugging surfaces: every agent boundary is a place where context gets lost, handoffs misfire, and no single trace shows the whole task. When something breaks, you now debug an organization, not a program. Split for a trigger, never for a slide.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How this rhymes with everything you already built<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You have heard this melody before. b1: try a workflow before an agent. b3: the five workflow patterns hand over autonomy one notch at a time. b5: add planning only when one-shot answers fall short. Multi-agent is the same dial turned one more notch - and the same discipline applies: escalate deliberately, with a named reason. Your homework tonight literally asks you to write that reason down in one sentence before you are allowed to go multi.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: MANAGER VS HANDOFFS ============ -->
+  <section class="section" id="manager-vs-handoffs">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers OpenAI guide (multi-agent taxonomy), OpenAI SDK, Claude Agent SDK subagents</span>
+      <h2>Manager vs handoffs - the two shapes <span class="tag concept">9 min live</span></h2>
+    </div>
+    <p class="lede">The OpenAI guide names exactly two multi-agent patterns, and its SDK maps them 1:1 to primitives. <strong>Manager pattern:</strong> agents as tools - a central manager delegates via tool calls and synthesizes the results, staying the single point of user contact. <strong>Decentralized pattern:</strong> peer handoffs - one agent transfers execution plus the conversation state to another (triage → specialist), and the new agent takes over. Learn the two shapes and every framework's multi-agent story becomes familiar.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Manager pattern: user talks to one manager agent, which delegates to specialist agents via tool calls and synthesizes one answer.">
+        <style>
+          .mgrT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .mgrS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .mgrI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .mgrX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .mgrN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .mgrWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#mgrHd); }
+          .mgrBack { stroke: #CBD5E1; stroke-width: 2; fill: none; stroke-dasharray: 5 4; marker-end: url(#mgrHdB); }
+        </style>
+        <defs>
+          <marker id="mgrHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+          <marker id="mgrHdB" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#CBD5E1"/>
+          </marker>
+        </defs>
+        <rect x="30" y="120" width="130" height="56" rx="8" fill="#1E293B"/>
+        <text class="mgrT" x="46" y="143">USER</text>
+        <text class="mgrS" x="46" y="161">one contact point</text>
+        <rect x="240" y="112" width="210" height="72" rx="8" fill="#9A3412"/>
+        <text class="mgrT" x="256" y="136">MANAGER agent</text>
+        <text class="mgrS" x="256" y="154">decomposes · delegates</text>
+        <text class="mgrS" x="256" y="170">synthesizes one answer</text>
+        <rect x="620" y="34" width="220" height="56" rx="8" fill="#EA580C"/>
+        <text class="mgrT" x="636" y="57">ANALYST (a tool)</text>
+        <text class="mgrS" x="636" y="75">query tools · numbers</text>
+        <rect x="620" y="124" width="220" height="56" rx="8" fill="#F97316"/>
+        <text class="mgrT" x="636" y="147">WRITER (a tool)</text>
+        <text class="mgrS" x="636" y="165">no tools · prose</text>
+        <rect x="620" y="214" width="220" height="50" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="2" stroke-dasharray="6 4"/>
+        <text class="mgrI" x="636" y="235">next specialist slot</text>
+        <text class="mgrX" x="636" y="252">homework: subscriptions</text>
+        <path class="mgrWire" d="M160,148 L235,148"/>
+        <path class="mgrWire" d="M450,128 C520,110 560,80 615,66"/>
+        <path class="mgrWire" d="M450,150 L615,150"/>
+        <path class="mgrBack" d="M620,86 C560,100 510,124 460,136"/>
+        <path class="mgrBack" d="M620,196 C560,190 500,178 458,168"/>
+        <text class="mgrX" x="480" y="102">tool call out</text>
+        <text class="mgrX" x="480" y="206">result back</text>
+        <rect x="30" y="292" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="mgrN" x="54" y="304">Specialists never talk to the user. The manager is the single point of contact and owns the final answer.</text>
+        <rect x="30" y="324" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="mgrN" x="54" y="336">Each specialist is an agent exposed as a tool: OpenAI SDK "agents as tools"; Claude Agent SDK ships subagents.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the manager pattern: agents as tools behind one synthesizing manager</figcaption>
+    </figure>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decentralized pattern: a triage agent hands off execution and conversation state to a specialist, which then owns the conversation.">
+        <style>
+          .hndT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .hndS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .hndI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .hndX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .hndN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .hndWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#hndHd); }
+          .hndBig { stroke: #EA580C; stroke-width: 4; fill: none; marker-end: url(#hndHd); }
+        </style>
+        <defs>
+          <marker id="hndHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="30" y="54" width="130" height="56" rx="8" fill="#1E293B"/>
+        <text class="hndT" x="46" y="77">USER</text>
+        <text class="hndS" x="46" y="95">"fix my invoice"</text>
+        <rect x="250" y="46" width="210" height="72" rx="8" fill="#9A3412"/>
+        <text class="hndT" x="266" y="70">TRIAGE agent</text>
+        <text class="hndS" x="266" y="88">classifies the request,</text>
+        <text class="hndS" x="266" y="104">then steps aside</text>
+        <rect x="610" y="46" width="230" height="72" rx="8" fill="#EA580C"/>
+        <text class="hndT" x="626" y="70">BILLING specialist</text>
+        <text class="hndS" x="626" y="88">now owns execution</text>
+        <text class="hndS" x="626" y="104">and the conversation</text>
+        <path class="hndWire" d="M160,82 L245,82"/>
+        <path class="hndBig" d="M460,82 L605,82"/>
+        <text class="hndI" x="492" y="70">HANDOFF</text>
+        <rect x="300" y="170" width="380" height="66" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="hndI" x="320" y="194">WHAT TRANSFERS in a handoff</text>
+        <text class="hndX" x="320" y="214">execution + the conversation state so far -</text>
+        <text class="hndX" x="320" y="228">the specialist picks up mid-conversation, not from zero</text>
+        <path class="hndWire" d="M532,96 L500,165"/>
+        <path class="hndWire" d="M660,122 C540,180 260,150 130,116"/>
+        <text class="hndX" x="330" y="140">specialist replies to the user directly</text>
+        <rect x="30" y="268" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="hndN" x="54" y="280">Decentralized pattern: peers transfer work among themselves; no central synthesizer (OpenAI guide).</text>
+        <rect x="30" y="298" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="hndN" x="54" y="310">Maps 1:1 to the OpenAI SDK "handoff" primitive - just as manager maps to "agents as tools".</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the decentralized pattern: a handoff transfers execution plus conversation state</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why multi wins, when it wins<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When a split trigger genuinely fires, many agents buy you three things one agent cannot:</p>
+        <ul>
+          <li><strong>Context isolation</strong> - each specialist gets a clean context window for its sub-task instead of wading through everything the whole job has accumulated. This is b4's lesson wearing a new coat: protect the context, protect the agent.</li>
+          <li><strong>Parallelism</strong> - independent sub-tasks (the analyst pulling June numbers, another specialist pulling ticket themes) can run at the same time instead of in sequence.</li>
+          <li><strong>Separation of permissions</strong> - the writer has no tools at all, so it cannot touch data; only the analyst can query, and nobody here can send email. Smaller toolboxes per agent mean smaller blast radius - which is exactly where b7's guardrails pick up.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the two shapes live in the SDKs<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The taxonomy is not abstract - it ships as primitives you can import:</p>
+        <ul>
+          <li><strong>OpenAI Agents SDK</strong> - its named primitives include Agents, Handoffs, Guardrails, Sessions, Tracing. "Agents as tools" gives you the manager pattern; "handoffs" gives you the decentralized one. Guide and SDK map 1:1.</li>
+          <li><strong>Claude Agent SDK</strong> - ships <strong>subagents</strong> as a primitive alongside built-in tools, hooks, MCP, permissions, sessions, skills and plugins. A subagent is the manager shape: a specialist the parent invokes and whose result it synthesizes.</li>
+          <li><strong>LangGraph</strong> - subgraphs let you nest one graph inside another, which is how it expresses specialist crews. Positioning lesson in b9.</li>
+          <li><strong>crewAI</strong> - the "Practical Multi AI Agents" short course builds whole crews this way; same two shapes underneath.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: BUILD-ALONG ============ -->
+  <section class="section" id="build-along">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>The Daybreak review crew <span class="tag demo">★ 24 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">The founder wants the June monthly review written. That is two different skills: pulling correct numbers (needs the query tools) and writing clean prose (needs none). Perfect manager-pattern shape: an <strong>analyst</strong> agent and a <strong>writer</strong> agent, each a plain Python function, exposed to a <strong>manager</strong> as two tools. The manager is just b2's loop - the only new idea is that behind two of the tool names sits another agent.</p>
+
+    <div class="steps">
+      <div class="step"><p>Define the two specialists as functions. The analyst reuses your b2 loop with the Daybreak query tools; the writer is a single <code>messages.create</code> call with no tools at all.</p></div>
+      <div class="step"><p>Describe each specialist to the manager as a tool - <code>ask_analyst</code> and <code>ask_writer</code> - with honest descriptions. Tool docs are the ACI (b2); a manager routing between agents lives or dies by them.</p></div>
+      <div class="step"><p>Run it on "Write the June 2026 monthly review." Watch the manager decompose: it calls <code>ask_analyst</code> first, the analyst runs <code>query_sales("2026-06")</code> and reports June completed revenue of <strong>$168</strong>, then the manager hands that brief to <code>ask_writer</code> and synthesizes the final review.</p></div>
+      <div class="step"><p>Confirm the separation of permissions: the writer never saw a database, the analyst never wrote prose, and only the manager spoke to the user.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The whole crew in ~30 lines<span class="mini">10 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+<pre><code># the Daybreak review crew - manager pattern
+import anthropic
+client = anthropic.Anthropic()
+
+def analyst(task: str) -&gt; str:
+    """Specialist 1: has the Daybreak query tools (your b2 loop, reused)."""
+    return run_loop(                     # the tool loop you built in b2
+        system="You are Daybreak's analyst. Report tool-verified numbers only.",
+        tools=DAYBREAK_TOOLS,            # query_sales · top_products · subscription_status
+        user=task)
+
+def writer(brief: str) -&gt; str:
+    """Specialist 2: no tools - turns the analyst's brief into prose."""
+    msg = client.messages.create(
+        model="claude-opus-5", max_tokens=1024,
+        system="You write Daybreak's monthly reviews. Use only numbers from the brief.",
+        messages=[{"role": "user", "content": brief}])
+    return msg.content[0].text
+
+CREW = {"ask_analyst": analyst, "ask_writer": writer}
+MANAGER_TOOLS = [
+    {"name": "ask_analyst",
+     "description": "Delegate a numbers question. Returns tool-verified Daybreak figures.",
+     "input_schema": {"type": "object",
+                      "properties": {"task": {"type": "string"}}, "required": ["task"]}},
+    {"name": "ask_writer",
+     "description": "Delegate prose. Give it every number it needs - it has no tools.",
+     "input_schema": {"type": "object",
+                      "properties": {"brief": {"type": "string"}}, "required": ["brief"]}},
+]
+
+# the manager is just b2's loop - two of its "tools" happen to be agents
+messages = [{"role": "user", "content": "Write the June 2026 monthly review."}]
+while True:
+    r = client.messages.create(
+        model="claude-opus-5", max_tokens=2048,
+        system="You are the Daybreak review manager. Delegate, then synthesize one answer.",
+        tools=MANAGER_TOOLS, messages=messages)
+    if r.stop_reason != "tool_use":
+        break                            # no more delegation - the review is done
+    messages.append({"role": "assistant", "content": r.content})
+    messages.append({"role": "user", "content": [
+        {"type": "tool_result", "tool_use_id": b.id,
+         "content": CREW[b.name](**b.input)}   # the "tool" runs a whole agent
+        for b in r.content if b.type == "tool_use"]})
+print(r.content[0].text)</code></pre>
+        <p>Read the last comment twice: <strong>the "tool" runs a whole agent</strong>. That single line is the entire manager pattern. Everything else on this page you already built in b2.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Contrast: b3's chaining did this same job<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Honesty check: "write the June review" can also be done with b3's <strong>prompt chaining</strong> workflow - step 1 query, step 2 write, in fixed order, no manager deciding anything. For this exact task the fixed pipeline is cheaper, fully predictable, and easier to test - <strong>when the fixed pipeline is enough, prefer it</strong>. The manager earns its keep only when the decomposition varies per request: "compare June to May and only interview the analyst twice if something looks off" is where a fixed chain starts sprouting the conditional logic that triggers the split. Same discipline as b1: autonomy is bought, not free.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>Naming the shapes in the wild</strong>
+      Orchestrator-workers (b3) at the agent level IS the manager pattern - the orchestrator became an agent and the workers became agents-as-tools. When a vendor demo says "supervisor", "crew", or "subagents", ask one question: does one agent synthesize (manager) or does control transfer (handoff)? There is no third shape in the official guides.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Add a third specialist to the crew: a <strong>subscriptions agent</strong> that owns <code>subscription_status</code>. Give it an honest tool description and re-run the June review - the manager should call it only when subscriptions are actually relevant.</li>
+      <li>Now break it on purpose: give the analyst AND the writer overlapping tools and near-identical descriptions, then watch the manager's routing degrade - wrong specialist, doubled calls, mixed-up briefs. You are reproducing the tool-overload trigger (overlap, not count) from Part 1.</li>
+      <li>Take the agent task you specced in b2 and write the one-sentence justification it would need before going multi: which split trigger fires, and which shape (manager or handoff) fits. If you cannot finish the sentence, it stays single-agent - that is the rule working.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Certificates, videos, and graded assessments stay on the official sites - this page teaches the working core. Tonight covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI "A Practical Guide to Building Agents" - multi-agent section</span><span class="note">Manager vs decentralized taxonomy · single-agent-first rule · the two split triggers</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI Agents SDK - handoffs + agents-as-tools</span><span class="note">The two patterns as importable primitives, mapped 1:1 to the guide</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Claude Agent SDK - subagents</span><span class="note">Subagents as a shipped primitive; full SDK positioning lands in b9</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DLAI "Practical Multi AI Agents" (crewAI)</span><span class="note">Crews at scale - same two shapes underneath; framework tour in b9</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DeepLearning.AI "Agentic AI" (Ng) - Module 5</span><span class="note">Multi-agent communication as the fourth pattern of the agentic canon</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">LangGraph - subgraphs</span><span class="note">How graph frameworks express specialist crews; positioning in b9</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · The OpenAI guide names exactly two multi-agent shapes. Which pair?</p>
+      <button class="qopt" type="button">A · Hierarchical and flat</button>
+      <button class="qopt" type="button">B · Synchronous and asynchronous</button>
+      <button class="qopt" type="button">C · Manager (agents as tools) and decentralized (peer handoffs)</button>
+      <p class="qwhy">Manager: a central agent delegates via tool calls, synthesizes, and stays the single point of user contact. Decentralized: peers hand work to each other. Every vendor framework's multi-agent story is one of these two.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · In the decentralized pattern, what exactly does a handoff transfer?</p>
+      <button class="qopt" type="button">A · Just the user's original message, so the specialist starts fresh</button>
+      <button class="qopt" type="button">B · Execution plus the conversation state - the specialist picks up mid-conversation and takes over</button>
+      <button class="qopt" type="button">C · Only the tool list - the conversation stays with the triage agent</button>
+      <p class="qwhy">A handoff transfers execution AND conversation state (triage → specialist). That is what separates it from the manager pattern, where control never leaves the manager and specialists only see the sub-task they were delegated.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · When does the OpenAI guide say to split one agent into many?</p>
+      <button class="qopt" type="button">A · Complex conditional logic in the instructions, or tool overload - where overlap matters more than count</button>
+      <button class="qopt" type="button">B · As soon as the agent has more than five tools</button>
+      <button class="qopt" type="button">C · Whenever latency needs to come down</button>
+      <p class="qwhy">Maximize a single agent first. Split on unmaintainable branching logic or on overlapping, confusable tools - some agents handle 15+ distinct tools fine while others struggle under 10 overlapping ones. Raw tool count is not the trigger.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The rule</b><span>Maximize a single agent's capabilities first (OpenAI guide). Multi-agent is a cost, not a badge.</span></div>
+      <div class="cheat-item"><b>Split triggers</b><span>Complex conditional logic · tool overload - overlap matters more than count (15+ distinct fine; 10 overlapping can fail).</span></div>
+      <div class="cheat-item"><b>Manager pattern</b><span>Agents as tools. Central manager delegates via tool calls, synthesizes, single point of user contact.</span></div>
+      <div class="cheat-item"><b>Decentralized pattern</b><span>Peer handoffs transfer execution + conversation state (triage → specialist). New agent takes over.</span></div>
+      <div class="cheat-item"><b>SDK mapping</b><span>OpenAI SDK: agents-as-tools + handoffs, 1:1 with the guide. Claude Agent SDK: subagents as a primitive.</span></div>
+      <div class="cheat-item"><b>Why multi wins</b><span>Context isolation (clean window per specialist, b4) · parallelism · separation of permissions (b7).</span></div>
+      <div class="cheat-item"><b>The crew build</b><span>Analyst (query tools) + writer (no tools) behind a manager - b2's loop where two tools run whole agents.</span></div>
+      <div class="cheat-item"><b>Honesty check</b><span>If a fixed pipeline (b3 chaining) does the job, prefer it. Write the one-sentence split justification first.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 6 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b5-planning-reasoning.html">← b5: Planning + reasoning</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b7-guardrails.html">Next: Guardrails →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

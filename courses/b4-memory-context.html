@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 4 · Memory and context - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 4 of 10</div>
+    <h1>Memory and <span class="accent">context</span></h1>
+    <p class="sub">In b1 you saw that the context window IS the agent's working state - every thought, action and observation piles into it, turn after turn. Tonight you learn what happens when that pile gets too tall: findings vanish, standing instructions silently fall away, and the agent starts contradicting its own earlier steps. You will watch the Daybreak Ops Agent lose a number it fetched correctly three steps earlier, then build the memory toolkit that stops it - trimming, compaction, a scratchpad, and the long-term stores real frameworks ship.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Medium</span>
+      <span class="chip audience">Builder track</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Context is the state</span>
+      <span class="a3" style="flex:8">18-42 · Build-along: memory that survives</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE CONTEXT WINDOW IS THE MEMORY ============ -->
+  <section class="section" id="context-is-memory">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic context management, LangGraph MessagesState, HF Unit 1 recap</span>
+      <h2>The context window IS the agent's memory <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">b1's Thought → Action → Observation cycle has a hidden bill: every turn appends to the context window, and the window is finite. A long task grows its own history until something has to give. There are exactly two ways it gives - <strong>overflow</strong> (the task blows past the window and the run dies or degrades) and <strong>eviction</strong> (early turns get trimmed away to make room, taking early findings and standing instructions with them). Both are memory failures. Neither is a "bad model".</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A context window filling turn by turn across three snapshots, until the earliest instruction, exclude refunds, falls off the edge and the answer silently changes.">
+        <style>
+          .mwT { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .mwI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .mwX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .mwF { font: 700 12px Inter, sans-serif; fill: #64748B; }
+          .mwN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .mwWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#mwHd); }
+        </style>
+        <defs>
+          <marker id="mwHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <text class="mwI" x="40" y="66">Turn 2</text>
+        <rect x="200" y="42" width="620" height="44" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <rect x="212" y="52" width="128" height="24" rx="5" fill="#9A3412"/>
+        <text class="mwT" x="222" y="68">exclude refunds</text>
+        <rect x="348" y="52" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="358" y="68">T1·A1</text>
+        <rect x="416" y="52" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="426" y="68">O1</text>
+        <text class="mwX" x="484" y="68">plenty of room left</text>
+        <text class="mwI" x="40" y="146">Turn 6</text>
+        <rect x="200" y="122" width="620" height="44" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <rect x="208" y="132" width="128" height="24" rx="5" fill="#9A3412"/>
+        <text class="mwT" x="218" y="148">exclude refunds</text>
+        <rect x="344" y="132" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="354" y="148">T2·A2</text>
+        <rect x="412" y="132" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="422" y="148">O2</text>
+        <rect x="472" y="132" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="482" y="148">T3·A3</text>
+        <rect x="540" y="132" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="550" y="148">O3</text>
+        <rect x="600" y="132" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="610" y="148">T4·A4</text>
+        <rect x="668" y="132" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="678" y="148">O4</text>
+        <text class="mwX" x="732" y="148">filling up</text>
+        <text class="mwI" x="40" y="226">Turn 11</text>
+        <rect x="60" y="172" width="128" height="24" rx="5" fill="#CBD5E1" opacity="0.7"/>
+        <text class="mwF" x="70" y="188">exclude refunds</text>
+        <rect x="200" y="202" width="620" height="44" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2" stroke-dasharray="6 4"/>
+        <rect x="208" y="212" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="218" y="228">T5·A5</text>
+        <rect x="276" y="212" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="286" y="228">O5</text>
+        <rect x="336" y="212" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="346" y="228">T6·A6</text>
+        <rect x="404" y="212" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="414" y="228">O6</text>
+        <rect x="464" y="212" width="60" height="24" rx="5" fill="#EA580C"/>
+        <text class="mwT" x="474" y="228">T7·A7</text>
+        <rect x="532" y="212" width="52" height="24" rx="5" fill="#FDBA74"/>
+        <text class="mwI" x="542" y="228">O7</text>
+        <rect x="592" y="212" width="120" height="24" rx="5" fill="#F97316"/>
+        <text class="mwT" x="602" y="228">...more turns</text>
+        <path class="mwWire" d="M212,204 C204,198 198,192 192,186"/>
+        <text class="mwX" x="60" y="252">evicted - trimmed to make room</text>
+        <text class="mwX" x="600" y="266">the answer silently changes:</text>
+        <text class="mwI" x="600" y="284">refunds are back in the total</text>
+        <rect x="40" y="308" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="mwN" x="64" y="320">The agent never says "I forgot". It just answers as if the instruction never existed - fluent, confident, wrong.</text>
+        <rect x="40" y="336" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="mwN" x="64" y="348">Overflow kills the run loudly. Eviction corrupts it silently. The silent one is the dangerous one.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the window fills turn by turn until "exclude refunds" falls off the edge, and the answer silently changes</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Two ways a context dies<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Name the failure before you fix it - same habit as the levers in b1:</p>
+        <ul>
+          <li><strong>Overflow</strong> - a long task (big tool results, many turns) exceeds the window. Symptoms: API errors, truncated inputs, sudden quality cliffs late in a run. Loud, easy to spot.</li>
+          <li><strong>Eviction</strong> - to keep running, old turns get dropped or trimmed. Symptoms: the agent re-fetches things it already knew, contradicts its own earlier finding, or ignores an instruction given at turn 1. Quiet, easy to miss - this is the memory-off signature you will reproduce in the demo.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The standing instruction that expired.</strong> An ops team told their agent at the start of every month: "exclude refunded orders from revenue figures." Ten turns of ticket triage later, month-end numbers came out higher than finance's. Nothing crashed and no error was logged - the instruction had simply been evicted mid-run, and every later answer quietly included refunds again.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "just use a bigger window" is not the fix<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Bigger windows delay the problem; they do not remove it. Three reasons the toolkit still matters:</p>
+        <ul>
+          <li><strong>Cost and latency scale with context</strong> - every turn re-reads the whole history. A lean context is a cheaper, faster agent.</li>
+          <li><strong>Long tasks are unbounded</strong> - an agent that monitors tickets all day will outgrow any window eventually.</li>
+          <li><strong>Runs end</strong> - the window empties when the process exits. Anything the agent should know NEXT run needs long-term memory: a store, a file, a session - never the window itself.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE MEMORY TOOLKIT ============ -->
+  <section class="section" id="memory-toolkit">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers LangGraph checkpointing + Store, LangChain Academy M2+M5, OpenAI SDK Sessions</span>
+      <h2>The memory toolkit, short-term to long-term <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Every serious stack ships the same five techniques under different names. Short-term techniques manage the window inside one run; long-term techniques survive across runs. Learn the technique, and every framework's memory docs become familiar.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Technique</th><th>What it does</th><th>Term</th><th>Where you meet it</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Message trimming / filtering</strong></td><td>Drop or truncate old turns (oldest-first, or filter big tool results) to stay under budget</td><td>Short</td><td>Raw loops · LangGraph message state helpers</td></tr>
+        <tr><td><strong>Compaction</strong></td><td>Summarize the history so far, replace old turns with the summary, keep going</td><td>Short</td><td>Anthropic context management · you build it below</td></tr>
+        <tr><td><strong>Scratchpad</strong></td><td>Agent writes findings to a file or note it re-reads every turn - findings survive eviction</td><td>Short</td><td>Anthropic memory tool pattern · self-study card</td></tr>
+        <tr><td><strong>Sessions</strong></td><td>Persistent conversation memory across runs - the SDK stores and replays history for you</td><td>Long</td><td>OpenAI Agents SDK "Sessions" primitive</td></tr>
+        <tr><td><strong>Checkpointing + Store</strong></td><td>Checkpointing persists state through failures mid-run; Store is long-term memory across threads</td><td>Long</td><td>LangGraph · Academy modules 2 and 5</td></tr>
+      </tbody>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Compaction by hand<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Compaction is one extra API call: when the estimated token count crosses a threshold, ask the model to summarize the history - keeping every number, finding and standing instruction - then replace the old turns with that summary and continue. Bolt this onto your b2 loop:</p>
+<pre><code>from anthropic import Anthropic
+
+client = Anthropic()
+THRESHOLD = 8000  # rough token budget before we compact
+
+def estimate_tokens(messages):
+    return sum(len(str(m["content"])) for m in messages) // 4
+
+def maybe_compact(messages):
+    if estimate_tokens(messages) &lt; THRESHOLD:
+        return messages
+    transcript = "\n".join(f"{m['role']}: {m['content']}" for m in messages[:-4])
+    summary = client.messages.create(
+        model="claude-opus-5",
+        max_tokens=500,
+        messages=[{"role": "user", "content":
+            "Summarize this agent transcript for the agent itself. "
+            "Keep EVERY number, finding, and standing instruction:\n\n"
+            + transcript}],
+    ).content[0].text
+    return ([{"role": "user",
+              "content": "[Summary of earlier turns]\n" + summary}]
+            + messages[-4:])  # keep the freshest turns verbatim
+</code></pre>
+        <p>The summarize-then-continue trade: you spend one call and lose verbatim detail, but the numbers, findings and instructions travel forward instead of falling off the edge. The summary prompt is the whole game - "keep every standing instruction" is what saves "exclude refunds".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Scratchpad pattern<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A scratchpad moves key findings OUT of the message history entirely. The agent appends findings to a notes list (or a file), and the loop injects the notes into the system prompt every turn - so even aggressive trimming cannot evict them:</p>
+<pre><code>notes = []  # lives OUTSIDE messages - trimming cannot touch it
+
+def remember(finding):
+    notes.append(finding)  # e.g. "Feb completed revenue = $271"
+
+def system_prompt():
+    return (BASE_PROMPT
+        + "\n\nScratchpad - re-read before every step:\n"
+        + "\n".join("- " + n for n in notes))
+
+# in the loop: expose remember() as a tool, and rebuild
+# the system prompt from notes on every messages.create call
+</code></pre>
+        <p>Expose <code>remember</code> as a tool and the agent decides what is worth keeping - the same move Anthropic's memory tool and file-based agent memory make. Write one note per confirmed finding, not per raw tool result, or the scratchpad becomes a second overflowing context.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Demo 1 of 2</span>
+      <h2>Watch the agent lose its own finding <span class="tag demo">★ 10 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">The founder asks: <em>"Diagnose the March dip."</em> Below, the Daybreak Ops Agent runs that task with tools and planning on but <strong>memory OFF</strong>. Step through slowly: it fetches February correctly - <strong>$271</strong> - then, at the synthesis step, the figure is gone and the agent contradicts the very step it just ran. That is the memory-off signature: the agent argues with its own earlier finding.</p>
+
+    <div class="steps">
+      <div class="step"><p>Step through with memory off. Find the step where <code>query_sales("2026-02")</code> returns <strong>$271</strong> - the fetch itself is perfect.</p></div>
+      <div class="step"><p>Keep stepping to the synthesis. The February figure has been evicted, and the conclusion contradicts the step you just watched. No error, no apology.</p></div>
+      <div class="step"><p>Toggle <strong>Memory on</strong> and step through again. Same task, same tools - now the synthesis holds onto $271 → $150 all the way to the answer.</p></div>
+      <div class="step"><p>Say the diagnosis out loud: not a model problem, not a tools problem - a memory problem. Name the lever first.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="dip" data-levers="tools,planning"></div>
+
+    <div class="callout tip">
+      <strong>How to spot eviction in your own traces</strong>
+      Grep the trace for the finding, then for the final answer. If a number appears in a 📦 tool result but the 💬 answer disagrees with it - and no later tool call superseded it - memory is your lever. Re-fetching data it already fetched is the same signature in a cheaper disguise.
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Demo 2 of 2 · rung moment</span>
+      <h2>Rung 2 on the ladder: 5/12 becomes 7/12 <span class="tag demo">★ 6 min · explore</span></h2>
+    </div>
+    <p class="lede">Back to the 12-task scorecard from b1. Tools alone scored <strong>5/12</strong>. Turn memory on with it and the score climbs to exactly <strong>7/12</strong> - rung 2 of the course ladder (1 → 5 → 7 → 10 → 12). Read WHICH two tasks flipped and why they are both memory-shaped.</p>
+
+    <div class="steps">
+      <div class="step"><p>Check the score reads <strong>7/12</strong> with tools + memory on. Two tasks flipped from red to ✓ versus b2's rung.</p></div>
+      <div class="step"><p>Flipped task 1: the <strong>February-vs-March comparison</strong> - a multi-step task where the first fetch must survive until the second one lands.</p></div>
+      <div class="step"><p>Flipped task 2: the <strong>standing exclude-refunds instruction</strong> - a rule given once, early, that must still bind many turns later.</p></div>
+      <div class="step"><p>Read the failure text on the tasks still red: diagnoses and reports need planning (b5); the outward-acting ones need guardrails (b7).</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="score" data-levers="tools,memory"></div>
+
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The two context failure modes (overflow, eviction) and the memory-off signature - an agent contradicting its own earlier finding. A working compaction function and a scratchpad pattern you can bolt onto the b2 loop tonight. The short-term vs long-term split: window techniques inside a run, Sessions / checkpointing + Store across runs. And rung 2, banked: 7/12.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 25-35 min total</span></h2>
+    </div>
+    <ul>
+      <li>Implement the compaction threshold in your b2 loop: add <code>maybe_compact</code> before every <code>messages.create</code> call, set the threshold low (even 2000) so you can watch it fire, and print the summary it produces.</li>
+      <li>Torture-test a standing instruction: give the agent "always exclude refunds" at turn 1, then feed it 10 filler turns of unrelated lookups, then ask for March revenue. Does the instruction survive? Try with trimming only, then with compaction.</li>
+      <li>Write one scratchpad entry format for the dip diagnosis - one line per confirmed finding (for example "Feb completed revenue = $271", "1 March refund: order 1017"). Decide what does NOT belong in it.</li>
+      <li>Skim LangChain Academy module 5 (long-term memory) and map each concept to tonight's table: which are window techniques, which are stores?</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session teaches the working core of the memory and context-management guidance across the major agent stacks. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">LangGraph docs - checkpointing, Store, MessagesState</span><span class="note">Short-term state vs long-term Store · checkpointing persists through failures mid-run</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">LangChain Academy "Intro to LangGraph" - modules 2 + 5</span><span class="note">State and memory · long-term memory (Store) · taught here framework-neutral</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">OpenAI Agents SDK - Sessions</span><span class="note">Persistent memory across runs · positioned in the toolkit table, not built here</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic context-management docs</span><span class="note">Compaction and memory-tool patterns · the by-hand version you built tonight</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Mid-task, the agent's final answer contradicts a number it fetched correctly three steps earlier. Which lever was off?</p>
+      <button class="qopt" type="button">A · Tools - it never really fetched the number</button>
+      <button class="qopt" type="button">B · Planning - it failed to decompose the task</button>
+      <button class="qopt" type="button">C · Memory - the finding was evicted from context before the synthesis step</button>
+      <p class="qwhy">Contradicting your own earlier finding is the memory-off signature. Tools-off invents numbers that were never in any result; planning-off stops after one shallow call. The fetch was real - keeping it was the failure.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · What exactly is compaction?</p>
+      <button class="qopt" type="button">A · Compressing tool results with gzip before adding them to context</button>
+      <button class="qopt" type="button">B · Summarizing the history so far, replacing old turns with the summary, and continuing the run</button>
+      <button class="qopt" type="button">C · Deleting the oldest messages whenever the window is full</button>
+      <p class="qwhy">Compaction is summarize-then-continue: one extra model call that carries numbers, findings and standing instructions forward in condensed form. Plain deletion of old messages is trimming - cheaper, but it is exactly how "exclude refunds" gets lost.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Where does the short-term vs long-term memory line actually sit?</p>
+      <button class="qopt" type="button">A · Short-term lives in the context window within one run; long-term lives in a store or session that survives across runs</button>
+      <button class="qopt" type="button">B · Short-term is anything under 1,000 tokens; long-term is anything above</button>
+      <button class="qopt" type="button">C · Short-term is what the user said; long-term is what the tools returned</button>
+      <p class="qwhy">The window empties when the run ends - trimming, compaction and scratchpads all manage life inside one run. Anything the agent must know next run needs a store: OpenAI SDK Sessions, LangGraph Store, or your own file.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The core fact</b><span>The context window IS the agent's memory - every thought, action and observation accumulates in it, and it is finite.</span></div>
+      <div class="cheat-item"><b>Two failure modes</b><span>Overflow (long tasks blow the window, loud) and eviction (early findings and instructions trimmed away, silent).</span></div>
+      <div class="cheat-item"><b>Memory-off signature</b><span>The agent contradicts its own earlier finding, or ignores a standing instruction given at turn 1. Fluent, confident, wrong.</span></div>
+      <div class="cheat-item"><b>Trimming</b><span>Drop or truncate old turns to stay under budget. Cheap - and exactly how standing instructions get lost.</span></div>
+      <div class="cheat-item"><b>Compaction</b><span>Summarize-then-continue: one messages.create call condenses history, replaces old turns, keeps every number and instruction.</span></div>
+      <div class="cheat-item"><b>Scratchpad</b><span>Agent writes findings to notes outside the messages; the loop re-injects them every turn. Eviction-proof by construction.</span></div>
+      <div class="cheat-item"><b>Long-term memory</b><span>Across runs: OpenAI SDK Sessions · LangGraph checkpointing (survives failures) + Store (long-term). The window never persists.</span></div>
+      <div class="cheat-item"><b>Rung 2</b><span>Tools + memory = 7/12. Flipped: the Feb-vs-Mar comparison and the standing exclude-refunds rule. Planning unlocks rung 3.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 4 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b3-workflow-patterns.html">← b3: Workflow patterns</a> &nbsp;·&nbsp; <a href="b5-planning-reasoning.html">Next: Planning and reasoning →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

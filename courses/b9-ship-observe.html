@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 9 · Ship and observe - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 9 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 9 of 10</div>
+    <h1>Ship and <span class="accent">observe</span></h1>
+    <p class="sub">Your raw-Python agent works - now decide what to ship it ON. Tonight: the honest framework landscape (when raw Python stops being enough), tracing so you can see every loop turn in production, deployment and cost control, and where MCP ends and A2A begins.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Builder track</span>
+      <span class="chip audience">Practitioners: DE · DS · AI engineers · builders</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The framework landscape</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: trace it, cap it, ship it</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE FRAMEWORK LANDSCAPE ============ -->
+  <section class="section" id="landscape">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Claude Agent SDK docs, OpenAI Agents SDK, LangGraph, DLAI short courses</span>
+      <h2>The framework landscape <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Full honesty up front: this is a <strong>positioning lesson, not a build track</strong>. Framework deep-dives are deliberately out of this course's scope - each framework below gets a mental model and a pointer, so that when you open its quickstart you already know what shelf it sits on and what it would replace in the loop you built in b2. That loop, remember, is production-legitimate: Anthropic's own guidance is simple, composable patterns first.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Framework landscape map: x-axis from code-first to config-first, y-axis from single agent to multi-agent, with raw Python, Claude Agent SDK, OpenAI Agents SDK, LangGraph, crewAI and AutoGen placed as boxes.">
+        <style>
+          .s9aT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .s9aS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .s9aI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .s9aX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .s9aN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .s9aAx { stroke: #64748B; stroke-width: 2; fill: none; marker-end: url(#s9aHd); }
+        </style>
+        <defs>
+          <marker id="s9aHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#64748B"/>
+          </marker>
+        </defs>
+        <path class="s9aAx" d="M80,330 L80,44"/>
+        <path class="s9aAx" d="M80,330 L845,330"/>
+        <text class="s9aX" x="92" y="58">multi-agent</text>
+        <text class="s9aX" x="92" y="322">single agent</text>
+        <text class="s9aX" x="84" y="354">code-first</text>
+        <text class="s9aX" x="758" y="354">config-first</text>
+        <rect x="280" y="54" width="170" height="52" rx="8" fill="#F97316"/>
+        <text class="s9aT" x="296" y="76">LangGraph</text>
+        <text class="s9aS" x="296" y="94">graphs + checkpoints</text>
+        <rect x="480" y="54" width="185" height="52" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="s9aI" x="496" y="76">AutoGen</text>
+        <text class="s9aX" x="496" y="94">conversation patterns</text>
+        <rect x="685" y="54" width="155" height="52" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="s9aI" x="701" y="76">crewAI</text>
+        <text class="s9aX" x="701" y="94">role-based crews</text>
+        <rect x="170" y="160" width="185" height="52" rx="8" fill="#9A3412"/>
+        <text class="s9aT" x="186" y="182">Claude Agent SDK</text>
+        <text class="s9aS" x="186" y="200">query() + subagents</text>
+        <rect x="430" y="160" width="195" height="52" rx="8" fill="#EA580C"/>
+        <text class="s9aT" x="446" y="182">OpenAI Agents SDK</text>
+        <text class="s9aS" x="446" y="200">handoffs + tracing</text>
+        <rect x="110" y="252" width="170" height="52" rx="8" fill="#1E293B"/>
+        <text class="s9aT" x="126" y="274">raw Python</text>
+        <text class="s9aS" x="126" y="292">your b2 loop</text>
+        <rect x="80" y="380" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="s9aN" x="104" y="392">Start bottom-left. Move up or right only when a named trigger fires: persistence, interrupts, or a fleet.</text>
+        <rect x="80" y="408" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="s9aN" x="104" y="420">Docs: code.claude.com · openai.github.io/openai-agents-python · docs.langchain.com/oss/python/langgraph</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the landscape map: code-first to config-first, single agent to multi-agent</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The four shelves, one at a time<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Four serious options above raw Python, each with a distinct mental model:</p>
+        <ul>
+          <li><strong>Claude Agent SDK</strong> - Python and TypeScript only, and it bundles the Claude Code binary: you inherit a full agent harness rather than assembling one. Its primitives are built-in tools, hooks, subagents, MCP, permissions, sessions, skills, and plugins. Entry point is <code>query()</code> plus <code>ClaudeAgentOptions</code>; permission modes include <code>plan</code>, <code>acceptEdits</code>, and <code>bypassPermissions</code>. It was renamed from "Claude Code SDK" in late 2025 - older tutorials use the old name for the same thing.</li>
+          <li><strong>OpenAI Agents SDK</strong> - five primitives, and you have met most of them: <strong>Agents, Handoffs, Guardrails, Sessions, Tracing</strong>. The b6 shapes and b7 guardrails map 1:1; tracing is the new gift, covered in Part 2.</li>
+          <li><strong>LangGraph</strong> - your agent as a <code>StateGraph</code> of nodes and edges over a <code>MessagesState</code>. What it buys you: checkpointing and persistence, human-in-the-loop interrupts, subgraphs, a long-term memory Store, and a deployment story. Docs now live at docs.langchain.com/oss/python/langgraph - older links are stale.</li>
+          <li><strong>crewAI</strong> - you describe a crew of role-based agents (researcher, writer, reviewer) and the framework runs the collaboration. Fastest path from idea to multi-agent demo; the two b6 shapes are still what runs underneath.</li>
+          <li><strong>AutoGen</strong> - agents as conversation participants; the DLAI "Agentic Design Patterns" course teaches the four-pattern canon (Reflection · Tool Use · Planning · Multi-Agent) in it. Strong for research-style back-and-forth between agents.</li>
+        </ul>
+        <table class="clean">
+          <thead><tr><th>Framework</th><th>Mental model</th><th>Strongest when</th><th>Watch out</th></tr></thead>
+          <tbody>
+            <tr><td>raw Python</td><td>a loop you own end to end</td><td>one agent, clear tools, full control</td><td>you build persistence + tracing yourself</td></tr>
+            <tr><td>Claude Agent SDK</td><td>inherit the Claude Code harness</td><td>you want permissions, sessions, subagents ready-made</td><td>Python/TS only; harness has opinions</td></tr>
+            <tr><td>OpenAI Agents SDK</td><td>five primitives, guide-shaped</td><td>handoffs + built-in tracing matter</td><td>primitives mirror one vendor's guide</td></tr>
+            <tr><td>LangGraph</td><td>agent as a state graph</td><td>persistence, interrupts, complex flows</td><td>graph thinking is a real learning curve</td></tr>
+            <tr><td>crewAI</td><td>role-based crew, declared</td><td>quick multi-agent prototypes</td><td>config hides the loop you learned to debug</td></tr>
+            <tr><td>AutoGen</td><td>agents in conversation</td><td>pattern experiments, research flows</td><td>conversations are hard to make deterministic</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <strong>The decision rule</strong>
+          Stay on raw Python until you need <strong>persistence</strong> (durable state across restarts), <strong>interrupts</strong> (pause mid-run for a human, resume later), or <strong>fleets</strong> (many specialists with managed handoffs). None of the three? Your b2 loop IS production-legitimate - simplicity is an official principle, not a beginner's crutch.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "which framework" is the wrong first question<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every framework above ships the same four levers under different names - tools, memory, planning, guardrails. You learned the levers on a loop you can read in one screen; a framework is just someone else's opinionated packaging of them. So the productive question is never "which framework is best" - it is "which lever do I need packaged that I do not want to maintain myself". Checkpointing is a memory lever. Interrupts are a guardrail lever. Handoffs are b6's decentralized shape. Read any quickstart with the lever map in hand and it stops being magic in about ten minutes - that is your homework tonight.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: TRACING ============ -->
+  <section class="section" id="tracing">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers OpenAI SDK tracing, LangSmith trajectory traces</span>
+      <h2>Tracing and observability <span class="tag demo">★ 12 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">The eval vocabulary from b8 carries straight over: in production, <strong>the transcript becomes the trace</strong>. Log every loop turn - the model call, each tool call with its arguments, each tool result, and every guardrail firing. An agent without a trace is an agent you can only debug by vibes.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A JSONL trace writer in ~20 lines<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The OpenAI Agents SDK ships tracing built in - it is one of the five primitives. LangSmith does trajectory-level traces for LangGraph and friends. On raw Python, this wrapper around your b2 loop covers 80% of what those give you:</p>
+<pre><code># trace.py - one JSONL line per loop step
+import json, time, hashlib
+
+def trace(kind: str, name: str = "", args=None, tokens: int = 0):
+    line = {
+        "ts": time.time(),
+        "kind": kind,          # "model" | "tool_call" | "tool_result" | "guardrail"
+        "name": name,          # e.g. query_sales
+        "args_hash": hashlib.sha256(
+            json.dumps(args or {}, sort_keys=True).encode()).hexdigest()[:12],
+        "tokens": tokens,
+    }
+    with open("trace.jsonl", "a") as f:
+        f.write(json.dumps(line) + "\n")
+
+# inside the b2 loop, one call per step:
+r = client.messages.create(model="claude-opus-5", max_tokens=2048,
+                           tools=DAYBREAK_TOOLS, messages=messages)
+trace("model", tokens=r.usage.output_tokens)
+for b in r.content:
+    if b.type == "tool_use":
+        trace("tool_call", b.name, b.input)
+        result = TOOLBOX[b.name](**b.input)
+        trace("tool_result", b.name)</code></pre>
+        <p>Hash the arguments instead of storing them raw - customer emails and ticket text do not belong in a log file, but you still want to know whether two runs made the same call. Token counts per step are your cost meter for Part 3.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Trajectory traces, formalized<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>What you just wrote by hand is what LangSmith calls a <strong>trajectory</strong>: the ordered sequence of steps an agent took, not just its final answer. b8's trajectory match modes - strict, unordered, subset, superset - grade exactly this object. That is the payoff of using one vocabulary across b8 and b9: your golden set graded transcripts offline; production grades the same shape of data live. When a trace platform demo looks impressive, check it against your JSONL fields - ts, kind, name, args_hash, tokens - and ask what it adds beyond search and pretty rendering. (Often plenty. But now you can name it.)</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The March dip, in production.</strong> Back in b3 you diagnosed why Daybreak's March revenue fell from $271 to $150. Now imagine the shipped agent gets that question and answers wrongly. Without a trace you cannot tell whether it was a bad plan (never queried February), a lost memory (queried it, then dropped the finding), or a failed tool call (query errored and the model improvised). Three different levers, three different fixes, one identical wrong answer. The trace is how you know WHICH lever slipped - the b1 habit, kept alive in production.</p>
+    </div>
+  </section>
+
+  <!-- ============ PART 3: DEPLOY + COST ============ -->
+  <section class="section" id="deploy">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers deployment options, Managed Agents, cost levers</span>
+      <h2>Deploy and cost control <span class="tag demo">★ 12 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">Three places your agent can live. <strong>Your own server</strong> - the raw loop or an SDK app behind an endpoint you run; maximum control, you own uptime. <strong>LangGraph deployment</strong> - the graph platform hosts and scales your graphs, with persistence wired in. <strong>Anthropic Managed Agents</strong> - a hosted sandbox product: Anthropic runs the agent's environment for you. Same loop in all three; what changes is who carries the pager.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Sessions and the cost levers<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>State first.</strong> In production, "memory" (b4) becomes a storage decision: server-side session state (the OpenAI SDK's Sessions primitive, or your own store keyed by conversation id) versus LangGraph-style checkpointing, where every step is durably saved and a run can resume - or be interrupted for approval - mid-task. If your b7 approval gates need a human who answers hours later, checkpointing is the shape you want.</p>
+        <p><strong>Then cost.</strong> Three levers that do not touch quality where it matters:</p>
+        <ul>
+          <li><strong>Model tier per step</strong> - the planner runs on a big model (<code>claude-opus-5</code> in our path); the tool-result summarizer runs on a small one. Most steps in a long run are small-model steps.</li>
+          <li><strong>Prompt caching</strong> - the system prompt and tool schemas are identical every turn; cache them and stop paying full price to resend your own instructions.</li>
+          <li><strong>Budgets from b7, promoted to config</strong> - max turns and spend ceilings stop being demo code and become deploy-time settings someone can audit.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="steps">
+      <div class="step"><p><strong>Pin model versions.</strong> A silent model upgrade is a silent behavior change. Deploys name exact versions; upgrades go through the b8 eval gate like any other change.</p></div>
+      <div class="step"><p><strong>Trace every turn.</strong> The JSONL writer (or SDK tracing) is on from the first production request. No trace, no deploy.</p></div>
+      <div class="step"><p><strong>Budgets and stop conditions on.</strong> Max turns, spend ceiling, tool-error limit - the b7 rails, now in config, not in a notebook.</p></div>
+      <div class="step"><p><strong>Draft-and-hold on outward tools.</strong> <code>send_email</code> and <code>refund_order</code> draft; a human releases. The default outward-action pattern from b7 ships as-is.</p></div>
+      <div class="step"><p><strong>Eval gate in CI.</strong> The b8 golden set runs on every change - prompt, tool, model version - and a failing set blocks the deploy. 12/12 or it does not ship.</p></div>
+      <div class="step"><p><strong>Rollback plan.</strong> Keep the previous prompt + model + config bundle one command away. Agents fail weird; reverting fast beats debugging live.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ PART 4: MCP VS A2A ============ -->
+  <section class="section" id="protocols">
+    <div class="section-kicker">
+      <span class="klabel">Part 4 · covers A2A Protocol short course, MCP positioning</span>
+      <h2>The protocol map: MCP vs A2A <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">Two protocols, two directions. <strong>MCP</strong> standardizes the model-to-tools-and-context connection - it is how your Daybreak server plugs into any MCP-speaking agent without custom glue. <strong>A2A</strong> standardizes agent-to-agent communication - cross-framework interop, so an agent built on Google's ADK can delegate to one on LangGraph, BeeAI, or the Microsoft Agent Framework. MCP points down at the toolbox; A2A points sideways at the peers.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Protocol map: your agent connects downward via MCP to tool servers including the Daybreak MCP server, and sideways via A2A to peer agents built on other frameworks.">
+        <style>
+          .s9bT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .s9bS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .s9bI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .s9bX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .s9bN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .s9bMcp { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#s9bHd); }
+          .s9bA2a { stroke: #EA580C; stroke-width: 2.5; stroke-dasharray: 6 4; fill: none; marker-end: url(#s9bHd); }
+        </style>
+        <defs>
+          <marker id="s9bHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="340" y="70" width="210" height="60" rx="8" fill="#9A3412"/>
+        <text class="s9bT" x="356" y="94">YOUR AGENT</text>
+        <text class="s9bS" x="356" y="112">the b2 loop, shipped</text>
+        <rect x="50" y="70" width="200" height="60" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="s9bI" x="66" y="94">PEER AGENT</text>
+        <text class="s9bX" x="66" y="112">LangGraph / BeeAI</text>
+        <rect x="640" y="70" width="200" height="60" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="s9bI" x="656" y="94">PEER AGENT</text>
+        <text class="s9bX" x="656" y="112">ADK / MS Agent Fwk</text>
+        <path class="s9bA2a" d="M335,100 L256,100"/>
+        <path class="s9bA2a" d="M555,100 L634,100"/>
+        <text class="s9bI" x="278" y="90">A2A</text>
+        <text class="s9bI" x="578" y="90">A2A</text>
+        <rect x="120" y="240" width="210" height="56" rx="8" fill="#EA580C"/>
+        <text class="s9bT" x="136" y="263">Daybreak MCP server</text>
+        <text class="s9bS" x="136" y="281">query_sales · tickets</text>
+        <rect x="370" y="240" width="180" height="56" rx="8" fill="#F97316"/>
+        <text class="s9bT" x="386" y="263">web search</text>
+        <text class="s9bS" x="386" y="281">server tool</text>
+        <rect x="590" y="240" width="200" height="56" rx="8" fill="#F97316"/>
+        <text class="s9bT" x="606" y="263">email server</text>
+        <text class="s9bS" x="606" y="281">draft-and-hold</text>
+        <path class="s9bMcp" d="M400,130 C350,175 285,200 240,235"/>
+        <path class="s9bMcp" d="M448,130 L457,235"/>
+        <path class="s9bMcp" d="M490,130 C545,175 635,200 678,235"/>
+        <text class="s9bI" x="290" y="192">MCP</text>
+        <text class="s9bI" x="420" y="192">MCP</text>
+        <text class="s9bI" x="600" y="192">MCP</text>
+        <rect x="50" y="332" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="s9bN" x="74" y="344">MCP: one standard plug between a model and its tools/context. Your Daybreak server ships unchanged.</text>
+        <rect x="50" y="362" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="s9bN" x="74" y="374">A2A: agent-to-agent interop across frameworks (ADK, LangGraph, BeeAI, MS Agent Framework).</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - MCP plugs down into the toolbox; A2A reaches sideways to peer agents</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What each protocol buys you<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>MCP</strong> - write the Daybreak server once, and any MCP-speaking host can use it: your raw loop, Claude Code, an Agent SDK app. Tools stop being framework-locked. You have lived this since the MCP course; b2 made it your agent's toolbox.</li>
+          <li><strong>A2A</strong> - the same idea one level up: a standard way for one agent to discover another's capabilities and delegate to it, regardless of which framework either was built on. b6's manager and handoff shapes, but across organizational and framework boundaries.</li>
+          <li><strong>One sentence to keep:</strong> MCP is how an agent talks to its tools; A2A is how an agent talks to other agents.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Honest scope note<span class="mini">1 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A2A here is positioning only - implementing an A2A server is out of this course's scope, by design. If you want the hands-on version, the DLAI "A2A Protocol" short course (Google + IBM, ~1.5h) builds one. Take the lever map and the two-protocol sentence with you; they make that course a fast read.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Wrap your b2 loop in the JSONL trace writer, then run the b8 golden set through it. You now have a trace file per task - production-shaped data, generated at your desk.</li>
+      <li>Pick one FAILED task, read its trace end to end, and name which lever slipped - bad plan, lost memory, failed tool call, or guardrail miss - before touching any code. Write the diagnosis in one sentence.</li>
+      <li>Skim ONE framework's quickstart (your pick from tonight's map) and write 5 lines: what it would replace in your raw loop, and which of the three triggers - persistence, interrupts, fleets - would make that trade worth it.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Certificates, videos, and graded assessments stay with the official providers - and tonight's framework coverage is deliberately pointers, not builds. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Claude Agent SDK docs (code.claude.com)</span><span class="note">Primitives, query() + ClaudeAgentOptions, permission modes, the late-2025 rename</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI Agents SDK - five primitives</span><span class="note">Agents, Handoffs, Guardrails, Sessions, Tracing - tracing taught hands-on here</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">LangGraph docs + Academy - positioning + deployment</span><span class="note">StateGraph, checkpointing, interrupts, Store, deployment; graph builds stay official</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">DLAI short courses - A2A Protocol + crewAI + AutoGen</span><span class="note">A2A protocol split, role-based crews, conversation-pattern canon - as positioning</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic platform docs - Managed Agents</span><span class="note">Hosted sandbox product as a deployment option; tool docs covered in b2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">OpenAI "A Practical Guide to Building Agents"</span><span class="note">Guide-to-SDK mapping recap; the guide's core landed in b1/b6/b7</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">LangSmith trajectory evals</span><span class="note">Trajectory-level traces in production; grading modes were b8's territory</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · When does raw Python stop being enough for a production agent?</p>
+      <button class="qopt" type="button">A · As soon as real users touch it - frameworks are mandatory in production</button>
+      <button class="qopt" type="button">B · When you need persistence, human-in-the-loop interrupts, or a fleet of coordinated agents</button>
+      <button class="qopt" type="button">C · When the agent has more than three tools</button>
+      <p class="qwhy">The b2 loop is production-legitimate - simplicity is an official Anthropic principle. Frameworks earn their complexity when a named trigger fires: durable state, pause-and-resume approvals, or managed multi-agent coordination. Tool count is not a trigger.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · What must a production trace capture, at minimum?</p>
+      <button class="qopt" type="button">A · The final answer and total cost - the middle steps are noise</button>
+      <button class="qopt" type="button">B · Only the tool calls, since the model's reasoning cannot be logged</button>
+      <button class="qopt" type="button">C · Every loop turn: model calls, tool calls with arguments, tool results, and guardrail firings</button>
+      <p class="qwhy">The transcript becomes the trace. With only the final answer you cannot tell a bad plan from a lost memory from a failed tool call - three levers, one identical wrong output. Log the trajectory, then diagnose by lever.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · MCP vs A2A - which line is right?</p>
+      <button class="qopt" type="button">A · MCP standardizes model-to-tools/context; A2A standardizes agent-to-agent communication across frameworks</button>
+      <button class="qopt" type="button">B · A2A replaces MCP - new agents should skip MCP entirely</button>
+      <button class="qopt" type="button">C · MCP is Anthropic-only and A2A is OpenAI-only, so you pick by vendor</button>
+      <p class="qwhy">They point in different directions and coexist: MCP plugs the agent into its toolbox (your Daybreak server), A2A lets agents on ADK, LangGraph, BeeAI, or the MS Agent Framework delegate to each other. Neither replaces the other.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 9 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Claude Agent SDK</b><span>Python/TS, bundles the Claude Code binary. query() + ClaudeAgentOptions; subagents, hooks, MCP, permission modes (plan, acceptEdits, bypassPermissions).</span></div>
+      <div class="cheat-item"><b>OpenAI Agents SDK</b><span>Five primitives: Agents, Handoffs, Guardrails, Sessions, Tracing. Maps 1:1 to the OpenAI guide.</span></div>
+      <div class="cheat-item"><b>LangGraph</b><span>StateGraph nodes + edges over MessagesState. Buys checkpointing, interrupts, subgraphs, Store, deployment.</span></div>
+      <div class="cheat-item"><b>crewAI / AutoGen</b><span>crewAI: declared role-based crews. AutoGen: agents as conversation participants. Same b6 shapes underneath.</span></div>
+      <div class="cheat-item"><b>The decision rule</b><span>Raw Python until you need persistence, interrupts, or fleets. The b2 loop is production-legitimate.</span></div>
+      <div class="cheat-item"><b>Trace line</b><span>One JSONL line per step: ts · kind (model / tool_call / tool_result / guardrail) · name · args_hash · tokens.</span></div>
+      <div class="cheat-item"><b>Ship checklist</b><span>Pin model versions · trace every turn · budgets + stop conditions · draft-and-hold outward · b8 eval gate in CI · rollback plan.</span></div>
+      <div class="cheat-item"><b>MCP vs A2A</b><span>MCP: agent to its tools/context (Daybreak server). A2A: agent to other agents, across frameworks. They coexist.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 9 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b8-agent-evals.html">← b8 · Agent evals</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="b10-capstone.html">Next: Capstone →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 5 · Planning and reasoning - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 5 of 10</div>
+    <h1>Planning and <span class="accent">reasoning</span></h1>
+    <p class="sub">Ask an unplanned agent to diagnose the March dip and it fetches one number, wraps it in confident prose, and stops. A number is not a diagnosis. Tonight you learn why one-shot answers happen - the model optimizes for "answered something", not "answered everything" - and build the fix: plans the agent writes down before it acts. ReAct, plan-then-execute, reflection, and the decomposition heuristics that turn a vague ops question into four crisp tool calls and a real synthesis. Rung 3 of the ladder falls tonight.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Medium</span>
+      <span class="chip audience">Builder track</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Why one shot fails</span>
+      <span class="a3" style="flex:8">18-42 · Build-along: plans that hold</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: WHY ONE SHOT FAILS ============ -->
+  <section class="section" id="one-shot-fails">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic transparency principle, Ng M2, HF Unit 1 (T-A-O)</span>
+      <h2>A number is not a diagnosis <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">The planning-off signature, straight from the scorecard: <strong>one tool call, a partial answer, and a stop</strong>. Why does a capable model do this? Because without an explicit plan, nothing in the loop rewards completeness - the model reaches the first answer-shaped thing and declares victory. It answered <em>something</em>. Anthropic's second agent principle is the antidote: <strong>transparency - show the agent's planning steps explicitly</strong>. A written plan is both a completeness contract and a debugging trail.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same task in two lanes: a one-shot lane makes one call and gives a shallow answer; a planned lane decomposes into four calls and a synthesis, giving a real diagnosis.">
+        <style>
+          .plT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .plS { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .plI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .plX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .plN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .plWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#plHd); }
+        </style>
+        <defs>
+          <marker id="plHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <text class="plI" x="40" y="40">Same task: "diagnose the March dip"</text>
+        <text class="plX" x="40" y="86">ONE-SHOT lane</text>
+        <rect x="40" y="98" width="150" height="46" rx="8" fill="#1E293B"/>
+        <text class="plT" x="54" y="118">TASK</text>
+        <text class="plS" x="54" y="136">why the dip?</text>
+        <rect x="260" y="98" width="170" height="46" rx="8" fill="#EA580C"/>
+        <text class="plT" x="274" y="118">1 call</text>
+        <text class="plS" x="274" y="136">query_sales("2026-03")</text>
+        <rect x="500" y="98" width="200" height="46" rx="8" fill="#FDBA74"/>
+        <text class="plI" x="514" y="118">"March was $150."</text>
+        <text class="plX" x="514" y="136">a number, then it stops</text>
+        <text class="plI" x="726" y="118">✗ shallow</text>
+        <text class="plX" x="726" y="136">no cause found</text>
+        <path class="plWire" d="M190,121 L255,121"/>
+        <path class="plWire" d="M430,121 L495,121"/>
+        <text class="plX" x="40" y="196">PLANNED lane</text>
+        <rect x="40" y="208" width="150" height="46" rx="8" fill="#1E293B"/>
+        <text class="plT" x="54" y="228">TASK</text>
+        <text class="plS" x="54" y="246">why the dip?</text>
+        <rect x="230" y="208" width="130" height="46" rx="8" fill="#9A3412"/>
+        <text class="plT" x="244" y="228">PLAN first</text>
+        <text class="plS" x="244" y="246">4 written steps</text>
+        <rect x="400" y="182" width="130" height="26" rx="5" fill="#EA580C"/>
+        <text class="plS" x="410" y="199">1 · Feb: $271</text>
+        <rect x="400" y="214" width="130" height="26" rx="5" fill="#EA580C"/>
+        <text class="plS" x="410" y="231">2 · Mar: $150</text>
+        <rect x="400" y="246" width="130" height="26" rx="5" fill="#EA580C"/>
+        <text class="plS" x="410" y="263">3 · refunds: 1</text>
+        <rect x="400" y="278" width="130" height="26" rx="5" fill="#EA580C"/>
+        <text class="plS" x="410" y="295">4 · subs: 1 cancel</text>
+        <rect x="570" y="208" width="150" height="46" rx="8" fill="#F97316"/>
+        <text class="plT" x="584" y="228">SYNTHESIS</text>
+        <text class="plS" x="584" y="246">-44.6%, causes named</text>
+        <text class="plI" x="746" y="228">✓ diagnosis</text>
+        <text class="plX" x="746" y="246">complete + checkable</text>
+        <path class="plWire" d="M190,231 L225,231"/>
+        <path class="plWire" d="M360,231 L395,231"/>
+        <path class="plWire" d="M530,231 L565,231"/>
+        <rect x="40" y="316" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="plN" x="64" y="328">Same model, same tools. The only difference: a plan written before acting - and a synthesis step it must reach.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - one task, two lanes: one-shot stops at a number; the planned lane decomposes, executes four calls, and synthesizes</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "answered something" wins by default<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nothing in a bare loop forces completeness. The model sees a question, sees a tool, makes the obvious call, and the result LOOKS like an answer - so it answers. Three forces push toward the shallow exit:</p>
+        <ul>
+          <li><strong>No completeness contract</strong> - "diagnose" quietly requires compare, decompose, and explain; the bare prompt never spells that out, so one number satisfies it.</li>
+          <li><strong>Every extra step has a cost</strong> - more calls mean more latency and more chances to err; stopping early is locally safe and globally wrong.</li>
+          <li><strong>No visible trail</strong> - with no written plan, neither the agent nor you can see which sub-questions were never asked. Anthropic's transparency principle exists precisely to make the gap visible.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The board slide with one query behind it.</strong> A revenue "analysis" agent shipped weekly summaries an exec loved - until someone audited the trace and found every report was a single aggregate query plus adjectives. The fix was not a bigger model. It was requiring an explicit plan with a compare step and a cause step - and rejecting any run whose trace skipped one.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Reasoning is not planning<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two words that get blurred:</p>
+        <ul>
+          <li><strong>Reasoning</strong> is the model thinking inside one turn - b1's Thought in the T-A-O cycle. Every capable model does some of it unprompted.</li>
+          <li><strong>Planning</strong> is structure ACROSS turns - a declared set of steps the loop then executes and checks off. It lives in your code and prompts, not just in the model's head.</li>
+        </ul>
+        <p>That is why planning is a lever you engineer, not a capability you hope for: the same model that one-shots a diagnosis will follow a four-step plan faithfully once the loop demands one.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE PLANNING TOOLKIT ============ -->
+  <section class="section" id="planning-toolkit">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Ng M2+M5 (reflection, planning), HF Unit 1, S1 patterns recap</span>
+      <h2>The planning toolkit <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Four techniques, from lightest to heaviest. They compose: a plan-then-execute agent can run ReAct inside each step and reflect on the final draft.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>ReAct / T-A-O - reason before every action<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>ReAct is b1's Thought → Action → Observation cycle made explicit: the agent must WRITE a thought before every tool call - "I have March, now I need February to compare" - instead of silently jumping to the next action. The lightest planning there is, and it is already in your b2 loop if your system prompt demands a reasoning line before each call. The payoff is the trail: when a run goes wrong, the written thoughts show you exactly where it stopped thinking.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Plan-then-execute - the workhorse<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Ask for the whole plan up front - a numbered list of steps - then execute the steps one by one, re-planning only when a result surprises you. The plan is the completeness contract: the run is not done until every step is. This is tonight's build (code below), and it is the technique that unlocks rung 3.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reflection - generate, critique, improve<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Ng's Module 2 pattern: the agent drafts an answer, then critiques its own draft against the task ("does this name a CAUSE for the dip, or just restate the number?"), then revises. You already met its inner move in b3 - reflection is exactly what the evaluator-optimizer workflow does, with the evaluator turned inward. Cheap to add: one extra model call after the synthesis step.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Decomposition heuristics - what makes a good subtask<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Plans fail at the seams, so cut carefully:</p>
+        <ul>
+          <li><strong>A good subtask = one tool call or one judgment.</strong> "Get February revenue" is one call. "Explain the gap" is one judgment. "Investigate revenue" is neither - split it.</li>
+          <li><strong>Each step should produce a checkable artifact</strong> - a number, a list, a yes/no - so the loop can tell done from not-done.</li>
+          <li><strong>End with an explicit synthesis step</strong> that consumes the artifacts. The one-shot failure is really a missing synthesis step.</li>
+          <li><strong>Prefer 3-6 steps.</strong> Ten-step plans go stale by step four; re-planning on surprise beats over-planning up front.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Build it: plan-then-execute in ~25 lines<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two phases. The first <code>messages.create</code> call asks ONLY for a JSON plan - no tools, no answers. Then a loop feeds each step to your b2 agent loop, appending results as it goes, and closes with a synthesis:</p>
+<pre><code>import json
+from anthropic import Anthropic
+
+client = Anthropic()
+
+def plan_then_execute(goal, tools):
+    # Phase 1: plan only - no tools, no answering
+    plan = client.messages.create(
+        model="claude-opus-5",
+        max_tokens=800,
+        system=("Return ONLY a JSON plan for the task: "
+                '{"steps": ["..."]}. Each step must be one '
+                "tool call or one judgment. End with a synthesis step."),
+        messages=[{"role": "user", "content": goal}],
+    )
+    steps = json.loads(plan.content[0].text)["steps"]
+
+    # Phase 2: execute each step through the b2 loop
+    messages = [{"role": "user", "content": goal}]
+    for i, step in enumerate(steps, 1):
+        messages.append({"role": "user",
+            "content": f"Plan step {i}/{len(steps)}: {step}"})
+        result = run_loop(messages, tools)  # your b2 loop, unchanged
+        messages.append({"role": "assistant", "content": result})
+
+    messages.append({"role": "user",
+        "content": "All steps done. Synthesize the final answer "
+                   "using only the results above."})
+    return run_loop(messages, tools)
+</code></pre>
+        <p>Re-planning on surprise is one more branch: if a step's result contradicts the plan's assumption, feed the plan plus the surprise back to phase 1 and ask for a revised remainder. Print the plan before executing - that single print IS Anthropic's transparency principle in practice.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Demo 1 of 2</span>
+      <h2>Watch planning turn a number into a diagnosis <span class="tag demo">★ 10 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">Same founder question as b4: <em>"Diagnose the March dip."</em> This time tools and memory are on but <strong>planning is OFF</strong>. Watch the one-call shallow answer land - then toggle planning on and watch the same agent write a four-step decomposition and follow it to a synthesis with real causes.</p>
+
+    <div class="steps">
+      <div class="step"><p>Step through with planning off: one <code>query_sales("2026-03")</code> call, a fluent sentence around <strong>$150</strong>, stop. A number, not a diagnosis.</p></div>
+      <div class="step"><p>Toggle <strong>Planning on</strong>. First new thing in the trace: a written plan, before any tool runs.</p></div>
+      <div class="step"><p>Follow the four steps land their artifacts: Feb <strong>$271</strong>, Mar <strong>$150</strong>, the March refund, the subscription cancellation.</p></div>
+      <div class="step"><p>Read the synthesis: <strong>$271 → $150, -44.6%</strong>, with the contributing causes named. Every claim traces back to a step above it.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="dip" data-levers="tools,memory"></div>
+
+    <div class="callout tip">
+      <strong>Diagnose by signature, as always</strong>
+      One call + partial answer + stop = planning off. Invented numbers = tools off. Contradicting its own earlier finding = memory off (b4). The trace tells you which lever to reach for before you touch the prompt.
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Demo 2 of 2 · rung moment</span>
+      <h2>Rung 3 on the ladder: 7/12 becomes 10/12 <span class="tag demo">★ 6 min · explore</span></h2>
+    </div>
+    <p class="lede">Turn planning on alongside tools and memory and the scorecard jumps to exactly <strong>10/12</strong> - rung 3 of the ladder (1 → 5 → 7 → 10 → 12), the biggest single-lever jump in the course. Read which three tasks flipped, and which two are still red.</p>
+
+    <div class="steps">
+      <div class="step"><p>Check the score reads <strong>10/12</strong> with tools + memory + planning on. Three tasks flipped versus b4's rung 2.</p></div>
+      <div class="step"><p>The three unlocked tasks are the decomposition-shaped ones: the diagnosis, the report, and the join-shaped task that needs results from multiple tools combined.</p></div>
+      <div class="step"><p>Read the failure text on the two still red: they touch the outside world - sending email, reading untrusted tickets. More planning will never fix them.</p></div>
+      <div class="step"><p>Name what is missing out loud: guardrails. That is b7, and it is the dangerous rung - the levers so far only made the agent smarter, not safer.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="score" data-levers="tools,memory,planning"></div>
+
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The planning-off signature (one call, partial answer, stop) and why it happens - the model optimizes for "answered something". Four techniques you can rank by weight: ReAct thoughts, plan-then-execute, reflection, and the subtask heuristic (one tool call or one judgment). A working ~25-line plan-then-execute loop on top of b2. And rung 3, banked: 10/12 - with a clear-eyed view of the two tasks only guardrails can save.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 25-35 min total</span></h2>
+    </div>
+    <ul>
+      <li>Write, by hand, the JSON plan the agent SHOULD emit for the June ops report - steps as strings, each one tool call or one judgment, ending in a synthesis step. Then run plan-then-execute against it and compare the model's plan with yours.</li>
+      <li>Find one task where planning made things WORSE - a simple lookup like "what was March revenue?" where the plan added latency and calls for zero extra quality. Planning is a lever, not a religion: know when to leave it off.</li>
+      <li>Add one reflection pass after your synthesis step ("critique this diagnosis: does it name causes, or restate numbers?") and note what it catches.</li>
+      <li>Re-run the b4 torture test (standing instruction + 10 filler turns) with planning on - does the written plan help the instruction survive, or is memory still doing that work?</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This session teaches the planning and reasoning core shared by the canonical agent sources. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - transparency principle</span><span class="note">Principle 2: show the agent's planning steps explicitly · practiced in every trace tonight</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">DeepLearning.AI "Agentic AI" (Ng) - Modules 2 + 5</span><span class="note">Reflection pattern · planning workflows · built here on Daybreak</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hugging Face Agents course - Unit 1 (T-A-O)</span><span class="note">Thought-Action-Observation as the lightest planning form (ReAct)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">OpenAI "A Practical Guide to Building Agents" - single-agent maximization</span><span class="note">"Maximize a single agent's capabilities first" - planning before you reach for multi-agent (b6)</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · The agent makes exactly one tool call, gives a fluent partial answer, and stops. Which lever was off?</p>
+      <button class="qopt" type="button">A · Tools - it could not reach the data it needed</button>
+      <button class="qopt" type="button">B · Planning - with no explicit plan, it optimized for "answered something" and took the shallow exit</button>
+      <button class="qopt" type="button">C · Memory - it forgot the rest of the task mid-run</button>
+      <p class="qwhy">One call + partial answer + stop is the planning-off signature. The tool call worked (so tools were on) and nothing was forgotten (the task simply was never decomposed). A written plan is the completeness contract that forces the remaining steps.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · What is the real difference between plan-then-execute and ReAct?</p>
+      <button class="qopt" type="button">A · ReAct uses tools; plan-then-execute does not</button>
+      <button class="qopt" type="button">B · Plan-then-execute needs a special planning model</button>
+      <button class="qopt" type="button">C · Plan-then-execute writes the whole numbered plan up front, then executes it; ReAct decides one step at a time, reasoning before each action</button>
+      <p class="qwhy">Both reason and both use tools. The difference is when structure appears: ReAct plans locally (one thought per action), plan-then-execute plans globally (all steps declared first, re-planning on surprise). They compose - ReAct can run inside each plan step.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · When does turning planning ON make an agent worse?</p>
+      <button class="qopt" type="button">A · On trivial lookups - the plan adds calls and latency for zero extra answer quality</button>
+      <button class="qopt" type="button">B · Never - more planning is always safer</button>
+      <button class="qopt" type="button">C · On any task that uses more than one tool</button>
+      <p class="qwhy">"What was March revenue?" needs one call; a planner turns it into several. Planning pays on decomposition-shaped tasks - diagnoses, reports, joins - and taxes simple ones. Planning is a lever, not a religion: pick per task.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Planning-off signature</b><span>One tool call, partial answer, stop. The model optimized for "answered something" - a number is not a diagnosis.</span></div>
+      <div class="cheat-item"><b>The principle</b><span>Anthropic principle 2: transparency - show the agent's planning steps explicitly. A printed plan is a completeness contract plus a debug trail.</span></div>
+      <div class="cheat-item"><b>ReAct / T-A-O</b><span>Reason before every action - b1's cycle made explicit. Lightest planning; lives in the system prompt.</span></div>
+      <div class="cheat-item"><b>Plan-then-execute</b><span>First call emits ONLY a JSON plan; a loop runs each step through the b2 loop; re-plan on surprise; synthesize at the end.</span></div>
+      <div class="cheat-item"><b>Reflection</b><span>Generate → critique → improve (Ng M2) - the evaluator-optimizer's inner move, turned on the agent's own draft.</span></div>
+      <div class="cheat-item"><b>Good subtask</b><span>One tool call or one judgment, producing a checkable artifact. 3-6 steps; always end with an explicit synthesis step.</span></div>
+      <div class="cheat-item"><b>Rung 3</b><span>Tools + memory + planning = 10/12. Unlocked: diagnosis, report, and the join-shaped task. Still red: the two that act on the world.</span></div>
+      <div class="cheat-item"><b>When to skip it</b><span>Trivial lookups get slower and costlier with a planner. Planning is a lever, not a religion - choose it per task.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 5 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b4-memory-context.html">← b4: Memory and context</a> &nbsp;·&nbsp; <a href="b6-multi-agent.html">Next: Multi-agent systems →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

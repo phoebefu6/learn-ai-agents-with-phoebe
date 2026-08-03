@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 3 · The five workflow patterns - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 3 of 10</div>
+    <h1>The five <span class="accent">workflow patterns</span></h1>
+    <p class="sub">Before you give a model the steering wheel, learn the five ways to keep it. Anthropic's essay names exactly five workflow patterns - prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer - each a predefined code path that uses LLMs without letting one direct the show. Tonight you meet all five as pictures, then build three of them on Daybreak in plain Python. The punchline the whole industry keeps relearning: for most tasks, a boring fixed path beats a clever agent - and knowing all five is what makes "do we even need an agent?" an engineering question instead of a vibe.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Medium</span>
+      <span class="chip audience">Builder track · practitioners</span>
+      <span class="chip audience">Python</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The catalog</span>
+      <span class="a3" style="flex:5">18-42 · Build-along: three patterns on Daybreak</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE CATALOG ============ -->
+  <section class="section" id="catalog">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic "Building Effective Agents" (all 5 patterns), Ng M2/M5</span>
+      <h2>The catalog <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Five shapes, one rule: in every pattern below, <strong>your code fixes the path and the model fills in the steps</strong>. That is Anthropic's definition of a workflow - "LLMs and tools orchestrated through predefined code paths" - and the exact opposite of b2's loop, where the model chose its own next move. Learn the shapes first; the code in Part 2 will read itself.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 610" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The five Anthropic workflow patterns as five rows: chaining as a sequence, routing as a fork, parallelization as fan-out plus merge, orchestrator-workers as hub and spokes, evaluator-optimizer as a loop pair.">
+        <style>
+          .fpT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .fpS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .fpI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .fpX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .fpN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .fpWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#fpHd); }
+        </style>
+        <defs>
+          <marker id="fpHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+
+        <text class="fpI" x="40" y="72">1 · Prompt chaining</text>
+        <rect x="250" y="48" width="120" height="40" rx="8" fill="#9A3412"/>
+        <text class="fpT" x="266" y="72">numbers</text>
+        <rect x="460" y="48" width="120" height="40" rx="8" fill="#EA580C"/>
+        <text class="fpT" x="476" y="72">draft</text>
+        <rect x="670" y="48" width="120" height="40" rx="8" fill="#F97316"/>
+        <text class="fpT" x="686" y="72">polish</text>
+        <path class="fpWire" d="M370,68 L455,68"/>
+        <path class="fpWire" d="M580,68 L665,68"/>
+
+        <text class="fpI" x="40" y="160">2 · Routing</text>
+        <rect x="250" y="135" width="120" height="40" rx="8" fill="#9A3412"/>
+        <text class="fpT" x="266" y="159">ticket in</text>
+        <rect x="470" y="112" width="150" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="484" y="129">refund handler</text>
+        <rect x="470" y="147" width="150" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="484" y="164">subs handler</text>
+        <rect x="470" y="182" width="150" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="484" y="199">general handler</text>
+        <path class="fpWire" d="M370,148 C410,140 425,130 465,126"/>
+        <path class="fpWire" d="M370,157 L465,160"/>
+        <path class="fpWire" d="M370,166 C410,176 425,186 465,193"/>
+
+        <text class="fpI" x="40" y="275">3 · Parallelization</text>
+        <rect x="250" y="250" width="120" height="40" rx="8" fill="#9A3412"/>
+        <text class="fpT" x="266" y="274">fan out</text>
+        <rect x="450" y="228" width="120" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="464" y="245">Jan + Feb</text>
+        <rect x="450" y="263" width="120" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="464" y="280">Mar + Apr</text>
+        <rect x="450" y="298" width="120" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="464" y="315">May + Jun</text>
+        <rect x="660" y="250" width="130" height="40" rx="8" fill="#F97316"/>
+        <text class="fpT" x="676" y="274">merge</text>
+        <path class="fpWire" d="M370,263 C405,255 415,246 445,242"/>
+        <path class="fpWire" d="M370,272 L445,276"/>
+        <path class="fpWire" d="M370,281 C405,291 415,302 445,309"/>
+        <path class="fpWire" d="M570,241 C610,246 625,255 655,262"/>
+        <path class="fpWire" d="M570,276 L655,272"/>
+        <path class="fpWire" d="M570,311 C610,304 625,292 655,281"/>
+
+        <text class="fpI" x="40" y="395">4 · Orchestrator-workers</text>
+        <rect x="250" y="370" width="140" height="40" rx="8" fill="#9A3412"/>
+        <text class="fpT" x="266" y="394">orchestrator</text>
+        <rect x="490" y="348" width="150" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="504" y="365">worker: sales</text>
+        <rect x="490" y="383" width="150" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="504" y="400">worker: subs</text>
+        <rect x="490" y="418" width="150" height="26" rx="6" fill="#EA580C"/>
+        <text class="fpS" x="504" y="435">worker: tickets</text>
+        <path class="fpWire" d="M390,383 C425,375 445,366 485,362"/>
+        <path class="fpWire" d="M390,392 L485,396"/>
+        <path class="fpWire" d="M390,401 C425,411 445,422 485,429"/>
+        <path class="fpWire" d="M488,437 C420,452 350,442 324,414"/>
+        <text class="fpX" x="330" y="452">results return</text>
+
+        <text class="fpI" x="40" y="510">5 · Evaluator-optimizer</text>
+        <rect x="250" y="485" width="140" height="40" rx="8" fill="#EA580C"/>
+        <text class="fpT" x="266" y="509">generator</text>
+        <rect x="540" y="485" width="140" height="40" rx="8" fill="#9A3412"/>
+        <text class="fpT" x="556" y="509">evaluator</text>
+        <path class="fpWire" d="M390,495 L535,495"/>
+        <path class="fpWire" d="M535,516 C490,532 440,532 395,518"/>
+        <text class="fpX" x="425" y="548">feedback - loop until pass</text>
+
+        <rect x="40" y="572" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="fpN" x="64" y="584">All five are workflows - code fixes the path, the model fills in steps; an agent chooses its own path.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - Anthropic's five workflow patterns, one shape per row</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Prompt chaining - a fixed sequence<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> decompose a task into fixed steps, each LLM call feeding the next - optionally with a code check ("gate") between steps.</p>
+        <p><strong>When it wins:</strong> the task cleanly splits into stages and you trade a little latency for a lot of accuracy per stage.</p>
+        <p><strong>Daybreak:</strong> the monthly report pipeline - pull the numbers → draft the report → polish for the founder. Three calls, one path, no surprises. You build it in Part 2.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Routing - a classifier picks the branch<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> one cheap classification call sorts the input, then code dispatches to a specialized handler - separate prompts, even separate models per branch.</p>
+        <p><strong>When it wins:</strong> distinct input categories that are handled better apart than by one prompt trying to serve them all.</p>
+        <p><strong>Daybreak:</strong> ticket triage - classify each support ticket as refund, subscription, or general, then dispatch to that branch's handler. Also in Part 2.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Parallelization - fan out, then merge<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> run independent LLM calls simultaneously and aggregate the outputs - either sectioning (split the work) or voting (same work, multiple attempts).</p>
+        <p><strong>When it wins:</strong> the subtasks do not depend on each other, so waiting in sequence is pure wasted latency.</p>
+        <p><strong>Daybreak:</strong> query all six months of 2026 revenue at once, then one merge call summarizes the half year. Sketched in Part 2 with asyncio.gather.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Orchestrator-workers - a hub delegates<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> a central LLM breaks the task into subtasks it could not have listed in advance, delegates each to a worker call, and synthesizes the results.</p>
+        <p><strong>When it wins:</strong> you cannot predict the subtasks up front - the decomposition itself needs the model's judgment.</p>
+        <p><strong>Daybreak:</strong> the March-dip diagnosis - "revenue fell, find out why" fans into sales, subscription, and refund investigations, then one synthesis. Tonight's demo shows the agent version of exactly this shape.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Evaluator-optimizer - generate, judge, loop<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>What it is:</strong> one LLM generates, another evaluates against explicit criteria and returns feedback; the pair loops until the evaluator passes it (or a max-rounds guard trips).</p>
+        <p><strong>When it wins:</strong> you can state clear evaluation criteria, and iterative critique measurably improves the output.</p>
+        <p><strong>Daybreak:</strong> the founder's report drafted, then judged against a checklist - numbers cited? refunds excluded? one concrete action? - and redrafted until it passes.</p>
+        <div class="callout tip">
+          <strong>Ng's map</strong>
+          Andrew Ng's agentic-canon <strong>Reflection</strong> pattern is exactly the evaluator-optimizer's inner move: the model critiques and revises its own output. Same idea, two vocabularies - now you speak both.
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: BUILD-ALONG ============ -->
+  <section class="section" id="build-along">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Academy Agents-and-Workflows lessons (chaining, routing, parallelization)</span>
+      <h2>Build-along: three patterns on Daybreak <span class="tag demo">★ 18 min · type along</span></h2>
+    </div>
+    <p class="lede">All three builds share one helper - a single plain call, no tools, no loop:</p>
+
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+
+def ask(prompt: str) -> str:
+    response = client.messages.create(
+        model="claude-opus-5", max_tokens=1024,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text</code></pre>
+
+    <p class="lede"><strong>1 · Prompt chaining</strong> - the monthly report as three sequential calls, each output piped into the next. The tool functions are b2's Daybreak toolbox:</p>
+
+<pre><code>def chain_monthly_report(month: str) -> str:
+    facts = (query_sales(month) + "\n" + top_products()
+             + "\n" + subscription_status())
+    numbers = ask("Summarize these raw Daybreak numbers as bullet points, "
+                  "refunds excluded from revenue:\n" + facts)
+    draft = ask(f"Write the {month} ops report for the founder "
+                f"from these numbers ONLY:\n{numbers}")
+    return ask("Polish this report: short, concrete, exactly one "
+               "action item for next month.\n" + draft)</code></pre>
+
+    <p class="lede"><strong>2 · Routing</strong> - one classifier call, then a plain dict dispatch. The model labels; your code branches:</p>
+
+<pre><code>HANDLERS = {"refund": handle_refund,
+            "subscription": handle_subscription,
+            "general": handle_general}
+
+def route_ticket(ticket: str) -> str:
+    label = ask(
+        "Classify this Daybreak support ticket. Reply with exactly one "
+        "word - refund, subscription, or general:\n" + ticket
+    ).strip().lower()
+    handler = HANDLERS.get(label, handle_general)   # safe fallback
+    return handler(ticket)</code></pre>
+
+    <p class="lede"><strong>3 · Parallelization</strong> - six independent month lookups have no business waiting for each other. Fan out with asyncio, then one merge call:</p>
+
+<pre><code>import asyncio
+
+async def h1_summary() -> str:
+    months = [f"2026-0{m}" for m in range(1, 7)]     # Jan..Jun
+    results = await asyncio.gather(
+        *(fetch_sales(month) for month in months)    # async ask() per month
+    )
+    return await ask_async("Summarize H1 2026 for the founder "
+                           "from these six month reports:\n"
+                           + "\n".join(results))</code></pre>
+
+    <div class="callout tip">
+      <strong>These are workflows, not agents - and that is the point</strong>
+      Notice what is missing: the while loop. b2's agent inspected stop_reason and chose its own next step; here every path is decided before the first token streams - chaining always runs three calls, routing always classifies then dispatches, parallelization always fans out six and merges. Predefined paths are cheaper, testable, and debuggable. Anthropic's rule: start here, and slide toward the agent loop only when the task demonstrably will not fit a fixed path.
+    </div>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The two patterns we did not build tonight<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Orchestrator-workers</strong> is a chaining-shaped skeleton where the model writes the plan: one call produces the subtask list, code runs a worker call per subtask, one call synthesizes. You will build it properly in b6, where the workers become full subagents.</li>
+          <li><strong>Evaluator-optimizer</strong> is a two-call loop with a max-rounds guard: generate, evaluate against a checklist, feed the critique back, repeat until the evaluator says pass. It returns in b5 as the Reflection pattern and again in b8, where the evaluator grows into a real LLM-judge grader.</li>
+        </ul>
+        <p>Homework asks you to sketch the orchestrator version of tonight's report chain - one prompt, model-written plan - and compare it honestly against the fixed chain.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Demo</span>
+      <h2>Orchestrator-thinking, live: the March-dip diagnosis <span class="tag demo">★ 8 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">The founder asks: <em>"Why did March revenue dip?"</em> Below, the Daybreak agent runs the diagnosis with tools, memory, and planning on. Watch the <strong>plan step</strong> closely - the model decomposes the question into sub-investigations (sales by month, refunds, subscription changes) before touching a tool. That is orchestrator-thinking, live. The answer it assembles: February $271 → March $150, one refund (order 1017), and Liam Ford's Midnight Espresso subscription cancelled 2026-03-10.</p>
+
+    <div class="steps">
+      <div class="step"><p>Step to the 🧠 <strong>plan step</strong> and read the decomposition. That plan is what b5 teaches the model to write well - and a FIXED version of that same plan is exactly what a workflow hard-codes.</p></div>
+      <div class="step"><p>Watch the plan execute: each sub-investigation is a tool call whose 📦 result feeds the next decision - orchestrator-workers with one model playing every part.</p></div>
+      <div class="step"><p>Ask the b3 question: if the founder wants this diagnosis EVERY month, would you keep the agent - or freeze tonight's plan into a chain? Cheaper, testable, boring. Boring is a feature.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="dip" data-levers="tools,memory,planning"></div>
+
+    <div class="callout tip">
+      <strong>How to read every agent demo in this course</strong>
+      👤 user · 🧠 model reasoning · 🔧 tool call · 📦 tool result · 🛡 guardrail · 💬 final answer. The model's words are a scripted teaching simulation replaying the characteristic behaviors; every number in a 📦 step is genuinely computed from the embedded Daybreak data.
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30-40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Build the routing workflow and run it on five sample tickets you write yourself (two refund, two subscription, one that fits nothing - watch the fallback catch it).</li>
+      <li>Convert the monthly report chain into ONE orchestrator prompt ("plan the report, then write it") and compare the two outputs side by side: accuracy of numbers, structure, refund handling.</li>
+      <li>Write down where the fixed path beat the agent-ish version - it should, on this task: same three steps every month is exactly what "predefined code path" is for. Bring your notes to b5, where planning makes the comparison interesting.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - the five workflow patterns</span><span class="note">Prompt chaining · routing · parallelization · orchestrator-workers · evaluator-optimizer</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic Academy - Agents and Workflows section</span><span class="note">Parallelization, chaining, and routing lessons - built here on Daybreak</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DeepLearning.AI "Agentic AI" (Ng) - Modules 2 + 5</span><span class="note">Reflection (= evaluator-optimizer's inner move) + Planning; planning lands in b5</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">DLAI "Agentic Design Patterns" (AutoGen)</span><span class="note">Same 4-pattern canon (Reflection · Tool Use · Planning · Multi-Agent) from another stack</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Six independent month lookups, then one combined summary. Which pattern?</p>
+      <button class="qopt" type="button">A · Prompt chaining - each lookup feeds the next</button>
+      <button class="qopt" type="button">B · Parallelization - fan the independent calls out simultaneously, then merge</button>
+      <button class="qopt" type="button">C · Routing - a classifier assigns each month to a handler</button>
+      <p class="qwhy">The lookups do not depend on each other, so running them in sequence is pure wasted latency. Chaining is for steps that feed each other; routing is for sorting different KINDS of input, not identical independent work.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Which Anthropic pattern is Andrew Ng's Reflection pattern the inner move of?</p>
+      <button class="qopt" type="button">A · Orchestrator-workers</button>
+      <button class="qopt" type="button">B · Prompt chaining</button>
+      <button class="qopt" type="button">C · Evaluator-optimizer</button>
+      <p class="qwhy">Reflection = generate, critique against criteria, revise. That critique-and-loop is exactly the evaluator half of evaluator-optimizer. Two vendor vocabularies, one idea - and in b8 the evaluator becomes a formal LLM-judge grader.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What separates all five of tonight's patterns from b2's agent loop?</p>
+      <button class="qopt" type="button">A · In a workflow your code fixes the path in advance; in the agent loop the model directs its own next step</button>
+      <button class="qopt" type="button">B · Workflows never call an LLM more than once</button>
+      <button class="qopt" type="button">C · Workflows cannot use tools</button>
+      <p class="qwhy">Anthropic's line: workflows orchestrate LLMs "through predefined code paths"; agents "dynamically direct their own processes." Workflows can make many calls and use tools freely - what they never do is let the model choose the route.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Prompt chaining</b><span>Fixed sequence, each call feeds the next. When the task splits into clean stages - Daybreak's numbers → draft → polish report.</span></div>
+      <div class="cheat-item"><b>Routing</b><span>Classify once, dispatch to a specialized handler. When input categories are handled better apart - ticket triage.</span></div>
+      <div class="cheat-item"><b>Parallelization</b><span>Fan independent calls out, merge the results. When subtasks do not depend on each other - six months queried at once.</span></div>
+      <div class="cheat-item"><b>Orchestrator-workers</b><span>A hub LLM writes the subtask list, delegates, synthesizes. When you cannot predict the decomposition up front - the dip diagnosis.</span></div>
+      <div class="cheat-item"><b>Evaluator-optimizer</b><span>Generate, judge against explicit criteria, loop until pass. When clear criteria exist and critique measurably helps - the report checklist.</span></div>
+      <div class="cheat-item"><b>Ng's map</b><span>Reflection = evaluator-optimizer's inner move. Same canon as AutoGen's: Reflection · Tool Use · Planning · Multi-Agent.</span></div>
+      <div class="cheat-item"><b>The dividing line</b><span>Workflows = predefined code paths; agents = the model directs its own process. Who chooses the next step is everything.</span></div>
+      <div class="cheat-item"><b>The rule</b><span>Start at the workflow end - cheaper, testable, boring. Slide toward the agent loop only when the task demonstrably demands it.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 3 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b2-tools-first-agent.html">← Prev: Tools + your first agent</a> &nbsp;·&nbsp; <a href="b4-memory-context.html">Next: Memory and context →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

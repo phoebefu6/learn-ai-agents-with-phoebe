@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leader session 6 · The roadmap and your strategy - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Leader track · Session 6 of 6</div>
+    <h1>The <span class="accent">roadmap</span> and your strategy</h1>
+    <p class="sub">The final session. You leave a5 holding one pilot recommendation; tonight we place it on the map of where the field is going, so you fund the things that stay valuable and skip the things that churn. Two standards to keep straight, four movements to watch, and a twelve-month fund-watch-skip strategy you can write in three lines. Then we close the arc: six sessions, one language for talking about agents that your builders will recognize.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Deciding track</span>
+      <span class="chip audience">Leaders: execs · managers · sponsors</span>
+      <span class="chip audience">No code - business language only</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The protocol map</span>
+      <span class="a3" style="flex:5">18-42 · What changes next + what to fund</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>How to read a fast-moving field</h2>
+    </div>
+    <p class="lede">Agent tooling changes monthly; the ideas underneath change slowly. Tonight's discipline is separating the two. Standards (Part 1) and evaluation habits (Part 3) compound; framework features churn. A leader who funds the compounding layer can watch the churn with curiosity instead of anxiety.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Official sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The MCP-vs-A2A split in one sentence each, a read on the four movements that matter this year - multi-agent, computer use, managed agents, evals as procurement language - and your own three-line fund-watch-skip strategy, anchored to the pilot you scoped in session 5.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE PROTOCOL MAP ============ -->
+  <section class="section" id="protocol-map">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the MCP vs A2A protocol split</span>
+      <h2>The protocol map <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Two open standards are settling into place, and they answer different questions. <strong>MCP</strong> standardizes how a model reaches tools and context - think of it as the vertical wiring inside one agent. <strong>A2A</strong> standardizes how agents talk to each other - the horizontal wiring between agents, even agents built on different frameworks by different teams. Keep the vertical-horizontal picture and you will never confuse them again.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Org diagram: two agents from different teams. Each agent connects vertically to its own tools via MCP; the agents talk to each other horizontally via A2A.">
+        <style>
+          .prT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .prS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .prI { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .prX { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .prN { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .prWire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#prHd); }
+        </style>
+        <defs>
+          <marker id="prHd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="90" y="70" width="230" height="56" rx="8" fill="#9A3412"/>
+        <text class="prT" x="106" y="94">SUPPORT AGENT</text>
+        <text class="prS" x="106" y="112">your team · framework A</text>
+        <rect x="560" y="70" width="230" height="56" rx="8" fill="#9A3412"/>
+        <text class="prT" x="576" y="94">FINANCE AGENT</text>
+        <text class="prS" x="576" y="112">other team · framework B</text>
+        <rect x="90" y="230" width="230" height="56" rx="8" fill="#EA580C"/>
+        <text class="prT" x="106" y="254">TOOLS + DATA</text>
+        <text class="prS" x="106" y="272">CRM · orders · email drafts</text>
+        <rect x="560" y="230" width="230" height="56" rx="8" fill="#F97316"/>
+        <text class="prT" x="576" y="254">TOOLS + DATA</text>
+        <text class="prS" x="576" y="272">ledger · invoices</text>
+        <path class="prWire" d="M205,126 L205,225"/>
+        <path class="prWire" d="M675,126 L675,225"/>
+        <text class="prX" x="220" y="170">MCP · vertical</text>
+        <text class="prX" x="220" y="187">model ↔ tools</text>
+        <text class="prX" x="690" y="170">MCP · vertical</text>
+        <text class="prX" x="690" y="187">model ↔ tools</text>
+        <path class="prWire" d="M320,90 L555,90"/>
+        <path class="prWire" d="M555,108 L325,108"/>
+        <text class="prX" x="365" y="60">A2A · horizontal · agent ↔ agent</text>
+        <text class="prX" x="365" y="140">works across frameworks</text>
+        <rect x="90" y="308" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="prN" x="114" y="320">MCP wires a model to tools and context. A2A lets agents from different frameworks talk to each other.</text>
+        <rect x="90" y="336" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="prN" x="114" y="348">A2A interop shown across ADK, LangGraph, BeeAI, MS Agent Framework (Google + IBM course).</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - MCP is the vertical standard, A2A is the horizontal one</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why two standards, in business terms<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The split mirrors something your org already knows: connecting a system to its own databases is a different problem from getting two departments' systems to cooperate.</p>
+        <ul>
+          <li><strong>MCP (model ↔ tools).</strong> One standard plug between any model and any tool or data source. Build a tool server once and every MCP-speaking agent can use it - which is why "do our tools speak MCP?" is now a foundations question, not a nice-to-have.</li>
+          <li><strong>A2A (agent ↔ agent).</strong> The newer layer, taught in its own Google + IBM course: a standard for agents to discover and talk to each other across frameworks - the course demonstrates interop across ADK, LangGraph, BeeAI, and Microsoft Agent Framework. Your support agent and a partner's finance agent do not need to share a vendor to cooperate.</li>
+          <li><strong>The leader takeaway.</strong> Standards are how you avoid marrying a framework. Tools behind MCP and agents reachable over A2A stay valuable no matter which SDK wins the year.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: WHAT IS MOVING ============ -->
+  <section class="section" id="what-is-moving">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers multi-agent, computer use, managed agents, evals in procurement</span>
+      <h2>What is moving <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Four movements matter for your next budget cycle. None of them requires you to act this quarter; all of them reward knowing the vocabulary before your vendors use it on you.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Multi-agent systems + computer use<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Multi-agent is maturing into two named shapes.</strong> The manager pattern - one agent coordinates others and synthesizes the answer - and the handoffs pattern, where agents pass a task between peers, the way a call gets transferred to the right department. Both vendors teach the same discipline you already know from session 3: maximize a single agent first, split only when tool overload or complex branching forces it. Multi-agent is a scaling decision, not a starting point.</p>
+        <p><strong>Computer-use agents</strong> operate software the way a person does - screen, cursor, keyboard - reaching the long tail of systems that will never get an API. On the roadmap it is a watch item: powerful for legacy-heavy orgs, and exactly the kind of outward-acting capability where session 4's guardrail questions matter most.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Managed agents + evals as procurement language<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Managed, hosted agents.</strong> Anthropic's Managed Agents is the marker: the agent runs in a hosted, managed sandbox, so your team designs the agent and its guardrails without operating the infrastructure underneath. Expect more of the running-an-agent burden to move to vendors - which makes your golden set MORE important, not less, because it becomes the part only you can supply.</p>
+        <p><strong>Evals are becoming procurement language.</strong> Terms from the eval literature - a golden set of tasks, pass@k (the agent succeeds in at least one of k attempts) - are starting to appear in RFPs and vendor scorecards. A buyer who can say "show me pass@k on our twelve tasks" gets a different class of answer than one who asks "is it accurate?". You learned this frame in session 5; the market is catching up to you.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>Vocabulary is cheap insurance</strong>
+      You do not need to fund multi-agent, computer use, or managed agents this year. You need to recognize them in a pitch, ask the guardrail and eval questions from sessions 4 and 5, and refuse to be hurried. Every movement above rewards the same two habits.
+    </div>
+  </section>
+
+  <!-- ============ PART 3: THE 12-MONTH STRATEGY ============ -->
+  <section class="section" id="twelve-month-strategy">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · fund, watch, skip - and closing the arc</span>
+      <h2>The 12-month strategy <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Three lines. That is the whole strategy format: what you fund now, what you watch, what you consciously skip. Everything in it compounds; nothing in it marries you to a framework.</p>
+
+    <table class="clean">
+      <thead>
+        <tr><th>Move</th><th>What</th><th>Why it compounds</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Fund now</strong></td>
+          <td>Tool and MCP foundations · an eval harness with a golden set · ONE pilot with its gate (your a5 recommendation).</td>
+          <td>Tools behind MCP serve every future agent. The golden set outlives every framework. The pilot converts theory into your org's own evidence.</td>
+        </tr>
+        <tr>
+          <td><strong>Watch</strong></td>
+          <td>A2A adoption · computer-use agents · managed/hosted agent offerings.</td>
+          <td>Real, but early. Watching costs a briefing per quarter; adopting early costs rework. Let the standards settle while your pilot earns data.</td>
+        </tr>
+        <tr>
+          <td><strong>Skip</strong></td>
+          <td>Framework churn-chasing - migrating because a new SDK had a good launch week.</td>
+          <td>Feature gaps between serious frameworks close within months. Switching costs are real; the eval harness makes switching possible later, when a reason exists.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The harness beat the bet.</strong> Two teams started agent programs the same quarter. One picked the hottest framework first and built everything inside it; the other built a boring eval harness first - a golden set of real tasks with pass rates on a dashboard. A year later the framework team was locked in, negotiating from weakness. The harness team had switched stacks twice, painlessly, because every candidate had to beat the same golden set. The eval harness was the strategy; the framework was just the current tenant.</p>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Closing the leader arc<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Six sessions, one language. In a1 you learned what an agent actually is - an LLM directing its own loop - and, just as important, when not to build one. In a2 you took the anatomy apart in plain English: model, tools, instructions, and the four capabilities - tools, memory, planning, guardrails - that make an agent trustworthy. In a3 you placed workflows and agents on a single autonomy dial and learned why single-agent-first is the disciplined default. In a4 you got the risk vocabulary: seven guardrail types, prompt injection, tool risk-rating, and the triggers that bring a human in. In a5 you turned all of it on your own org - the three-criteria scan, build-buy-wait, and one pilot behind an eval gate. Tonight you placed that pilot on the roadmap. You now ask better questions about agents than most people building them - which was the point all along.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Write your org's three-line agent strategy: one line each for fund, watch, skip. If a line does not name something concrete, it is a wish, not a strategy.</li>
+      <li>Revisit your a5 pilot recommendation with the roadmap lens: are its tools headed behind MCP? Does its golden set exist yet? Those two answers are your first two funded items.</li>
+      <li>Book the follow-up: put the scan workshop from a5 on a real calendar with your leadership team, and bring the three-line strategy as the closing slide.</li>
+      <li>Optional: if your builders are taking the builder track, ask them to show you the 12-task scorecard climbing - it is the same gate philosophy, running live.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">This track teaches the decision-maker's core of the canonical agent-building sources in business language. Certificates, videos, and graded assessments stay on the official sites (linked each session). This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">DeepLearning.AI short course "A2A Protocol" (Google + IBM) - positioning</span><span class="note">Agent ↔ agent standard · cross-framework interop across ADK, LangGraph, BeeAI, MS Agent Framework</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Anthropic platform docs - managed agents + computer use</span><span class="note">Managed Agents as hosted-sandbox product · computer use as a roadmap watch item; builder depth in b9</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">OpenAI "A Practical Guide to Building Agents" - multi-agent taxonomy</span><span class="note">Manager vs handoffs patterns · single-agent-first rule, revisited as a roadmap lens</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What is the split between MCP and A2A?</p>
+      <button class="qopt" type="button">A · MCP connects agents to each other; A2A connects models to tools</button>
+      <button class="qopt" type="button">B · MCP is the vertical standard (model ↔ tools and context); A2A is the horizontal one (agent ↔ agent, across frameworks)</button>
+      <button class="qopt" type="button">C · They are competing standards for the same job - pick one</button>
+      <p class="qwhy">Vertical vs horizontal. MCP wires one agent to its tools; A2A lets separately built agents cooperate - interop demonstrated across ADK, LangGraph, BeeAI, and Microsoft Agent Framework.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Why does funding an eval harness beat betting on a framework?</p>
+      <button class="qopt" type="button">A · Eval harnesses are cheaper to build than any framework license</button>
+      <button class="qopt" type="button">B · Frameworks are all identical anyway, so the choice never matters</button>
+      <button class="qopt" type="button">C · The golden set travels with you - any framework must beat the same tasks, so you can switch freely instead of being locked in</button>
+      <p class="qwhy">The harness is the asset that compounds: it turns framework choice into a reversible decision. Teams that built framework-first negotiated from weakness; harness-first teams switched painlessly.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A vendor mentions "managed agents". What are they describing?</p>
+      <button class="qopt" type="button">A · Agents that run in the vendor's hosted, managed sandbox - you design the agent and guardrails, they operate the infrastructure</button>
+      <button class="qopt" type="button">B · Human contractors who supervise your agents around the clock</button>
+      <button class="qopt" type="button">C · A framework feature for coordinating multi-agent teams</button>
+      <p class="qwhy">Anthropic's Managed Agents is the marker: a hosted-sandbox product. The running burden moves to the vendor - which makes your own golden set the part only you can supply.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>MCP</b><span>The vertical standard: model ↔ tools and context. "Do our tools speak MCP?" is a foundations question.</span></div>
+      <div class="cheat-item"><b>A2A</b><span>The horizontal standard: agent ↔ agent, across frameworks (ADK, LangGraph, BeeAI, MS Agent Framework interop).</span></div>
+      <div class="cheat-item"><b>Multi-agent shapes</b><span>Manager (one coordinates, synthesizes) vs handoffs (peers transfer the task). Single-agent-first still rules.</span></div>
+      <div class="cheat-item"><b>Computer use</b><span>Agents operating software via screen and cursor - reaches API-less systems. Watch item; heaviest guardrail questions.</span></div>
+      <div class="cheat-item"><b>Managed agents</b><span>Hosted-sandbox products (Anthropic Managed Agents): vendor runs the infrastructure, you supply design + golden set.</span></div>
+      <div class="cheat-item"><b>Evals in procurement</b><span>"Show me pass@k on our tasks" beats "is it accurate?". The golden set is becoming RFP language.</span></div>
+      <div class="cheat-item"><b>Fund / watch / skip</b><span>Fund: MCP foundations, eval harness, one pilot. Watch: A2A, computer use. Skip: framework churn-chasing.</span></div>
+      <div class="cheat-item"><b>The leader arc</b><span>a1 what an agent is · a2 anatomy · a3 autonomy dial · a4 risk · a5 your org · a6 roadmap. One language, better questions.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Leader session 6 of 6 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a5-agents-in-your-org.html">← Previous: Agents in your organization</a> &nbsp;·&nbsp; <a href="../index.html">Back to all sessions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

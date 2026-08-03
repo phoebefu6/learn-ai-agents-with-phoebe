@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder session 10 · Capstone: the full ops agent - learn ai agents with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-agents-with-phoebe</a> / Builder session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Agents with Phoebe · Builder track · Session 10 of 10</div>
+    <h1>Capstone: the <span class="accent">full ops agent</span></h1>
+    <p class="sub">Nine sessions, nine pieces. Tonight you wire them into one system: the complete Daybreak Ops Agent - MCP toolbox, workflow shortcuts, memory, planner, optional subagents, guardrails, eval gate, tracing. Nothing here is new. That is the point: a production agent is not one clever idea, it is eight boring ones assembled in the right order and then refused shipment until it proves itself. Your bar is exact: 12/12 on the golden set, or it does not go out.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Hardest session</span>
+      <span class="chip audience">Builder track capstone</span>
+      <span class="chip audience">Python · Claude API + Ollama path</span>
+      <span class="chip time">Ship it at 12/12</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-15 · The architecture</span>
+      <span class="a3" style="flex:9">15-42 · Assemble + gate</span>
+      <span class="a4" style="flex:1">42-45 · Graduation</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PART 1: THE ARCHITECTURE ============ -->
+  <section class="section" id="architecture">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Anthropic essay + OpenAI guide, assembled</span>
+      <h2>Everything you built, one architecture <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Here is the whole track in one diagram. The b2 MCP toolbox does the touching, b3 workflow shortcuts handle the fixed jobs, b4 memory keeps findings alive, b5 plans before executing, b6 subagents stay optional, b7 screens injection and gates approvals and enforces budgets, b8's eval harness decides whether any of it ships, and b9's tracing watches it run. Every request flows top to bottom; every layer is a session you already built.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Layered architecture of the Daybreak Ops Agent: user goal, input guardrail layer, planner, agent loop core with model and toolbox, memory sidecar, output and approval guardrail layer, answer.">
+        <style>
+          .cp10T { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .cp10S { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .cp10I { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+          .cp10D { font: 400 11.5px Inter, sans-serif; fill: #1E293B; }
+          .cp10X { font: 400 12px Inter, sans-serif; fill: #64748B; }
+          .cp10B { font: 700 11px Inter, sans-serif; fill: #1E293B; }
+          .cp10N { font: 600 13px Inter, sans-serif; fill: #043029; }
+          .cp10Wire { stroke: #EA580C; stroke-width: 2.5; fill: none; marker-end: url(#cp10Hd); }
+        </style>
+        <defs>
+          <marker id="cp10Hd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="40" y="20" width="170" height="44" rx="8" fill="#1E293B"/>
+        <text class="cp10T" x="56" y="38">USER GOAL</text>
+        <text class="cp10S" x="56" y="55">"send win-back emails"</text>
+        <path class="cp10Wire" d="M120,64 L120,84"/>
+        <rect x="40" y="88" width="800" height="52" rx="8" fill="#9A3412"/>
+        <text class="cp10T" x="56" y="110">GUARDRAIL - INPUT (b7)</text>
+        <text class="cp10S" x="56" y="128">relevance + safety screen on the incoming ask - off-topic or unsafe goals stop here</text>
+        <rect x="736" y="103" width="88" height="22" rx="11" fill="#FDBA74"/>
+        <text class="cp10B" x="750" y="118">guardrails</text>
+        <path class="cp10Wire" d="M120,140 L120,158"/>
+        <rect x="40" y="162" width="800" height="52" rx="8" fill="#F97316"/>
+        <text class="cp10T" x="56" y="184">PLANNER (b5)</text>
+        <text class="cp10S" x="56" y="202">plan-then-execute: decompose the goal into steps, show the plan, then start the loop</text>
+        <rect x="736" y="177" width="88" height="22" rx="11" fill="#FDBA74"/>
+        <text class="cp10B" x="756" y="192">planning</text>
+        <path class="cp10Wire" d="M120,214 L120,232"/>
+        <rect x="40" y="236" width="570" height="116" rx="10" fill="#FFF7ED" stroke="#F97316" stroke-width="2"/>
+        <text class="cp10I" x="56" y="256">AGENT LOOP CORE (b1)</text>
+        <rect x="512" y="242" width="60" height="22" rx="11" fill="#EA580C"/>
+        <text class="cp10B" x="527" y="257" fill="#FFFFFF">tools</text>
+        <rect x="64" y="268" width="190" height="52" rx="8" fill="#9A3412"/>
+        <text class="cp10T" x="80" y="290">MODEL</text>
+        <text class="cp10S" x="80" y="307">decides the next step</text>
+        <rect x="348" y="268" width="240" height="52" rx="8" fill="#EA580C"/>
+        <text class="cp10T" x="364" y="290">MCP TOOLBOX (b2)</text>
+        <text class="cp10S" x="364" y="307">query_sales + 5 more tools</text>
+        <path class="cp10Wire" d="M254,282 L342,282"/>
+        <path class="cp10Wire" d="M348,304 L260,304"/>
+        <text class="cp10X" x="64" y="341">b3 workflow shortcuts run the fixed jobs · b6 specialist subagents optional</text>
+        <rect x="650" y="236" width="190" height="116" rx="10" fill="#FDBA74"/>
+        <text class="cp10I" x="666" y="260">MEMORY (b4)</text>
+        <text class="cp10D" x="666" y="284">compaction + scratchpad:</text>
+        <text class="cp10D" x="666" y="302">findings survive long,</text>
+        <text class="cp10D" x="666" y="320">multi-step tasks</text>
+        <path class="cp10Wire" d="M610,278 L644,278"/>
+        <path class="cp10Wire" d="M650,316 L616,316"/>
+        <path class="cp10Wire" d="M120,352 L120,370"/>
+        <rect x="40" y="374" width="800" height="52" rx="8" fill="#9A3412"/>
+        <text class="cp10T" x="56" y="396">GUARDRAIL - OUTPUT + APPROVAL (b7)</text>
+        <text class="cp10S" x="56" y="414">injection screen wraps every tool result · send_email + refund_order held for human approval</text>
+        <rect x="736" y="389" width="88" height="22" rx="11" fill="#FDBA74"/>
+        <text class="cp10B" x="750" y="404">guardrails</text>
+        <path class="cp10Wire" d="M120,426 L120,444"/>
+        <rect x="40" y="448" width="170" height="44" rx="8" fill="#1E293B"/>
+        <text class="cp10T" x="56" y="466">ANSWER / ACTION</text>
+        <text class="cp10S" x="56" y="483">or held for approval</text>
+        <rect x="260" y="452" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="cp10N" x="284" y="464">b8's eval harness gates the whole stack: 12/12 or no ship. b9 traces it all.</text>
+        <rect x="260" y="476" width="14" height="14" rx="3" fill="#0E7C6B"/>
+        <text class="cp10N" x="284" y="488">Every box is a session you already built - tonight is wiring, not new ideas.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the full Daybreak Ops Agent, layer by layer, with the session that built each piece</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Read the diagram like an auditor<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Walk it top to bottom and say, for each layer, what breaks without it - that is the lever diagnosis habit from b1 turned into an architecture review:</p>
+        <ul>
+          <li><strong>No input guardrail</strong> - the agent burns budget on off-topic or unsafe asks.</li>
+          <li><strong>No planner</strong> - complex tasks get one-shot, half-done answers (the 10/12 rung never arrives).</li>
+          <li><strong>No toolbox</strong> - fluent, confident, invented numbers (the b1 "demo that lied").</li>
+          <li><strong>No memory sidecar</strong> - multi-step findings fall out of context (stuck at 5/12).</li>
+          <li><strong>No output/approval layer</strong> - injected instructions in tool results get obeyed, and emails go out unapproved.</li>
+          <li><strong>No eval gate, no tracing</strong> - you cannot prove any of the above, before or after shipping.</li>
+        </ul>
+        <p>OpenAI's guide reduces every agent to model, tools, instructions; Anthropic's essay demands simplicity and transparency. This diagram is both, with the guardrails drawn where they actually sit.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the fixed jobs stay workflows<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The monthly ops report never changes shape: numbers vs last month, refunds, subscription changes, one action. In b3 you built it as a prompt-chained workflow around the server's <code>monthly_report</code> prompt - predefined code path, cheap, testable. The assembled agent routes that request straight to the workflow instead of looping.</p>
+        <p>This is Anthropic's core rule surviving into your architecture: use the agent only where the task is too varied for a fixed path. An agent that also knows when NOT to be an agent is the mark of a builder who read the essay.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE ASSEMBLY ============ -->
+  <section class="section" id="assembly">
+    <div class="section-kicker">
+      <span class="klabel">Part 2</span>
+      <h2>The assembly, step by step <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Order matters. Each step below is one session's artifact bolted onto the last, and each is testable on its own before the next goes on. Build it in this order and you always have a working - if less capable - agent.</p>
+
+    <div class="steps">
+      <div class="step"><p><strong>Lay the floor (b2).</strong> The raw loop over the Daybreak MCP toolbox: three data tools (<code>query_sales</code>, <code>top_products</code>, <code>subscription_status</code>) plus the three action tools the track added (<code>list_tickets</code>, <code>send_email</code>, <code>refund_order</code>).</p></div>
+      <div class="step"><p><strong>Freeze the fixed jobs (b3).</strong> Route the monthly report to its prompt-chained workflow. Agentic loops are for varied tasks; the report is not one.</p></div>
+      <div class="step"><p><strong>Bolt on memory (b4).</strong> Compaction when context grows, a scratchpad for findings. Multi-step comparisons stop losing their own work.</p></div>
+      <div class="step"><p><strong>Put the planner in front (b5).</strong> Plan-then-execute, with the plan shown to the user - Anthropic's transparency principle, working for you as a debugging surface.</p></div>
+      <div class="step"><p><strong>Decide on subagents (b6).</strong> Only split if conditional logic gets complex or tools overlap confusingly - the single-agent-first rule. Daybreak's six tools do not force a split; keep it single unless yours do.</p></div>
+      <div class="step"><p><strong>Wrap the guardrails (b7).</strong> Injection screen around tool results, draft-and-hold approval on the high-risk tools, budgets and max turns as stop conditions.</p></div>
+      <div class="step"><p><strong>Gate it (b8).</strong> Run the 12-task golden set. Below 12/12: name the failing lever, fix, rerun. No exceptions.</p></div>
+      <div class="step"><p><strong>Light it up (b9).</strong> Tracing on before the first real user, so the first production surprise arrives with its own evidence attached.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The whole course in one config + one loop<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The assembled agent is smaller than you expect. One config dict declares every lever; one loop runs them in order. This is the skeleton you flesh out tonight:</p>
+<pre><code>CONFIG = {
+    "model": "claude-opus-5",
+    "tools": DATA_TOOLS + ACTION_TOOLS,           # b2: the 6-tool MCP toolbox
+    "max_turns": 15,                              # b1: loops need exits
+    "budgets": {"tool_calls": 25, "usd": 0.50},   # b7: stop conditions
+    "high_risk": ["send_email", "refund_order"],  # b7: approval-gated
+}
+
+def run_ops_agent(goal: str) -> str:
+    plan = make_plan(goal, CONFIG)                   # b5: plan-then-execute
+    messages = [{"role": "user",
+                 "content": f"{goal}\n\nPlan:\n{plan}"}]
+    for _ in range(CONFIG["max_turns"]):
+        reply = client.messages.create(
+            model=CONFIG["model"], max_tokens=1024,
+            tools=[t.schema for t in CONFIG["tools"]],
+            messages=messages,
+        )
+        if reply.stop_reason != "tool_use":
+            return screen_output(reply)              # b7: output check, then done
+        for call in tool_uses(reply):
+            spend_budget(call, CONFIG["budgets"])    # b7: budget guardrail
+            raw = execute(call)                      # b2: toolbox does the touching
+            safe = screen_injection(raw)             # b7: wrap TOOL RESULTS
+            if call.name in CONFIG["high_risk"]:
+                safe = hold_for_approval(call, safe) # b7: gate the SEND
+            messages.append(tool_result_block(call, safe))
+        messages = compact_if_needed(messages)       # b4: memory
+    return "Max turns hit - escalating to a human."  # b1: exit, never a hang</code></pre>
+        <p>Every commented line points at the session that built it. If a line surprises you, that session's cheat sheet is your fix.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The two hard integration bugs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Everyone who assembles this hits the same two bugs. Both are placement errors, not logic errors:</p>
+        <ul>
+          <li><strong>Bug 1: the injection screen wraps the wrong thing.</strong> Screening only user input feels natural - that is where attackers type, right? Wrong. The tickets scenario's attack arrives inside a <code>list_tickets</code> TOOL RESULT: untrusted customer text flows into context through a tool the agent trusts. The screen must wrap tool results, or the trap walks straight past it.</li>
+          <li><strong>Bug 2: the approval gate holds the wrong step.</strong> If the gate blocks the DRAFT, the agent never produces the email, the human has nothing concrete to review, and the visible catch that makes approval meaningful disappears. Hold the SEND: let the agent draft freely, then stop the one outward, hard-to-reverse action for a human yes.</li>
+        </ul>
+        <p>Check both placements in your build before you run the gate - they are the difference between 12/12 and a 10/12 that looks mysterious.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE GATE ============ -->
+  <section class="section" id="the-gate">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the ship gate</span>
+      <h2>The gate: do not ship below 12/12 <span class="tag demo">★ 15 min · everyone runs it</span></h2>
+    </div>
+    <p class="lede">The scorecard below has every lever on - the first time in the track you see the full ladder complete: <strong>1 → 5 → 7 → 10 → 12</strong>. Confirm the 12/12, then earn it: the two hardest traces follow, and you narrate them from memory.</p>
+
+    <div class="agentbox" data-mode="score" data-levers="tools,memory,planning,guardrails"></div>
+
+    <div class="callout tip">
+      <strong>Regression discipline - the gate's second half</strong>
+      12/12 once is a snapshot, not a guarantee. ANY change - a new tool, a reworded description, a smaller model, a prompt tweak - reruns the full set before it ships. Anthropic's evals guidance is explicit: the golden set grows from real failures and is tracked continuously. An agent without regression runs is an agent you are re-breaking silently.
+    </div>
+
+    <p class="lede"><strong>Proof of mastery 1: the win-back run.</strong> Before each Next click, say out loud what the agent should do - which tool, what the result will be, where the gate fires - then click and check yourself.</p>
+
+    <div class="steps">
+      <div class="step"><p>Narrate the plan first: which tool finds the cancelled subscribers, and what should the agent do before drafting anything?</p></div>
+      <div class="step"><p>Predict the tool result: how many cancelled subscriptions does Daybreak have, and who are they? (You have known this since b2.)</p></div>
+      <div class="step"><p>Name the exact moment the approval gate must fire - and what the agent is holding when it does.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="winback"></div>
+
+    <p class="lede"><strong>Proof of mastery 2: the injection trap.</strong> Same drill - narrate every step before revealing it. This is the trace most shipped agents fail in the wild.</p>
+
+    <div class="steps">
+      <div class="step"><p>Predict where the untrusted text enters: which tool carries it, and why the model would trust it by default?</p></div>
+      <div class="step"><p>Say what the injected instruction is trying to make the agent do, and which guardrail layer must catch it.</p></div>
+      <div class="step"><p>Explain why this catch would NOT happen if the screen wrapped only user input - bug 1 from Part 2, in the flesh.</p></div>
+    </div>
+
+    <div class="agentbox" data-mode="trace" data-scenario="tickets"></div>
+
+    <div class="callout win">
+      <strong>★ What you can now do</strong>
+      Read any agent trace and name the missing lever. Build the loop raw in Python, no framework required. Wrap it in guardrails placed where attacks actually arrive. Gate it behind a golden set and refuse to ship below the bar - and prove all of it with an eval instead of a vibe. Most people shipping agents today cannot do these things. You can.
+    </div>
+  </section>
+
+  <!-- ============ PART 4: WHERE NEXT ============ -->
+  <section class="section" id="where-next">
+    <div class="section-kicker">
+      <span class="klabel">Part 4</span>
+      <h2>Where to go next <span class="tag concept">3 min live</span></h2>
+    </div>
+    <p class="lede">The track ends; the practice does not. Four directions, each one deepening a layer you just assembled:</p>
+    <table class="clean">
+      <thead><tr><th>Go deeper on</th><th>Where</th><th>Why now</th></tr></thead>
+      <tbody>
+        <tr><td>The toolbox side</td><td>The MCP course in this series</td><td>You used the Daybreak server all track; that course builds it - tools, resources, prompts, transports.</td></tr>
+        <tr><td>The gate side</td><td>The sibling evals course in this series</td><td>Your 12-task golden set at full depth: graders, LLM-judges, trajectory checks, pass@k vs pass^k as a program.</td></tr>
+        <tr><td>The principles</td><td>Anthropic's "Building Effective Agents" essay, re-read</td><td>Twenty minutes. Every line lands differently now that you have built what it describes.</td></tr>
+        <tr><td>An external exam</td><td>Hugging Face Agents course, final unit</td><td>The GAIA benchmark challenge: score at least 30% for the official certificate - a graduation your employer can verify.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Make it yours - this week <span class="tag exercise">◐ 60-90 min total</span></h2>
+    </div>
+    <ul>
+      <li>Extend the golden set from 12 to 20 tasks drawn from YOUR domain's real failures - the b1 four-lever spec you wrote is the seed. Rerun the gate against all 20.</li>
+      <li>Swap in a smaller model (the Ollama path makes this a one-line change) and measure the whole ladder again. Which rungs drop? That number is what the bigger model is buying you.</li>
+      <li>Write a one-page runbook for the agent: who owns it, what the budgets are, and exactly when and to whom it escalates. An agent without a runbook has an owner - it just does not know it yet.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Official sources covered</h2>
+    </div>
+    <p class="lede">The capstone assembles rather than introduces - so tonight's coverage is the canon working together. Certificates, videos, and graded assessments stay on the official sites. This page covers:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Building Effective Agents" - principles, assembled</span><span class="note">Simplicity, transparency, ACI - all three visible in the finished architecture</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">OpenAI "A Practical Guide to Building Agents" - components + guardrails, assembled</span><span class="note">Model/tools/instructions, guardrail placement, human-intervention triggers, exit conditions</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Anthropic "Demystifying evals for AI agents" - gate discipline</span><span class="note">Golden set from real failures, continuous tracking, the ship gate as an eval</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Hugging Face Agents course - Unit 4 (final)</span><span class="note">GAIA benchmark challenge pointer - at least 30% for the certificate</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you graduate 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · You reworded one tool description in the shipped agent. What does the ship gate demand?</p>
+      <button class="qopt" type="button">A · Nothing - descriptions are documentation, not code</button>
+      <button class="qopt" type="button">B · Manually retest the one task that motivated the change</button>
+      <button class="qopt" type="button">C · Rerun the full 12-task golden set before the change goes live</button>
+      <p class="qwhy">The gate is 12/12 PLUS regression: any change reruns the whole set. Tool descriptions steer the model's choices, so a "harmless" rewording can break a distant task - only the full set catches it.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · Where must the injection screen sit to catch the tickets trap?</p>
+      <button class="qopt" type="button">A · On user input only - that is where attackers type</button>
+      <button class="qopt" type="button">B · Around tool results - the untrusted ticket text enters context through list_tickets</button>
+      <button class="qopt" type="button">C · On the final answer, just before it reaches the user</button>
+      <p class="qwhy">The tickets attack never touches user input: it hides in customer text that a trusted tool fetches. Screen only what the user types and the trap walks straight past. Wrap the tool results.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why does the approval gate hold the SEND rather than the draft?</p>
+      <button class="qopt" type="button">A · The draft is the evidence the human reviews - blocking drafting kills the visible catch; only the outward send is the risky step</button>
+      <button class="qopt" type="button">B · Drafting costs more tokens than sending, so it should run unattended</button>
+      <button class="qopt" type="button">C · Sends can always be recalled afterwards, so the order does not matter</button>
+      <p class="qwhy">Draft-and-hold works because the human approves something concrete. Gate the draft and there is nothing to review; gate the send and the risky, hard-to-reverse action waits for a yes.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Builder session 10 cheat sheet <span>· the whole course in 8 lines</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The loop (b1)</b><span>Goal → model decides → tool runs → result observed → repeat → answer. Exits: final answer, no tool call, error, max turns.</span></div>
+      <div class="cheat-item"><b>The levers (b2-b7)</b><span>Tools · Memory · Planning · Guardrails. When an agent fails, name the missing lever before touching the prompt.</span></div>
+      <div class="cheat-item"><b>The ladder</b><span>12-task golden set: 1 → 5 → 7 → 10 → 12 as the levers come on. The capstone ships only at 12/12.</span></div>
+      <div class="cheat-item"><b>The patterns (b3)</b><span>Prompt chaining · routing · parallelization · orchestrator-workers · evaluator-optimizer. Fixed jobs stay workflows.</span></div>
+      <div class="cheat-item"><b>Memory (b4)</b><span>The context window IS the working state. Compaction + scratchpad keep multi-step findings alive.</span></div>
+      <div class="cheat-item"><b>Guardrails (b7)</b><span>Injection screen wraps TOOL RESULTS; approval gate holds the SEND; budgets + max turns stop runaways.</span></div>
+      <div class="cheat-item"><b>Evals (b8)</b><span>Task, trial, grader. pass@k vs pass^k. Golden set grows from real failures and runs on every change.</span></div>
+      <div class="cheat-item"><b>The gate (b10)</b><span>12/12 + regression + tracing on, or it does not ship. Prove it with an eval, never a vibe.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Builder session 10 of 10 · learn-ai-agents-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b9-ship-observe.html">← Prev: Ship + observe</a> &nbsp;·&nbsp; <a href="../index.html">Back to all sessions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/agent-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>
