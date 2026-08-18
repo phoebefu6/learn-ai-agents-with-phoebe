@@ -121,6 +121,34 @@
         <div class="callout example">
           <span class="ex-pill">Real world</span>
           <p><strong>The judge that always said yes.</strong> A team wired an LLM-judge with the rubric "is this answer helpful?" and watched their eval pass rate hit 98% while users kept complaining. The judge had never been calibrated - it graded fluency, not correctness, and it had no way to say "I cannot tell." A rubric with concrete pass criteria plus an Unknown clause dropped the score to 61% - the honest number they could finally improve.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A before and after of an LLM-judge graded with the rubric is this answer helpful, which passed 98 percent of trials while users kept complaining, against the same judge given concrete pass criteria and an Unknown clause, which passed an honest 61 percent.">
+    <style>
+      .b8baT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b8baH { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b8baB { font: 400 12px Inter, sans-serif; fill: #1E293B; }
+      .b8baN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="300" fill="#FBF9F6"/>
+    <text class="b8baT" x="40" y="28">The judge that always said yes</text>
+
+    <rect x="40" y="50" width="390" height="180" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <text class="b8baH" x="58" y="84"><tspan fill="#991B1B">&#10007;</tspan> Uncalibrated judge</text>
+    <text class="b8baB" x="58" y="114">Rubric: is this answer helpful?</text>
+    <text class="b8baB" x="58" y="134">Pass rate: 98%</text>
+    <text class="b8baB" x="58" y="154">Users kept complaining anyway</text>
+
+    <rect x="450" y="50" width="390" height="180" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b8baH" x="468" y="84"><tspan fill="#EA580C">&#10003;</tspan> Calibrated judge</text>
+    <text class="b8baB" x="468" y="114">Concrete criteria + Unknown</text>
+    <text class="b8baB" x="468" y="134">Pass rate: 61%</text>
+    <text class="b8baB" x="468" y="154">The honest number to improve</text>
+
+    <text class="b8baN" x="40" y="276">A rubric needs concrete pass criteria and an Unknown clause, or the judge grades fluency.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - 98% was the judge grading fluency, not correctness</figcaption>
+</figure>
+
         </div>
       </div>
     </details>
@@ -140,6 +168,69 @@
       <h2>Outcome vs trajectory <span class="tag concept">7 min live</span></h2>
     </div>
     <p class="lede">Anthropic's essay is firm: <strong>grade outcomes over process</strong>. The pitfall it names is over-specifying tool sequences - if your grader demands query_sales then top_products in that order, you will fail perfectly good agents that found another valid route to the right final state. But outcome-only grading has a blind spot too: an agent that gets the right answer while silently calling send_email twice looks identical to a clean run. That is what <strong>trajectory checks</strong> are for - and it is exactly the split LangSmith's agentevals package implements.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five small cards showing the pitfalls that quietly ruin an eval suite: eval saturation hitting a ceiling, brittle string grading, shared state leaking between trials, ambiguous task specs two humans would judge differently, and positive-only test sets, highlighted because they miss refusal tasks like b7's injection trap.">
+    <style>
+      .b8smT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b8smC { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b8smCa { font: 700 12px Inter, sans-serif; fill: #EA580C; }
+      .b8smS { font: 400 9.5px Inter, sans-serif; fill: #64748B; }
+      .b8smTag { font: 700 11px Inter, sans-serif; fill: #9A3412; }
+      .b8smBox { font: 600 10px Inter, sans-serif; fill: #1E293B; }
+      .b8smBig { font: 700 15px Inter, sans-serif; }
+      .b8smN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="260" fill="#FBF9F6"/>
+    <text class="b8smT" x="40" y="20">Five ways a golden set quietly lies to you</text>
+
+    <rect x="60" y="56" width="148" height="122" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <text class="b8smC" x="134" y="48" text-anchor="middle">Eval saturation</text>
+    <line x1="70" y1="90" x2="198" y2="90" stroke="#CBD5E1" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <text class="b8smS" x="134" y="84" text-anchor="middle">ceiling</text>
+    <rect x="76" y="90" width="18" height="70" fill="#64748B"/>
+    <rect x="116" y="90" width="18" height="70" fill="#64748B"/>
+    <rect x="156" y="90" width="18" height="70" fill="#64748B"/>
+
+    <rect x="218" y="56" width="148" height="122" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <text class="b8smC" x="292" y="48" text-anchor="middle">Brittle grading</text>
+    <rect x="228" y="92" width="60" height="26" rx="6" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.2"/>
+    <text class="b8smTag" x="258" y="109" text-anchor="middle">150</text>
+    <text class="b8smBig" x="296" y="112" fill="#EA580C">&#10003;</text>
+    <rect x="228" y="132" width="86" height="26" rx="6" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.2"/>
+    <text class="b8smTag" x="271" y="149" text-anchor="middle" fill="#991B1B">$150.00</text>
+    <text class="b8smBig" x="322" y="152" fill="#991B1B">&#10007;</text>
+
+    <rect x="376" y="56" width="148" height="122" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <text class="b8smC" x="450" y="48" text-anchor="middle">Shared state</text>
+    <rect x="388" y="92" width="66" height="38" rx="8" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.2"/>
+    <text class="b8smBox" x="421" y="115" text-anchor="middle">Trial 2</text>
+    <rect x="418" y="118" width="66" height="38" rx="8" fill="#E3F4F0" stroke="#0E7C6B" stroke-width="1.2"/>
+    <text class="b8smBox" x="451" y="141" text-anchor="middle">Trial 3</text>
+
+    <rect x="534" y="56" width="148" height="122" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <text class="b8smC" x="608" y="48" text-anchor="middle">Ambiguous specs</text>
+    <circle cx="608" cy="92" r="5" fill="#1E293B"/>
+    <line x1="608" y1="97" x2="568" y2="150" stroke="#64748B" stroke-width="1.6"/>
+    <line x1="608" y1="97" x2="648" y2="150" stroke="#64748B" stroke-width="1.6"/>
+    <circle cx="568" cy="158" r="14" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.2"/>
+    <text class="b8smBox" x="568" y="162" text-anchor="middle">A</text>
+    <circle cx="648" cy="158" r="14" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.2"/>
+    <text class="b8smBox" x="648" y="162" text-anchor="middle">B</text>
+
+    <rect x="692" y="56" width="148" height="122" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.6"/>
+    <text class="b8smCa" x="766" y="48" text-anchor="middle">Positive-only</text>
+    <text class="b8smS" x="766" y="100" text-anchor="middle">happy path only</text>
+    <text class="b8smBig" x="706" y="140" fill="#EA580C">&#10003;</text>
+    <text class="b8smBig" x="732" y="140" fill="#EA580C">&#10003;</text>
+    <text class="b8smBig" x="758" y="140" fill="#EA580C">&#10003;</text>
+    <text class="b8smBig" x="784" y="140" fill="#EA580C">&#10003;</text>
+    <circle cx="816" cy="132" r="12" fill="none" stroke="#CBD5E1" stroke-width="1.6" stroke-dasharray="3 2"/>
+
+    <text class="b8smN" x="40" y="236">Positive-only sets are the blind spot that connects straight back to b7's injection trap.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - positive-only sets are the blind spot, tie a refusal task in</figcaption>
+</figure>
+
 
     <table class="clean">
       <thead>

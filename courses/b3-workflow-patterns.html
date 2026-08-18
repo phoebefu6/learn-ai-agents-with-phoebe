@@ -175,6 +175,28 @@
         <p><strong>What it is:</strong> one LLM generates, another evaluates against explicit criteria and returns feedback; the pair loops until the evaluator passes it (or a max-rounds guard trips).</p>
         <p><strong>When it wins:</strong> you can state clear evaluation criteria, and iterative critique measurably improves the output.</p>
         <p><strong>Daybreak:</strong> the founder's report drafted, then judged against a checklist - numbers cited? refunds excluded? one concrete action? - and redrafted until it passes.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two overlapping circles, Reflection from Andrew Ng's agentic canon and evaluator-optimizer from Anthropic's workflow catalog, sharing one intersection labeled critique then revise, showing the same inner move under two vocabularies.">
+    <style>
+      .b3ovT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b3ovL { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b3ovI { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b3ovN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="320" fill="#FBF9F6"/>
+    <text class="b3ovT" x="40" y="28">Reflection and evaluator-optimizer are the same inner move</text>
+
+    <circle cx="370" cy="160" r="118" fill="#EA580C" fill-opacity=".22" stroke="#EA580C" stroke-width="1.6"/>
+    <circle cx="510" cy="160" r="118" fill="#0E7C6B" fill-opacity=".22" stroke="#0E7C6B" stroke-width="1.6"/>
+    <text class="b3ovL" x="246" y="160" text-anchor="end">Reflection (Ng)</text>
+    <text class="b3ovL" x="634" y="160" text-anchor="start">Evaluator-optimizer</text>
+    <text class="b3ovI" x="440" y="164" text-anchor="middle">Critique, revise</text>
+
+    <text class="b3ovN" x="40" y="302">Same idea, two vocabularies - now you speak both. The evaluator turned inward is reflection.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - two names, one move: generate, then critique your own draft</figcaption>
+</figure>
+
         <div class="callout tip">
           <strong>Ng's map</strong>
           Andrew Ng's agentic-canon <strong>Reflection</strong> pattern is exactly the evaluator-optimizer's inner move: the model critiques and revises its own output. Same idea, two vocabularies - now you speak both.
@@ -269,7 +291,46 @@ async def h1_summary() -> str:
     <div class="steps">
       <div class="step"><p>Step to the 🧠 <strong>plan step</strong> and read the decomposition. That plan is what b5 teaches the model to write well - and a FIXED version of that same plan is exactly what a workflow hard-codes.</p></div>
       <div class="step"><p>Watch the plan execute: each sub-investigation is a tool call whose 📦 result feeds the next decision - orchestrator-workers with one model playing every part.</p></div>
-      <div class="step"><p>Ask the b3 question: if the founder wants this diagnosis EVERY month, would you keep the agent - or freeze tonight's plan into a chain? Cheaper, testable, boring. Boring is a feature.</p></div>
+      <div class="step"><p>Ask the b3 question: if the founder wants this diagnosis EVERY month, would you keep the agent - or freeze tonight's plan into a chain? Cheaper, testable, boring. Boring is a feature.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree asking whether a task's shape repeats unchanged every time: if yes, freeze it into a cheaper, testable workflow; if no, keep it as an agent that decomposes the task itself, the question the March-dip diagnosis raises.">
+    <style>
+      .b3dtT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b3dtQ { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b3dtO { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b3dtS { font: 400 11px Inter, sans-serif; fill: #64748B; }
+      .b3dtE { font: 700 11px Inter, sans-serif; fill: #64748B; }
+      .b3dtN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <defs>
+      <marker id="arrB3dt" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="880" height="320" fill="#FBF9F6"/>
+    <text class="b3dtT" x="40" y="28">Freeze the shape, or let the model decide?</text>
+
+    <rect x="40" y="130" width="240" height="56" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b3dtQ" x="160" y="163" text-anchor="middle">Same shape, every time?</text>
+
+    <line x1="280" y1="158" x2="556" y2="95" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB3dt)"/>
+    <text class="b3dtE" x="380" y="114">yes</text>
+    <line x1="280" y1="158" x2="556" y2="235" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB3dt)"/>
+    <text class="b3dtE" x="380" y="204">no</text>
+
+    <rect x="560" y="60" width="260" height="70" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b3dtO" x="580" y="88">Freeze it into a workflow</text>
+    <text class="b3dtS" x="580" y="108">Cheaper, testable, boring</text>
+
+    <rect x="560" y="200" width="260" height="70" rx="10" fill="#E3F4F0" stroke="#0E7C6B" stroke-width="1.5"/>
+    <text class="b3dtO" x="580" y="228">Keep it an agent</text>
+    <text class="b3dtS" x="580" y="248">Model decomposes at runtime</text>
+
+    <text class="b3dtN" x="40" y="302">If the founder wants this diagnosis every month, freeze tonight's plan. Boring is a feature.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - repeats the same way every time - freeze it, otherwise keep the agent</figcaption>
+</figure>
+</div>
     </div>
 
     <div class="agentbox" data-mode="trace" data-scenario="dip" data-levers="tools,memory,planning"></div>

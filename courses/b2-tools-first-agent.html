@@ -124,6 +124,34 @@
         <div class="callout example">
           <span class="ex-pill">Real world</span>
           <p><strong>The one-word fix.</strong> An agent kept calling a revenue tool to answer refund-policy questions. The team rewrote the system prompt three times with no luck. The actual fix: the tool's description said "sales data" and nothing else - adding "does NOT cover policies or subscriptions" routed every question correctly from then on. Interface bug, not model bug.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A before and after comparison showing a vague sales-data tool description causing an agent to misroute refund questions through three failed prompt rewrites, against a specific description with an explicit exclusion that fixed routing immediately.">
+    <style>
+      .b2baT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b2baH { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b2baB { font: 400 12px Inter, sans-serif; fill: #1E293B; }
+      .b2baN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="300" fill="#FBF9F6"/>
+    <text class="b2baT" x="40" y="28">Fix the tool description, not the system prompt</text>
+
+    <rect x="40" y="50" width="390" height="180" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <text class="b2baH" x="58" y="84"><tspan fill="#991B1B">&#10007;</tspan> Vague tool description</text>
+    <text class="b2baB" x="58" y="114">Description says only "sales data"</text>
+    <text class="b2baB" x="58" y="134">Agent calls query_sales for refunds</text>
+    <text class="b2baB" x="58" y="154">Three system-prompt rewrites failed</text>
+
+    <rect x="450" y="50" width="390" height="180" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b2baH" x="468" y="84"><tspan fill="#EA580C">&#10003;</tspan> Tight tool description</text>
+    <text class="b2baB" x="468" y="114">Description adds one exclusion line</text>
+    <text class="b2baB" x="468" y="134">"does NOT cover policies/subs"</text>
+    <text class="b2baB" x="468" y="154">Every question routes correctly</text>
+
+    <text class="b2baN" x="40" y="276">Interface bug, not model bug. Prompt-engineer the tool description like you would a prompt.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - the fix was the tool description, not the prompt</figcaption>
+</figure>
+
         </div>
       </div>
     </details>
@@ -148,7 +176,74 @@
     </div>
     <p class="lede">This course does not invent a toolbox - it inherits one. The MCP course's Daybreak server (server.py in this repo's project folder) ships <strong>three tools, two resources, and one prompt</strong> over the same SQLite database the SQL course used. That server is this agent's hands for the rest of the track.</p>
 
-    <table class="clean">
+    
+<figure class="zoomable">
+  <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six Daybreak assets grouped as three tools, two resources and one prompt, each shown with its signature and what it returns, from the query_sales tool through the monthly_report prompt template.">
+    <style>
+      .b2smT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b2smL { font: 600 11px Inter, sans-serif; fill: #1E293B; }
+      .b2smK { font: 700 10.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .03em; }
+      .b2smN2 { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b2smD { font: 400 11px Inter, sans-serif; fill: #64748B; }
+      .b2smNote { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="340" fill="#FBF9F6"/>
+    <text class="b2smT" x="40" y="26">One toolbox, inherited from the MCP course: three tools, two resources, one prompt</text>
+
+    <rect x="50" y="38" width="14" height="14" fill="#EA580C"/>
+    <text class="b2smL" x="70" y="50">tool</text>
+    <rect x="170" y="38" width="14" height="14" fill="#0E7C6B"/>
+    <text class="b2smL" x="190" y="50">resource</text>
+    <rect x="330" y="38" width="14" height="14" fill="#64748B"/>
+    <text class="b2smL" x="350" y="50">prompt</text>
+
+    <rect x="50" y="60" width="220" height="108" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="62" y="72" width="196" height="24" rx="6" fill="#EA580C"/>
+    <text class="b2smK" x="160" y="88" text-anchor="middle">TOOL</text>
+    <text class="b2smN2" x="62" y="116">query_sales(month)</text>
+    <text class="b2smD" x="62" y="134">Order count, refunds, revenue</text>
+    <text class="b2smD" x="62" y="150">for one month (YYYY-MM)</text>
+
+    <rect x="320" y="60" width="220" height="108" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="332" y="72" width="196" height="24" rx="6" fill="#EA580C"/>
+    <text class="b2smK" x="430" y="88" text-anchor="middle">TOOL</text>
+    <text class="b2smN2" x="332" y="116">top_products()</text>
+    <text class="b2smD" x="332" y="134">Best-selling products by</text>
+    <text class="b2smD" x="332" y="150">quantity, date range</text>
+
+    <rect x="590" y="60" width="220" height="108" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="602" y="72" width="196" height="24" rx="6" fill="#EA580C"/>
+    <text class="b2smK" x="700" y="88" text-anchor="middle">TOOL</text>
+    <text class="b2smN2" x="602" y="116">subscription_status()</text>
+    <text class="b2smD" x="602" y="134">Active vs cancelled</text>
+    <text class="b2smD" x="602" y="150">subscription counts</text>
+
+    <rect x="50" y="190" width="220" height="108" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="62" y="202" width="196" height="24" rx="6" fill="#0E7C6B"/>
+    <text class="b2smK" x="160" y="218" text-anchor="middle">RESOURCE</text>
+    <text class="b2smN2" x="62" y="246">daybreak://catalog</text>
+    <text class="b2smD" x="62" y="264">Product catalog</text>
+    <text class="b2smD" x="62" y="280">with prices</text>
+
+    <rect x="320" y="190" width="220" height="108" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="332" y="202" width="196" height="24" rx="6" fill="#0E7C6B"/>
+    <text class="b2smK" x="430" y="218" text-anchor="middle">RESOURCE</text>
+    <text class="b2smN2" x="332" y="246">daybreak://policy/refunds</text>
+    <text class="b2smD" x="332" y="264">Refund and cancellation</text>
+    <text class="b2smD" x="332" y="280">policy</text>
+
+    <rect x="590" y="190" width="220" height="108" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="602" y="202" width="196" height="24" rx="6" fill="#64748B"/>
+    <text class="b2smK" x="700" y="218" text-anchor="middle">PROMPT</text>
+    <text class="b2smN2" x="602" y="246">monthly_report(month)</text>
+    <text class="b2smD" x="602" y="264">Standard monthly ops</text>
+    <text class="b2smD" x="602" y="280">report template</text>
+
+    <text class="b2smNote" x="50" y="322">One process, three asset types. MCP or plain functions, the b2 loop cannot tell the difference.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - one process, six assets, every host can share them</figcaption>
+</figure>
+<table class="clean">
       <thead><tr><th>Asset</th><th>Signature / URI</th><th>What it returns</th></tr></thead>
       <tbody>
         <tr><td>Tool</td><td><code>query_sales(month: str)</code></td><td>Order count, refunds, and completed revenue for one month (YYYY-MM)</td></tr>

@@ -180,6 +180,56 @@
       <summary><span class="mode live">Live</span>Build it: plan-then-execute in ~25 lines<span class="mini">6 min</span><span class="caret">▶</span></summary>
       <div class="body">
         <p>Two phases. The first <code>messages.create</code> call asks ONLY for a JSON plan - no tools, no answers. Then a loop feeds each step to your b2 agent loop, appending results as it goes, and closes with a synthesis:</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree for writing a good plan step: first check whether the step is one tool call or one judgment, otherwise split it further; if it is, check whether it produces a checkable artifact, otherwise add a check, and if it does, keep it as a plan step.">
+    <style>
+      .b5dtT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b5dtQ { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b5dtO { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b5dtE { font: 700 11px Inter, sans-serif; fill: #64748B; }
+      .b5dtN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <defs>
+      <marker id="arrB5dt" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="880" height="340" fill="#FBF9F6"/>
+    <text class="b5dtT" x="40" y="28">A good plan step passes two checks</text>
+
+    <rect x="40" y="100" width="240" height="56" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b5dtQ" x="160" y="133" text-anchor="middle">One call or one judgment?</text>
+
+    <rect x="340" y="100" width="240" height="56" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b5dtQ" x="460" y="133" text-anchor="middle">Checkable artifact?</text>
+
+    <line x1="280" y1="128" x2="336" y2="128" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB5dt)"/>
+    <text class="b5dtE" x="290" y="122">yes</text>
+
+    <line x1="280" y1="112" x2="636" y2="68" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB5dt)"/>
+    <text class="b5dtE" x="440" y="82">no</text>
+
+    <line x1="580" y1="118" x2="636" y2="160" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB5dt)"/>
+    <text class="b5dtE" x="592" y="130">no</text>
+
+    <line x1="580" y1="145" x2="636" y2="255" stroke="#64748B" stroke-width="1.6" marker-end="url(#arrB5dt)"/>
+    <text class="b5dtE" x="596" y="195">yes</text>
+
+    <rect x="640" y="40" width="220" height="56" rx="10" fill="#FEF2F2" stroke="#991B1B" stroke-width="1.5"/>
+    <text class="b5dtO" x="660" y="73">Split it further</text>
+
+    <rect x="640" y="130" width="220" height="70" rx="10" fill="#FEF2F2" stroke="#991B1B" stroke-width="1.5"/>
+    <text class="b5dtO" x="660" y="158">Add a checkable</text>
+    <text class="b5dtO" x="660" y="178">result</text>
+
+    <rect x="640" y="230" width="220" height="56" rx="10" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b5dtO" x="660" y="263">Keep as a plan step</text>
+
+    <text class="b5dtN" x="40" y="312">Ten-step plans go stale by step four - prefer three to six checkable steps, then synthesize.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - the one-shot failure is really a missing synthesis step</figcaption>
+</figure>
+
 <pre><code>import json
 from anthropic import Anthropic
 
@@ -245,6 +295,39 @@ def plan_then_execute(goal, tools):
       <h2>Rung 3 on the ladder: 7/12 becomes 10/12 <span class="tag demo">★ 6 min · explore</span></h2>
     </div>
     <p class="lede">Turn planning on alongside tools and memory and the scorecard jumps to exactly <strong>10/12</strong> - rung 3 of the ladder (1 → 5 → 7 → 10 → 12), the biggest single-lever jump in the course. Read which three tasks flipped, and which two are still red.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A bar chart of the 12-task Daybreak scorecard climbing one lever at a time: 1 of 12 with no levers, 5 of 12 with tools, 7 of 12 adding memory, and 10 of 12 adding planning, the biggest single-lever jump in the course.">
+    <style>
+      .b5bnT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b5bnL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+      .b5bnV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+      .b5bnVo { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b5bnN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="300" fill="#FBF9F6"/>
+    <text class="b5bnT" x="40" y="28">Four levers, one ladder: 1 → 5 → 7 → 10 of 12 tasks</text>
+
+    <text class="b5bnL" x="240" y="90" text-anchor="end">No levers (b1)</text>
+    <rect x="260" y="70" width="40" height="30" rx="4" fill="#EA580C"/>
+    <text class="b5bnVo" x="310" y="90">1/12</text>
+
+    <text class="b5bnL" x="240" y="142" text-anchor="end">+ tools (b2)</text>
+    <rect x="260" y="122" width="200" height="30" rx="4" fill="#EA580C"/>
+    <text class="b5bnV" x="272" y="142">5/12</text>
+
+    <text class="b5bnL" x="240" y="194" text-anchor="end">+ memory (b4)</text>
+    <rect x="260" y="174" width="280" height="30" rx="4" fill="#EA580C"/>
+    <text class="b5bnV" x="272" y="194">7/12</text>
+
+    <text class="b5bnL" x="240" y="246" text-anchor="end">+ planning (b5)</text>
+    <rect x="260" y="226" width="400" height="30" rx="4" fill="#EA580C"/>
+    <text class="b5bnV" x="272" y="246">10/12</text>
+
+    <text class="b5bnN" x="40" y="282">Rung 3: planning is the biggest single-lever jump in the course - 7/12 to 10/12.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - planning is the biggest single jump yet: 7/12 to 10/12</figcaption>
+</figure>
+
 
     <div class="steps">
       <div class="step"><p>Check the score reads <strong>10/12</strong> with tools + memory + planning on. Three tasks flipped versus b4's rung 2.</p></div>

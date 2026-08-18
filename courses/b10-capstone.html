@@ -207,6 +207,34 @@ def run_ops_agent(goal: str) -> str:
           <li><strong>Bug 2: the approval gate holds the wrong step.</strong> If the gate blocks the DRAFT, the agent never produces the email, the human has nothing concrete to review, and the visible catch that makes approval meaningful disappears. Hold the SEND: let the agent draft freely, then stop the one outward, hard-to-reverse action for a human yes.</li>
         </ul>
         <p>Check both placements in your build before you run the gate - they are the difference between 12/12 and a 10/12 that looks mysterious.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A before and after of the two integration bugs from the capstone assembly: guardrails misplaced, with the injection screen wrapping only user input and the approval gate holding the draft instead of the send, against guardrails correctly placed, wrapping every tool result and holding the send, reaching 12 of 12.">
+    <style>
+      .b10baT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b10baH { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b10baB { font: 400 12px Inter, sans-serif; fill: #1E293B; }
+      .b10baN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="300" fill="#FBF9F6"/>
+    <text class="b10baT" x="40" y="28">Two integration bugs, both about placement</text>
+
+    <rect x="40" y="50" width="390" height="180" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <text class="b10baH" x="58" y="84"><tspan fill="#991B1B">&#10007;</tspan> Guardrails misplaced</text>
+    <text class="b10baB" x="58" y="114">Screen wraps user input only</text>
+    <text class="b10baB" x="58" y="134">Gate holds the draft, not send</text>
+    <text class="b10baB" x="58" y="154">Attack and unreviewed send slip</text>
+
+    <rect x="450" y="50" width="390" height="180" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b10baH" x="468" y="84"><tspan fill="#EA580C">&#10003;</tspan> Guardrails placed right</text>
+    <text class="b10baB" x="468" y="114">Screen wraps every tool result</text>
+    <text class="b10baB" x="468" y="134">Gate holds the send, not draft</text>
+    <text class="b10baB" x="468" y="154">12/12 - no exceptions</text>
+
+    <text class="b10baN" x="40" y="276">Both are placement errors, not logic errors - check both before you run the gate.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - both bugs are placement errors, not logic errors</figcaption>
+</figure>
+
       </div>
     </details>
   </section>
@@ -218,6 +246,43 @@ def run_ops_agent(goal: str) -> str:
       <h2>The gate: do not ship below 12/12 <span class="tag demo">★ 15 min · everyone runs it</span></h2>
     </div>
     <p class="lede">The scorecard below has every lever on - the first time in the track you see the full ladder complete: <strong>1 → 5 → 7 → 10 → 12</strong>. Confirm the 12/12, then earn it: the two hardest traces follow, and you narrate them from memory.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A bar chart of the complete 12-task Daybreak ladder: 1 of 12 with no levers, 5 of 12 with tools, 7 of 12 adding memory, 10 of 12 adding planning, and 12 of 12 adding guardrails, the full ladder assembled in the capstone.">
+    <style>
+      .b10bnT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b10bnL { font: 600 12px Inter, sans-serif; fill: #1E293B; }
+      .b10bnV { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+      .b10bnVo { font: 700 12px Inter, sans-serif; fill: #1E293B; }
+      .b10bnN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="360" fill="#FBF9F6"/>
+    <text class="b10bnT" x="40" y="28">The full ladder: 1 → 5 → 7 → 10 → 12 of 12 tasks</text>
+
+    <text class="b10bnL" x="240" y="90" text-anchor="end">No levers (b1)</text>
+    <rect x="260" y="70" width="40" height="30" rx="4" fill="#EA580C"/>
+    <text class="b10bnVo" x="310" y="90">1/12</text>
+
+    <text class="b10bnL" x="240" y="142" text-anchor="end">+ tools (b2)</text>
+    <rect x="260" y="122" width="200" height="30" rx="4" fill="#EA580C"/>
+    <text class="b10bnV" x="272" y="142">5/12</text>
+
+    <text class="b10bnL" x="240" y="194" text-anchor="end">+ memory (b4)</text>
+    <rect x="260" y="174" width="280" height="30" rx="4" fill="#EA580C"/>
+    <text class="b10bnV" x="272" y="194">7/12</text>
+
+    <text class="b10bnL" x="240" y="246" text-anchor="end">+ planning (b5)</text>
+    <rect x="260" y="226" width="400" height="30" rx="4" fill="#EA580C"/>
+    <text class="b10bnV" x="272" y="246">10/12</text>
+
+    <text class="b10bnL" x="240" y="298" text-anchor="end">+ guardrails (b7)</text>
+    <rect x="260" y="278" width="480" height="30" rx="4" fill="#EA580C"/>
+    <text class="b10bnV" x="272" y="298">12/12</text>
+
+    <text class="b10bnN" x="40" y="336">12/12 is the reference state - any change reruns the full set before it ships.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - the full ladder, assembled: 1 to 12 of 12</figcaption>
+</figure>
+
 
     <div class="agentbox" data-mode="score" data-levers="tools,memory,planning,guardrails"></div>
 

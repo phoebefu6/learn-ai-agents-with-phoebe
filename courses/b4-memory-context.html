@@ -153,7 +153,42 @@
     </div>
     <p class="lede">Every serious stack ships the same five techniques under different names. Short-term techniques manage the window inside one run; long-term techniques survive across runs. Learn the technique, and every framework's memory docs become familiar.</p>
 
-    <table class="clean">
+    
+<figure class="zoomable">
+  <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A two-layer stack showing what long-term memory adds to short-term window management. The base layer is short-term techniques, message trimming, compaction and scratchpad, that keep one run coherent. The upper layer is long-term memory, sessions and checkpointing plus store, which adds survival across separate runs.">
+    <style>
+      .b4asT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b4asB { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+      .b4asS { font: 400 11.5px Inter, sans-serif; fill: rgba(255,255,255,.84); }
+      .b4asC { font: 700 11px Inter, sans-serif; fill: #9A3412; }
+      .b4asE { font: 700 11.5px Inter, sans-serif; fill: #1E293B; }
+      .b4asN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="320" fill="#FBF9F6"/>
+    <text class="b4asT" x="40" y="28">What long-term memory adds to a run that ends</text>
+
+    <rect x="40" y="56" width="150" height="30" rx="8" fill="#FFF7ED"/>
+    <text class="b4asC" x="115" y="76" text-anchor="middle">sessions</text>
+    <rect x="210" y="56" width="150" height="30" rx="8" fill="#FFF7ED"/>
+    <text class="b4asC" x="285" y="76" text-anchor="middle">checkpoint + store</text>
+
+    <rect x="40" y="104" width="660" height="56" rx="10" fill="#EA580C"/>
+    <text class="b4asB" x="60" y="128">LONG-TERM MEMORY</text>
+    <text class="b4asS" x="60" y="146">sessions, checkpointing + store</text>
+
+    <rect x="40" y="196" width="660" height="56" rx="10" fill="#64748B"/>
+    <text class="b4asB" x="60" y="220">SHORT-TERM MEMORY</text>
+    <text class="b4asS" x="60" y="238">trimming, compaction, scratchpad</text>
+
+    <path d="M716,104 h14 v148 h-14" fill="none" stroke="#1E293B" stroke-width="1.6"/>
+    <text class="b4asE" x="740" y="174">= findings</text>
+    <text class="b4asE" x="740" y="190">survive restarts</text>
+
+    <text class="b4asN" x="40" y="296">Short-term keeps a run coherent; long-term memory is what it still knows after the run ends.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - long-term memory adds survival across runs, not just a bigger window</figcaption>
+</figure>
+<table class="clean">
       <thead>
         <tr><th>Technique</th><th>What it does</th><th>Term</th><th>Where you meet it</th></tr>
       </thead>
@@ -230,7 +265,35 @@ def system_prompt():
 
     <div class="steps">
       <div class="step"><p>Step through with memory off. Find the step where <code>query_sales("2026-02")</code> returns <strong>$271</strong> - the fetch itself is perfect.</p></div>
-      <div class="step"><p>Keep stepping to the synthesis. The February figure has been evicted, and the conclusion contradicts the step you just watched. No error, no apology.</p></div>
+      <div class="step"><p>Keep stepping to the synthesis. The February figure has been evicted, and the conclusion contradicts the step you just watched. No error, no apology.</p>
+<figure class="zoomable">
+  <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A before and after showing the Daybreak agent's March-dip diagnosis with memory off, where it fetches February's $271 revenue but contradicts that finding at synthesis, against memory on, where the synthesis holds both $271 and $150 through to a real diagnosis.">
+    <style>
+      .b4baT { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b4baH { font: 700 13px Inter, sans-serif; fill: #1E293B; }
+      .b4baB { font: 400 12px Inter, sans-serif; fill: #1E293B; }
+      .b4baN { font: 400 12px Inter, sans-serif; fill: #64748B; }
+    </style>
+    <rect x="0" y="0" width="880" height="300" fill="#FBF9F6"/>
+    <text class="b4baT" x="40" y="28">Same task, same tools - the difference is memory</text>
+
+    <rect x="40" y="50" width="390" height="180" rx="12" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <text class="b4baH" x="58" y="84"><tspan fill="#991B1B">&#10007;</tspan> Memory off</text>
+    <text class="b4baB" x="58" y="114">Fetches Feb revenue: $271</text>
+    <text class="b4baB" x="58" y="134">Synthesis: figure is gone</text>
+    <text class="b4baB" x="58" y="154">Contradicts its own step</text>
+
+    <rect x="450" y="50" width="390" height="180" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-width="1.5"/>
+    <text class="b4baH" x="468" y="84"><tspan fill="#EA580C">&#10003;</tspan> Memory on</text>
+    <text class="b4baB" x="468" y="114">Fetches Feb revenue: $271</text>
+    <text class="b4baB" x="468" y="134">Synthesis holds $271, $150</text>
+    <text class="b4baB" x="468" y="154">Diagnosis names real causes</text>
+
+    <text class="b4baN" x="40" y="276">Not a model problem, not a tools problem - a memory problem. Name the lever first.</text>
+  </svg>
+  <figcaption>🔍 Click to zoom - memory on: the agent stops arguing with its own findings</figcaption>
+</figure>
+</div>
       <div class="step"><p>Toggle <strong>Memory on</strong> and step through again. Same task, same tools - now the synthesis holds onto $271 → $150 all the way to the answer.</p></div>
       <div class="step"><p>Say the diagnosis out loud: not a model problem, not a tools problem - a memory problem. Name the lever first.</p></div>
     </div>
