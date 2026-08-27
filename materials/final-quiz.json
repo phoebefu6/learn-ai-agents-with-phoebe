@@ -1,0 +1,343 @@
+{
+  "slug": "learn-ai-agents-with-phoebe",
+  "title": "AI Agents",
+  "version": 1,
+  "passPercent": 80,
+  "purposeNote": "This quiz records your name, work email and score so attendance and completion can be confirmed. Scores are kept for 12 months, then aggregated with identifiers removed. Visible to Phoebe Fu and named course admins only.",
+  "tracks": {
+    "leader": {
+      "label": "Leader track",
+      "formId": "",
+      "formUrl": "",
+      "questions": [
+        {
+          "n": 1,
+          "session": "a1",
+          "term": "agent vs workflow",
+          "type": "mcq",
+          "q": "A vendor pitches an AI agent. Which single fact decides whether it is genuinely an agent rather than a workflow?",
+          "options": [
+            "It runs on the newest and largest available model",
+            "The model chooses its own next step, rather than following a path fixed in the vendor's code",
+            "It is connected to many tools and internal systems",
+            "It replies in natural language instead of a fixed template"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "Workflows run predefined code paths; agents dynamically direct their own processes. Model size, tool count and conversational tone are all irrelevant. Who chooses the next step is the whole question."
+        },
+        {
+          "n": 2,
+          "session": "a1",
+          "term": "when to build an agent",
+          "type": "mcq",
+          "q": "A team proposes an agent for a task with stable rules and fully structured data. What is the right call?",
+          "options": [
+            "Fund the agent, because autonomy is where the industry is heading",
+            "Fund it, but require a larger model for safety",
+            "Build normal software, because none of the three build criteria hold",
+            "Fund a pilot and decide after six months of usage data"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "The three criteria for reaching for an agent are complex judgment, rules too tangled to maintain, and heavy unstructured data. With none present you pay agent costs in latency, money and unpredictability for no benefit."
+        },
+        {
+          "n": 3,
+          "session": "a2",
+          "term": "agent anatomy",
+          "type": "mcq",
+          "q": "What are the three components of every agent?",
+          "options": [
+            "Model, tools, instructions",
+            "Prompt, database, interface",
+            "Planner, memory, executor",
+            "Classifier, retriever, generator"
+          ],
+          "answer": 0,
+          "points": 1,
+          "why": "Model is the reasoning engine, tools are what it can touch, instructions are the guidelines and guardrails. Anything else on a vendor slide is a repackaging of these three."
+        },
+        {
+          "n": 4,
+          "session": "a2",
+          "term": "memory",
+          "type": "mcq",
+          "q": "You are watching an agent work through a long task. Which behaviour is the signature of memory being the weak lever?",
+          "options": [
+            "It states confident figures that exist in no system of record",
+            "It sends an outward email that nobody approved",
+            "It loses its own earlier findings and forgets constraints partway through the task",
+            "It refuses the task and asks for clarification"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "Invented figures point at tools. Unapproved actions point at guardrails. Losing findings and constraints mid-task is the memory signature, and it is visible from outside without reading any code."
+        },
+        {
+          "n": 5,
+          "session": "a3",
+          "term": "routing",
+          "type": "mcq",
+          "q": "Requests arrive in clearly different categories, each deserving a different specialist path. Which pattern fits?",
+          "options": [
+            "Prompt chaining, running the categories one after another",
+            "Routing, one cheap classification up front and then the right lane",
+            "Evaluator-optimizer, letting an editor model sort them out",
+            "Parallelization, sending every request down every lane at once"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "Routing is the triage desk: classify once, then send each request down its specialist lane. Chaining suits fixed stages of one job, and evaluator-optimizer is a quality loop rather than a sorting mechanism."
+        },
+        {
+          "n": 6,
+          "session": "a4",
+          "term": "prompt injection",
+          "type": "mcq",
+          "q": "What makes prompt injection different in kind from other AI risks?",
+          "options": [
+            "It requires an attacker to breach your network first",
+            "It only affects agents built on smaller, cheaper models",
+            "Instructions hide inside the data the agent reads, and an unguarded agent obeys them using your permissions",
+            "It only occurs where users are allowed to write their own prompts"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "No breach is needed. The attacker simply writes content the agent will read: a ticket, an email, a web page. Injected text carries no real authority, but text is text to a model, which is why the guardrail sits around what the agent reads."
+        },
+        {
+          "n": 7,
+          "session": "a4",
+          "term": "human approval gate",
+          "type": "mcq",
+          "q": "Which actions should sit behind a human approval gate?",
+          "options": [
+            "Every action the agent takes, including read-only lookups",
+            "Irreversible, outward-facing or financial actions, such as sent emails, refunds and changed records",
+            "None, because gates defeat the purpose of automation",
+            "Any action that costs more than a set number of tokens"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "Gate what cannot be undone, what leaves the building, and what moves money. Gating every read-only lookup buries the humans in noise and trains them to click approve without looking, which is worse than no gate at all."
+        },
+        {
+          "n": 8,
+          "session": "a5",
+          "term": "vendor evidence",
+          "type": "mcq",
+          "q": "A vendor demonstrates an impressive support agent. What evidence do you ask for before signing?",
+          "options": [
+            "A longer demonstration using more of their own examples",
+            "The model name and its parameter count",
+            "Guardrail specifics plus evaluation results on tasks like yours",
+            "A reference call with their largest customer"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "Demonstrations show the happy path by design. Which guardrail types run, how tools are risk-rated, what triggers a human, and how it scores on your kind of tasks: that is what tells you what happens off the happy path, where real incidents live."
+        },
+        {
+          "n": 9,
+          "session": "a5",
+          "term": "golden set",
+          "type": "mcq",
+          "q": "What makes a pilot gate that a board can actually trust?",
+          "options": [
+            "A polished live demonstration in the boardroom",
+            "The vendor's published benchmark numbers",
+            "A golden set of real tasks that must pass before rollout, with the score visible as capabilities come on",
+            "A signed accuracy statement from the vendor"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "An evaluation set drawn from your own real cases is the only gate that comes with a built-in reason to say no. Demonstrations and vendor benchmarks measure someone else's tasks under someone else's conditions."
+        },
+        {
+          "n": 10,
+          "session": "a6",
+          "term": "MCP and A2A",
+          "type": "mcq",
+          "q": "How do MCP and A2A divide the work between them?",
+          "options": [
+            "MCP connects agents to each other, A2A connects models to tools",
+            "MCP is the vertical standard for model to tools and context, A2A is the horizontal one for agent to agent across frameworks",
+            "They are competing standards for the same job, so you pick one",
+            "MCP is for internal systems, A2A is for public internet services"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "Vertical against horizontal. MCP wires one agent to its tools and context. A2A lets separately built agents cooperate across different frameworks. They coexist rather than compete."
+        }
+      ]
+    },
+    "builder": {
+      "label": "Builder track",
+      "formId": "",
+      "formUrl": "",
+      "questions": [
+        {
+          "n": 1,
+          "session": "b1",
+          "term": "lever diagnosis",
+          "type": "mcq",
+          "q": "Your agent quotes a revenue figure that appeared in no tool result. Which lever was off?",
+          "options": [
+            "Planning, because it should have decomposed the task",
+            "Guardrails, because nothing screened the output",
+            "Tools, because with no way to fetch data the model improvised a fluent and wrong answer",
+            "Memory, because the real figure was evicted from context"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "Hallucinated figures are the tools-off signature. Planning-off produces shallow half-answers, guardrails-off produces unauthorized actions, and memory-off produces self-contradiction. Diagnose by which lever the symptom points at."
+        },
+        {
+          "n": 2,
+          "session": "b2",
+          "term": "stop_reason tool_use",
+          "type": "mcq",
+          "q": "The API response comes back with stop_reason set to tool_use. What has happened?",
+          "options": [
+            "The model errored while running your tool",
+            "The model finished, and tool_use confirms tools were used along the way",
+            "The model paused and is asking you to run a tool, then append a tool_result and call again",
+            "The model is requesting permission to use a tool it has not been given"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "The model never runs anything itself. It emits a tool request and stops. Your loop executes the function, appends the tool_result, and calls the API again. Any other stop_reason means the loop is finished."
+        },
+        {
+          "n": 3,
+          "session": "b3",
+          "term": "parallelization",
+          "type": "mcq",
+          "q": "Six independent month lookups, then one combined summary. Which workflow pattern is that?",
+          "options": [
+            "Prompt chaining, because each lookup feeds the next",
+            "Parallelization, fanning the independent calls out at once and then merging",
+            "Routing, because a classifier assigns each month to a handler",
+            "Orchestrator-workers, because a lead agent assigns each month"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "The lookups do not depend on each other, so running them in sequence is pure wasted latency. Chaining is for steps that feed each other, and routing is for sorting different kinds of work."
+        },
+        {
+          "n": 4,
+          "session": "b4",
+          "term": "compaction",
+          "type": "mcq",
+          "q": "What exactly is compaction?",
+          "options": [
+            "Compressing tool results before adding them to context",
+            "Deleting the oldest messages whenever the window fills",
+            "Summarizing the history so far, replacing old turns with the summary, and continuing the run",
+            "Storing the transcript in a vector database for later retrieval"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "Compaction is summarize then continue: one extra model call that carries figures, findings and standing instructions forward in condensed form. Plain truncation drops them, which is exactly the failure compaction exists to prevent."
+        },
+        {
+          "n": 5,
+          "session": "b5",
+          "term": "ReAct",
+          "type": "mcq",
+          "q": "What is the real difference between plan-then-execute and ReAct?",
+          "options": [
+            "ReAct uses tools and plan-then-execute does not",
+            "Plan-then-execute requires a dedicated planning model",
+            "Plan-then-execute writes the whole numbered plan up front and then executes it, while ReAct decides one step at a time, reasoning before each action",
+            "ReAct works only on single-tool agents"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "Both reason and both use tools. The difference is when the structure appears. ReAct plans locally, one thought per action. Plan-then-execute plans globally before acting, which is easier to inspect but harder to adapt mid-run."
+        },
+        {
+          "n": 6,
+          "session": "b6",
+          "term": "multi-agent shapes",
+          "type": "mcq",
+          "q": "Which pair are the two multi-agent shapes?",
+          "options": [
+            "Hierarchical and flat",
+            "Synchronous and asynchronous",
+            "Manager, where agents are used as tools, and decentralized, where peers hand off",
+            "Supervisor and swarm"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "In the manager shape a central agent delegates through tool calls, synthesizes, and stays the single point of contact with the user. In the decentralized shape peers hand work to each other and control genuinely moves."
+        },
+        {
+          "n": 7,
+          "session": "b7",
+          "term": "tool risk rating",
+          "type": "mcq",
+          "q": "Which three dimensions are used to risk-rate a tool?",
+          "options": [
+            "Latency, token cost and error rate",
+            "Read versus write, reversibility, and financial impact",
+            "Popularity, documentation quality and vendor support",
+            "Call frequency, payload size and authentication method"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "Read versus write, reversibility, financial impact. A refund tool scores write plus irreversible plus moves money, which makes it high risk and holds it for approval. Latency and cost matter for budgets, not for blast radius."
+        },
+        {
+          "n": 8,
+          "session": "b8",
+          "term": "pass@k and pass^k",
+          "type": "mcq",
+          "q": "Your agent scores pass@5 yes but pass^5 no on a task. What does that tell you?",
+          "options": [
+            "The task is impossible for this agent and should leave the set",
+            "It succeeded at least once in five trials but not in all five: capable, not yet reliable",
+            "The two metrics disagree, so the grader is broken",
+            "The agent is reliable but slow, since five trials were needed"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "pass@k asks whether it succeeded at least once in k trials. pass^k asks whether it succeeded in all k. A split between them is the signature of a flaky task, which is a reliability problem rather than a capability one."
+        },
+        {
+          "n": 9,
+          "session": "b9",
+          "term": "production trace",
+          "type": "mcq",
+          "q": "What must a production trace capture, at minimum?",
+          "options": [
+            "The final answer and total cost, since the middle steps are noise",
+            "Only the tool calls, since model reasoning cannot be logged",
+            "Every loop turn: model calls, tool calls with arguments, tool results, and guardrail firings",
+            "A sampled one run in ten, to keep storage manageable"
+          ],
+          "answer": 2,
+          "points": 1,
+          "why": "The transcript becomes the trace. With only the final answer you cannot tell a bad plan from a lost memory from a failed tool call. Three different levers produce one identical-looking bad answer."
+        },
+        {
+          "n": 10,
+          "session": "b10",
+          "term": "injection screen placement",
+          "type": "mcq",
+          "q": "Where must the injection screen sit to catch a malicious instruction planted in a customer ticket?",
+          "options": [
+            "On user input only, because that is where attackers type",
+            "Around tool results, because the untrusted ticket text enters context through the tool that fetches it",
+            "On the final answer, just before it reaches the user",
+            "On the system prompt, which is what the injection tries to override"
+          ],
+          "answer": 1,
+          "points": 1,
+          "why": "That attack never touches user input. It hides in customer text that a trusted tool fetches. Screen only what the user types and the trap walks straight past the guardrail inside a legitimate tool result."
+        }
+      ]
+    }
+  }
+}
