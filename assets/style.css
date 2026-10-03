@@ -3,6 +3,8 @@
    (CSS var names still read --indigo/--amber; they hold SQL-blue values.) */
 
 :root {
+  --indigo-solid: #C84B0A;
+  --indigo-text: #C3490A;
   --indigo: #EA580C;
   --indigo-deep: #9A3412;
   --indigo-mid: #F97316;
@@ -39,7 +41,7 @@ body {
 
 /* ---------- header band ---------- */
 .masthead {
-  background: var(--indigo);
+  background: var(--indigo-solid);
   color: #fff;
   padding: 2.5rem 0 2.25rem;
 }
@@ -71,7 +73,7 @@ body {
   font-weight: 600;
   white-space: nowrap;
 }
-.chip.level { background: #fff; color: var(--indigo); }
+.chip.level { background: #fff; color: var(--indigo-text); }
 .chip.audience { background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.35); }
 .chip.time { background: var(--ink); color: #fff; font-variant-numeric: tabular-nums; }
 
@@ -119,7 +121,7 @@ body {
   transition: all .15s ease;
 }
 .btn:hover { border-color: var(--indigo); color: var(--indigo); }
-.btn.primary { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+.btn.primary { background: var(--indigo-solid); border-color: var(--indigo-solid); color: #fff; }
 .btn.primary:hover { background: var(--indigo-deep); }
 
 /* ---------- sections ---------- */
@@ -153,7 +155,7 @@ main { padding: 2.5rem 0 4rem; }
   text-transform: uppercase;
   letter-spacing: .08em;
 }
-.tag.concept { background: var(--indigo-50); color: var(--indigo); }
+.tag.concept { background: var(--indigo-50); color: var(--indigo-text); }
 .tag.demo { background: var(--amber-50); color: var(--amber-ink); }
 .tag.exercise { background: var(--ink); color: #fff; }
 
@@ -169,7 +171,7 @@ main { padding: 2.5rem 0 4rem; }
   border-radius: 999px;
   flex: none;
 }
-.mode.live { background: var(--indigo); color: #fff; }
+.mode.live { background: var(--indigo-solid); color: #fff; }
 .mode.self { background: #fff; color: var(--muted); border: 1px solid var(--hairline); }
 
 /* ---------- accordions ---------- */
@@ -221,8 +223,8 @@ details.card .body h4:first-child { margin-top: 0; }
   font-size: .78rem;
   font-weight: 600;
 }
-.pill.solid { background: var(--indigo); color: #fff; }
-.pill.light { background: var(--indigo-50); color: var(--indigo); }
+.pill.solid { background: var(--indigo-solid); color: #fff; }
+.pill.light { background: var(--indigo-50); color: var(--indigo-text); }
 .pill.inkpill { background: var(--ink); color: #fff; }
 .pill.amber, .pill.peach { background: var(--amber); color: #fff; }
 .pill.bare { color: var(--faint); }
@@ -271,7 +273,7 @@ table.clean td:first-child { font-weight: 600; }
   position: absolute;
   top: -0.7rem;
   left: 1rem;
-  background: var(--indigo);
+  background: var(--indigo-solid);
   color: #fff;
   font-family: "Inter", -apple-system, sans-serif;
   font-size: .68rem;
@@ -321,7 +323,7 @@ table.clean td:first-child { font-weight: 600; }
   width: 1.7rem; height: 1.7rem;
   border-radius: 999px;
   background: var(--indigo-50);
-  color: var(--indigo);
+  color: var(--indigo-text);
   font-weight: 700;
   font-size: .85rem;
   display: inline-flex;
@@ -557,7 +559,7 @@ details.card summary:hover { background: #FBF6EF; }
   font-variant-numeric: tabular-nums;
 }
 .journey a:hover { border-color: #fff; transform: scale(1.12); }
-.journey a.here { background: #fff; color: var(--indigo); border-color: #fff; }
+.journey a.here { background: #fff; color: var(--indigo-text); border-color: #fff; }
 .journey a.dd-chip { width: auto; border-radius: 999px; padding: 0 .7rem; font-size: .72rem; }
 
 /* ---------- check-yourself quiz ---------- */
@@ -585,7 +587,7 @@ details.card summary:hover { background: #FBF6EF; }
   transition: all .15s ease;
 }
 .quiz-q .qopt:hover { border-color: var(--indigo); background: var(--indigo-50); }
-.quiz-q .qopt.correct { background: var(--indigo); border-color: var(--indigo); color: #fff; font-weight: 600; }
+.quiz-q .qopt.correct { background: var(--indigo-solid); border-color: var(--indigo-solid); color: #fff; font-weight: 600; }
 .quiz-q .qopt.correct::after { content: "  ✓"; }
 .quiz-q .qopt.wrong { background: #FEF2F2; border-color: #FCA5A5; color: #991B1B; animation: qshake .3s ease; }
 .quiz-q .qopt.wrong::after { content: "  ✗ try again"; font-size: .78rem; }
@@ -804,7 +806,7 @@ table.sql-table tr:last-child td { border-bottom: none; }
 .ag-levers { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--hairline); background: var(--indigo-50); }
 .ag-lever { font: 700 0.8rem/1 "Inter", sans-serif; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--faint); background: #fff; color: var(--muted); cursor: pointer; transition: all 0.15s; }
 .ag-lever::before { content: "○ "; }
-.ag-lever.ag-on { border-color: var(--indigo); background: var(--indigo); color: #fff; }
+.ag-lever.ag-on { border-color: var(--indigo-solid); background: var(--indigo-solid); color: #fff; }
 .ag-lever.ag-on::before { content: "● "; }
 
 .ag-feed { padding: 14px 16px 4px; display: flex; flex-direction: column; gap: 10px; }
@@ -816,7 +818,7 @@ table.sql-table tr:last-child td { border-bottom: none; }
 
 .ag-user .ag-step-head { background: var(--hairline); color: var(--ink); }
 .ag-plan .ag-step-head { background: #EEF2F7; color: #33415C; }
-.ag-call .ag-step-head { background: var(--indigo); color: #fff; }
+.ag-call .ag-step-head { background: var(--indigo-solid); color: #fff; }
 .ag-call .ag-body { background: var(--code-bg); color: var(--code-ink); border-top: none; }
 .ag-result .ag-step-head { background: var(--amber-50); color: var(--amber-ink); }
 .ag-guard .ag-step-head { background: #FEF3C7; color: #78350F; }
